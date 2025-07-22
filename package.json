@@ -1,6 +1,7 @@
 {
   "name": "books-shop",
   "version": "0.1.0",
+  "author": "Illia Matushchak",
   "private": true,
   "dependencies": {
     "@testing-library/dom": "^10.4.0",
