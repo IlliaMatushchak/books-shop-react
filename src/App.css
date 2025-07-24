@@ -1,1 +1,53 @@
+* {
+    box-sizing: border-box;
+}
 
+html {
+    font-size: 16px;
+}
+
+body {
+    font-family: Merienda, 'Courier New', Courier, monospace;
+    letter-spacing: 1px;
+
+    background-image: url('./assets/images/background.jpg');
+    background-color: rgb(250, 240, 230);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: scroll;
+}
+
+body #root {
+    min-height: 100vh;
+    padding: 1rem;
+}
+
+body ::selection {
+    background-color: rgba(255, 255, 0, 0.5);
+}
+
+.flex {
+    display: flex;
+}
+
+.fancy-background {
+    background: linear-gradient(to right, rgba(245, 222, 170, 0.7) 0%, rgba(245, 222, 200, 0.7) 100%);
+    box-shadow: 0 0 20px 5px rgba(245, 222, 170, 0.9);
+    border-radius: 10px;
+}
+
+a {
+    text-decoration: none;
+    color: black;
+    user-select: none;
+    transition: transform 1s;
+}
+
+a:hover {
+    transform: scale(1.2);
+}
+
+a:active {
+    transform: scale(0.5);
+}

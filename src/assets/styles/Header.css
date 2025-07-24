@@ -1,0 +1,43 @@
+/* Header */
+
+.header {
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    margin: 0 0 1rem;
+}
+
+.header h1 {
+    margin: 0.5rem 0;
+    user-select: none;
+}
+
+.header nav {
+    width: 25rem;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.header .cart-link {
+    position: relative;
+}
+
+.header .cart-link span{
+    display: block;
+    position: absolute;
+    bottom: 0;
+    right: -0.8rem;
+    background-color: rgb(240, 240, 10);
+    border-radius: 1rem;
+    padding: 0.1rem;
+}
+
+.header .user {
+    align-items: center;
+}
+
+.header .user-name {
+    padding-left: 0.5rem;
+}
+
+/* Header */
