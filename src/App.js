@@ -1,4 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
 import "./App.css";
 
 import Layout from "./routes/Layout";
@@ -9,12 +10,31 @@ import Cart from "./routes/pages/Cart";
 import NotFound from "./routes/pages/NotFound";
 
 function App() {
+  const [userName, setUserName] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
     <>
       <Router>
         <Routes>
-          <Route path="/" element={<Layout />}>
-            <Route index element={<SignIn />} />
+          <Route
+            path="/"
+            element={
+              <Layout
+                userNameState={{ userName, setUserName }}
+                isLoggedInState={{ isLoggedIn, setIsLoggedIn }}
+              />
+            }
+          >
+            <Route
+              index
+              element={
+                <SignIn
+                  userNameState={{ userName, setUserName }}
+                  isLoggedInState={{ isLoggedIn, setIsLoggedIn }}
+                />
+              }
+            />
             <Route path="shop" element={<Shop />} />
             <Route path="specific-book/:bookID" element={<SpecificBook />} />
             <Route path="cart" element={<Cart />} />

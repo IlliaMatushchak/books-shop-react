@@ -1,0 +1,25 @@
+.signin-container img {
+    width: 10rem;
+    height: 10rem;
+    display: block;
+    margin: 3rem auto;
+    border-radius: 100%;
+    transition: transform 1s;
+}
+
+.signin-container img:hover {
+    transform: scale(1.2);
+}
+
+.signin-container form {
+    margin: 1rem auto;
+    padding: 1rem;
+    width: 14rem;
+    text-align: center;
+}
+
+.signin-container #user-name,
+.signin-container button[type="submit"] {
+    width: 100%;
+    margin-bottom: 1rem;
+}

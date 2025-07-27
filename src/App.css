@@ -44,7 +44,7 @@ main {
 
 .fancy-background {
     background: linear-gradient(to right, rgba(245, 222, 170, 0.7) 0%, rgba(245, 222, 200, 0.7) 100%);
-    box-shadow: 0 0 20px 5px rgba(245, 222, 170, 0.9);
+    box-shadow: 0 0 20px 10px rgba(245, 222, 170, 0.9);
     border-radius: 10px;
 }
 
@@ -55,10 +55,36 @@ a {
     transition: transform 1s;
 }
 
-a:hover {
+a:hover,
+button:hover {
     transform: scale(1.2);
 }
 
 a:active {
     transform: scale(0.5);
+}
+
+input {
+    border: 1px solid black;
+    outline: 1px solid rgba(0, 0, 0, 0);
+    transition: all 1s;
+}
+
+input:focus {
+    outline: 1px solid rgba(0, 0, 0, 1);
+    transform: perspective(100px) translate3d(0, 5px, 20px);
+}
+
+button {
+    border: 2px solid black;
+    transition: transform 0.5s;
+}
+
+input,
+button {
+    font-family: inherit;
+    font-size: inherit;
+    height: 2rem;
+    border-radius: 1rem;
+    text-align: center;
 }
