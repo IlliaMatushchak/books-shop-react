@@ -1,0 +1,6 @@
+.book-list {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 3rem;
+    margin: 3rem 0;
+}

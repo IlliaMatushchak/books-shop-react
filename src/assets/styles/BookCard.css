@@ -1,0 +1,57 @@
+.book-card {
+    width: 19rem;
+    padding: 1rem;
+}
+
+.book-card .img-container {
+    width: 100%;
+    height: 22rem;
+    overflow: hidden;
+    border: 1px solid black;
+}
+
+.book-card .book-img {
+    width: 100%;
+    height: 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    transition: transform 1s;
+}
+
+.book-card .book-img:hover {
+    transform: scale(1.1);
+}
+
+.book-card h2,
+.book-card p {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0.3rem 0;
+}
+
+.book-card div.flex {
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.book-card .btn-view {
+    width: 5rem;
+    height: 2rem;
+    line-height: 2rem;
+    text-align: center;
+    border: 1px solid black;
+    border-radius: 0.5rem;
+}
+
+.book-card .btn-view:hover {
+    transform: none;
+    background-color: rgba(128, 128, 128, 0.5);
+}
+
+.book-card .btn-view:active {
+    transform: none;
+    box-shadow: inset 0 0 3px 1px black;
+}
