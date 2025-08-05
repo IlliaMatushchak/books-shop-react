@@ -1,6 +1,8 @@
 import "../assets/styles/SearchSection.css";
 
-function SearchSection() {
+function SearchSection({
+  filterValues: { searchValue, setSearchValue, priceRange, setPriceRange },
+}) {
   return (
     <section className="search-section flex fancy-background">
       <label id="search-lable">
@@ -9,6 +11,10 @@ function SearchSection() {
           type="search"
           name="searchBy"
           placeholder="Search by book name"
+          value={searchValue}
+          onChange={(e) => {
+            setSearchValue(e.target.value);
+          }}
         />
       </label>
 
@@ -16,9 +22,13 @@ function SearchSection() {
         title="Select price range"
         name="priceRange"
         id="select"
-        defaultValue={"title"}
+        // defaultValue={"title"}
+        value={priceRange}
+        onChange={(e) => {
+          setPriceRange(e.target.value);
+        }}
       >
-        <option value="title" disabled hidden>
+        <option value="" disabled hidden>
           Price range
         </option>
         <option value="all">All prices</option>
