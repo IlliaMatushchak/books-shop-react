@@ -22,19 +22,15 @@ function SearchSection({
         title="Select price range"
         name="priceRange"
         id="select"
-        // defaultValue={"title"}
         value={priceRange}
         onChange={(e) => {
           setPriceRange(e.target.value);
         }}
       >
-        <option value="" disabled hidden>
-          Price range
-        </option>
-        <option value="all">All prices</option>
-        <option value="low">{"0$ < price < 15$"}</option>
-        <option value="medium">{"15$ < price < 30$"}</option>
-        <option value="high">{"price 30$ +"}</option>
+        <option value="[0, 9999]">All prices</option>
+        <option value="[0, 15]">{"0$ < price < 15$"}</option>
+        <option value="[15, 30]">{"15$ < price < 30$"}</option>
+        <option value="[30, 9999]">{"price 30$ +"}</option>
       </select>
     </section>
   );
