@@ -1,0 +1,4 @@
+.specific-book-container {
+    justify-content: space-between;
+    align-items: flex-start;
+}

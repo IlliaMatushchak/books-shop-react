@@ -1,0 +1,34 @@
+.book-section {
+    width: 65%;
+}
+
+.book-section .img-container {
+    margin: 1rem;
+}
+
+.book-section .book-image {
+    transition: all 1s ease-in-out;
+}
+
+.book-section .book-image:hover {
+    transform: perspective(100px) translate3d(50px, 20px, 50px);
+}
+
+.book-section .book-info {
+    flex-grow: 1;
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.book-section .book-info p {
+    margin-top: 0;
+}
+
+.book-section .book-description {
+    padding: 1rem;
+    margin: 1rem;
+}
+
+.book-section .book-span {
+    font-weight: bold;
+}
