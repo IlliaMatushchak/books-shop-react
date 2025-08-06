@@ -101,3 +101,12 @@ select {
 select:focus {
     outline: 1px solid black;
 }
+
+.invalid-field {
+    border: 2px red solid;
+    color: red;
+}
+
+.invalid-text {
+    color: red;
+}

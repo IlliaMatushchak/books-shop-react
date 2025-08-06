@@ -61,6 +61,11 @@
     transform: none;
 }
 
+.order-section .add-button:disabled:hover {
+    transform: none;
+    cursor: not-allowed;
+}
+
 .order-section .add-button:enabled:active {
     box-shadow: inset 0 0 5px 1px black;
 }
@@ -82,8 +87,4 @@
 
 .order-section .btn-minus {
     margin-right: 10px;
-}
-
-.order-section .invalid {
-    border: 2px red solid;
 }
