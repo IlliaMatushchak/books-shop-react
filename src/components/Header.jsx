@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useCart } from "../hooks/useCart";
 import "../assets/styles/Header.css";
 import cartImg from "../assets/images/cart.svg";
 import avatarImg from "../assets/images/avatar.png";
@@ -10,6 +11,9 @@ function Header({
   isLoggedIn,
   setIsLoggedIn,
 }) {
+  const { cart } = useCart();
+  const cartLength = cart.length;
+
   return (
     <>
       <header className="header flex fancy-background">
@@ -19,7 +23,7 @@ function Header({
           <nav className="flex">
             <Link to="/cart" className="cart-link">
               <img src={cartImg} width="50px" alt="Cart" />
-              <span>5</span>
+              {cartLength ? <span>{cartLength}</span> : ""}
             </Link>
 
             <Link

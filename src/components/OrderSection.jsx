@@ -1,9 +1,33 @@
 import { useState } from "react";
+import { useCart } from "../hooks/useCart";
 import "../assets/styles/OrderSection.css";
 
-function OrderSection({ bookID, price, amount }) {
-  const [totalCount, setTotalCount] = useState(1);
+function OrderSection({ price, amount, bookID, title }) {
+  const { cart, setCart } = useCart();
   const [isValid, setIsValid] = useState(true);
+  const [totalCount, setTotalCount] = useState(() => {
+    const index = cart.findIndex((el) => {
+      return el.id === bookID;
+    });
+
+    return index === -1 ? 1 : cart[index].orderedCount;
+  });
+
+  function handleAddToCart() {
+    const index = cart.findIndex((el) => {
+      return el.id === bookID;
+    });
+    if (index === -1) {
+      setCart([
+        ...cart,
+        { id: bookID, orderedCount: totalCount, price, title },
+      ]);
+    } else {
+      const cartNew = [...cart];
+      cartNew[index] = { id: bookID, orderedCount: totalCount, price, title };
+      setCart(cartNew);
+    }
+  }
 
   function validateTotalCount(count) {
     if (count > 0 && count <= amount) {
@@ -71,7 +95,11 @@ function OrderSection({ bookID, price, amount }) {
         </p>
       </div>
 
-      <button className="add-button" disabled={!isValid}>
+      <button
+        className="add-button"
+        disabled={!isValid}
+        onClick={handleAddToCart}
+      >
         Add to cart
       </button>
     </section>

@@ -10,12 +10,17 @@ function SpecificBook() {
   const { bookID } = useParams();
 
   const currentBook = books.find(({ id }) => id === Number(bookID));
-  const { amount, price } = currentBook;
+  const { amount, price, title } = currentBook;
 
   return (
     <div className="specific-book-container flex">
       <BookSection book={currentBook} />
-      <OrderSection bookID={bookID} price={price} amount={amount} />
+      <OrderSection
+        price={price}
+        amount={amount}
+        title={title}
+        bookID={bookID}
+      />
     </div>
   );
 }
