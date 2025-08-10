@@ -1,0 +1,22 @@
+.error-info-container {
+    font-size: 4rem;
+}
+
+.error-info-container p {
+    text-align: center;
+}
+
+.error-info-container span {
+    font-weight: bold;
+    color: red;
+}
+
+.error-info-container a {
+    display: block;
+    width: 50%;
+    margin: auto;
+    text-align: center;
+    font-size: 2rem;
+    text-decoration: underline;
+    color: purple;
+}
