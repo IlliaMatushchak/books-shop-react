@@ -36,22 +36,3 @@
     align-items: center;
     margin-top: 20px;
 }
-
-.book-card .btn-view {
-    width: 5rem;
-    height: 2rem;
-    line-height: 2rem;
-    text-align: center;
-    border: 1px solid black;
-    border-radius: 0.5rem;
-}
-
-.book-card .btn-view:hover {
-    transform: none;
-    background-color: rgba(128, 128, 128, 0.5);
-}
-
-.book-card .btn-view:active {
-    transform: none;
-    box-shadow: inset 0 0 3px 1px black;
-}

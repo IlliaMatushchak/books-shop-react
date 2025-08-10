@@ -53,17 +53,69 @@ a {
     text-decoration: none;
     color: black;
     user-select: none;
-    transition: transform 1s;
+    transition: all 0.5s;
+}
+
+.a-like-btn {
+    border: 1px solid black;
+    padding: 0.3rem 1rem;
+    border-radius: 0.5rem;
+    text-align: center;
+    transition: none;
+}
+
+.a-like-btn:hover {
+    background-color: rgba(128, 128, 128, 0.5);
+    transform: none;
+}
+
+.a-like-btn:active {
+    box-shadow: inset 0 0 5px 1px black;
+    transform: none;
 }
 
 a:hover,
-button:hover {
+.btn-styled-1:hover {
     transform: scale(1.2);
 }
 
 a:active,
-button:active {
+.btn-styled-1:active {
     transform: scale(1);
+}
+
+.btn-styled-2 {
+    padding: 0 1rem;
+    transition: none;
+}
+
+.btn-styled-2:enabled:hover {
+    background-color: rgba(128, 128, 128, 0.5);
+}
+
+.btn-styled-2:enabled:active {
+    box-shadow: inset 0 0 5px 1px black;
+}
+
+input,
+button,
+select {
+    font-family: inherit;
+    font-size: inherit;
+    min-height: 2rem;
+    border-radius: 1rem;
+    text-align: center;
+}
+
+button {
+    cursor: pointer;
+    border: 2px solid black;
+    transition: all 0.5s;
+}
+
+button:disabled:hover {
+    cursor: not-allowed;
+    transform: none;
 }
 
 input {
@@ -75,22 +127,6 @@ input {
 input:focus {
     outline: 1px solid rgba(0, 0, 0, 1);
     transform: perspective(100px) translate3d(0, 5px, 20px);
-}
-
-button {
-    cursor: pointer;
-    border: 2px solid black;
-    transition: all 0.5s;
-}
-
-input,
-button,
-select {
-    font-family: inherit;
-    font-size: inherit;
-    min-height: 2rem;
-    border-radius: 1rem;
-    text-align: center;
 }
 
 select {

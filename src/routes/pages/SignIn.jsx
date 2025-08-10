@@ -48,7 +48,7 @@ function SignIn({
               setUserName(e.target.value);
             }}
           />
-          <button type="submit" disabled={!validateUserName(userName)}>
+          <button type="submit" className="btn-styled-1" disabled={!validateUserName(userName)}>
             Sign-in
           </button>
         </form>

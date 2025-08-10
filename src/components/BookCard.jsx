@@ -17,7 +17,7 @@ function BookCard({ image, title, author, price, id }) {
         <p>{author}</p>
         <div className="flex">
           <p>Price: {price}</p>
-          <Link to={`/specific-book/${id}`} className="btn-view">
+          <Link to={`/specific-book/${id}`} className="btn-view a-like-btn">
             View
           </Link>
         </div>

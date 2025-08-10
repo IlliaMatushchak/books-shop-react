@@ -11,7 +11,7 @@ function Cart() {
   return (
     <div className="cart fancy-background">
       <button
-        className="btn-purchase"
+        className="btn-purchase btn-styled-2"
         onClick={() => {
           setCart([]);
         }}

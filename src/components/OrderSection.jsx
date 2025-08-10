@@ -65,7 +65,7 @@ function OrderSection({ price, amount, bookID, title }) {
         <label className="count-label" htmlFor="count">
           Count
         </label>
-        <button className="btn-plus" onClick={handleChangeTotalCount}>
+        <button className="btn-plus btn-styled-1" onClick={handleChangeTotalCount}>
           +
         </button>
         <input
@@ -79,7 +79,7 @@ function OrderSection({ price, amount, bookID, title }) {
           value={totalCount}
           onInput={handleChangeTotalCount}
         />
-        <button className="btn-minus" onClick={handleChangeTotalCount}>
+        <button className="btn-minus btn-styled-1" onClick={handleChangeTotalCount}>
           -
         </button>
       </div>
@@ -96,7 +96,7 @@ function OrderSection({ price, amount, bookID, title }) {
       </div>
 
       <button
-        className="add-button"
+        className="add-button btn-styled-2"
         disabled={!isValid}
         onClick={handleAddToCart}
       >
