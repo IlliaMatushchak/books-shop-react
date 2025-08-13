@@ -36,7 +36,7 @@ body ::selection {
 
 main {
     flex-grow: 1;
-    margin: 1rem 0;
+    margin: 3rem 0;
 }
 
 .flex {
@@ -76,12 +76,12 @@ a {
 
 a:hover,
 .btn-styled-1:hover {
-    transform: scale(1.2);
+    transform: perspective(100px) translate3d(0, 0, 20px);
 }
 
 a:active,
 .btn-styled-1:active {
-    transform: scale(1);
+    transform: perspective(100px) translate3d(0, 0, 0);
 }
 
 .btn-styled-2 {
@@ -111,6 +111,7 @@ button {
     cursor: pointer;
     border: 2px solid black;
     transition: all 0.5s;
+    line-height: 0;
 }
 
 button:disabled:hover {
@@ -145,4 +146,58 @@ select:focus {
 
 .invalid-text {
     color: red;
+}
+
+@media screen and (min-width: 1200px) {
+    html {
+        font-size: 18px;
+    }
+}
+
+@media screen and (min-width: 1600px) {
+    html {
+        font-size: 20px;
+    }
+}
+
+@media screen and (min-width: 2000px) {
+
+    html {
+        font-size: 28px;
+    }
+}
+
+@media screen and (min-width: 2500px) {
+
+    html {
+        font-size: 30px;
+    }
+}
+
+@media screen and (min-width: 3000px) {
+
+    html {
+        font-size: 38px;
+    }
+}
+
+@media screen and (min-width: 3500px) {
+
+    html {
+        font-size: 44px;
+    }
+}
+
+@media screen and (min-width: 4000px) {
+
+    html {
+        font-size: 48px;
+    }
+}
+
+@media screen and (min-width: 4500px) {
+
+    html {
+        font-size: 52px;
+    }
 }

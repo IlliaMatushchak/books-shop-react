@@ -9,7 +9,7 @@
 }
 
 .cart .empty-cart-container {
-    width: 200px;
+    width: 12.5rem;
     margin: auto;
 }
 
@@ -46,4 +46,24 @@
 .cart p {
     text-align: right;
     margin-bottom: 0;
+}
+
+@media screen and (max-width: 800px) {
+
+    .cart .product-info {
+        flex-direction: column;
+    }
+
+    .cart .product-info a {
+        width: 100%;
+        text-align: center;
+    }
+
+    .cart .product-info span {
+        width: 100%;
+        text-align: center;
+        margin-left: 0;
+        padding-top: 1rem;
+    }
+
 }

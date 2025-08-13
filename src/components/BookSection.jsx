@@ -14,7 +14,6 @@ function BookSection({
           <img
             className="book-image"
             src={image || imgNotFound}
-            width="250px"
             alt="Book image"
           />
         </div>

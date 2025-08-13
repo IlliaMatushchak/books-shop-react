@@ -75,3 +75,35 @@
 .order-section .btn-minus {
     margin-right: 10px;
 }
+
+@media screen and (max-width: 1200px) {
+
+    .order-section {
+        width: 30%;
+    }
+
+}
+
+@media screen and (max-width: 1024px) {
+
+    .order-section {
+        width: 50%;
+    }
+
+}
+
+@media screen and (max-width: 800px) {
+    
+    .order-section {
+        width: 70%;
+    }
+
+}
+
+@media screen and (max-width: 420px) {
+    
+    .order-section {
+        width: 100%;
+    }
+
+}

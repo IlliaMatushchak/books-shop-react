@@ -36,3 +36,24 @@
     align-items: center;
     margin-top: 20px;
 }
+
+@media screen and (max-width: 420px) {
+
+    .book-card {
+        width: 300px;
+        padding: 16px;
+    }
+
+    .book-card .img-container {
+        height: 350px;
+    }
+
+}
+
+@media screen and (max-width: 320px) {
+
+    .book-card {
+        width: 100%;
+    }
+
+}

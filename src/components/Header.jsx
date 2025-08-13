@@ -22,7 +22,7 @@ function Header({
         {isLoggedIn && (
           <nav className="flex">
             <Link to="/cart" className="cart-link">
-              <img src={cartImg} width="50px" alt="Cart" />
+              <img src={cartImg} alt="Cart" />
               {cartLength ? <span>{cartLength}</span> : ""}
             </Link>
 
@@ -41,7 +41,6 @@ function Header({
                 <img
                   className="user-avatar"
                   src={avatarImg}
-                  width="50px"
                   alt="Avatar"
                 />
               </Link>

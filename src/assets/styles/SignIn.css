@@ -2,7 +2,7 @@
     width: 10rem;
     height: 10rem;
     display: block;
-    margin: 3rem auto;
+    margin: 2rem auto;
     border-radius: 100%;
     transition: transform 1s;
 }
@@ -18,8 +18,29 @@
     text-align: center;
 }
 
-.signin-container #user-name,
+.signin-container input,
 .signin-container button[type="submit"] {
     width: 100%;
     margin-bottom: 1rem;
+}
+
+@media screen and (max-width: 320px) {
+
+    .signin-container img {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto 50px;
+    }
+
+    .signin-container form {
+        width: 95%;
+    }
+
+    .signin-container input,
+    .signin-container button[type="submit"] {
+        min-height: 3rem;
+        border-radius: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
 }

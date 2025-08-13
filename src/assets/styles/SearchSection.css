@@ -1,6 +1,7 @@
 .search-section {
-    width: 50%;
+    width: 75%;
     justify-content: left;
+    flex-wrap: wrap;
     gap: 1rem;
     padding: 1rem;
     margin: 3rem auto;
@@ -9,7 +10,7 @@
 .search-section #search-lable {
     display: block;
     position: relative;
-    width: 16rem;
+    min-width: 14rem;
     height: 2rem;
 }
 
@@ -33,11 +34,23 @@
 }
 
 .search-section #search:focus {
-   transform: none;
+    transform: none;
 }
 
 .search-section #search::-webkit-search-cancel-button {
-	/* -webkit-appearance:none; */
+    /* -webkit-appearance:none; */
     position: relative;
     right: 30px;
+}
+
+@media screen and (max-width: 1024px) {
+    .search-section {
+        justify-content: center;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .search-section {
+        width: auto;
+    }
 }
