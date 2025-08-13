@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/books-shop-react/static/css/main.39d86c85.css",
+    "main.js": "/books-shop-react/static/js/main.133522a7.js",
+    "static/js/453.7496e86d.chunk.js": "/books-shop-react/static/js/453.7496e86d.chunk.js",
+    "static/media/background.jpg": "/books-shop-react/static/media/background.7ba35e2a99a404014526.jpg",
+    "static/media/avatar.png": "/books-shop-react/static/media/avatar.0d14c6999b4a5c8e86a7.png",
+    "static/media/search.png": "/books-shop-react/static/media/search.a5c06f01e3a8520d52e5.png",
+    "static/media/imgNotFound.png": "/books-shop-react/static/media/imgNotFound.298b98203c3825c61303.png",
+    "static/media/cart.svg": "/books-shop-react/static/media/cart.5a1c3c755c07e59db7d65be6bc8d8bfb.svg",
+    "index.html": "/books-shop-react/index.html",
+    "main.39d86c85.css.map": "/books-shop-react/static/css/main.39d86c85.css.map",
+    "main.133522a7.js.map": "/books-shop-react/static/js/main.133522a7.js.map",
+    "453.7496e86d.chunk.js.map": "/books-shop-react/static/js/453.7496e86d.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.39d86c85.css",
+    "static/js/main.133522a7.js"
+  ]
+}
