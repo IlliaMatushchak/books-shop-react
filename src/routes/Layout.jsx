@@ -3,6 +3,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import ScrollToTopButton from "../components/ScrollToTopButton";
 
 function Layout({ userNameState, isLoggedInState }) {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ function Layout({ userNameState, isLoggedInState }) {
         <Outlet />
       </main>
       <Footer />
+      <ScrollToTopButton />
     </>
   );
 }
