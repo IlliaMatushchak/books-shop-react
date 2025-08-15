@@ -4,6 +4,7 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import ScrollToTopButton from "../components/ScrollToTopButton";
+import GoBackButton from "../components/GoBackButton";
 
 function Layout({ userNameState, isLoggedInState }) {
   const navigate = useNavigate();
@@ -27,6 +28,7 @@ function Layout({ userNameState, isLoggedInState }) {
       </main>
       <Footer />
       <ScrollToTopButton />
+      {pathname !== "/" && <GoBackButton />}
     </>
   );
 }
