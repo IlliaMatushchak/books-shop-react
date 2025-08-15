@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
-import ScrollToTopButton from "../components/ScrollToTopButton";
-import GoBackButton from "../components/GoBackButton";
+import Header from "../../components/Header/Header";
+import Footer from "../../components/Footer/Footer";
+import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopButton";
+import GoBackButton from "../../components/GoBackButton/GoBackButton";
 
 function Layout({ userNameState, isLoggedInState }) {
   const navigate = useNavigate();

@@ -1,4 +1,4 @@
-import "../assets/styles/SearchSection.css";
+import "./SearchSection.css";
 
 function SearchSection({
   filterValues: { searchValue, setSearchValue, priceRange, setPriceRange },

@@ -17,7 +17,7 @@
 .search-section #search-lable::after {
     content: '';
     cursor: pointer;
-    background-image: url('../images/search.png');
+    background-image: url('./../../assets/images/search.png');
     background-size: 1.2rem;
     background-repeat: no-repeat;
     background-position: center;

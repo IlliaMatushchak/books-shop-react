@@ -6,12 +6,12 @@ import { CartProvider } from "./hooks/useCart";
 
 import "./App.css";
 
-import Layout from "./routes/Layout";
-import SignIn from "./routes/pages/SignIn";
-import Shop from "./routes/pages/Shop";
-import SpecificBook from "./routes/pages/SpecificBook";
-import Cart from "./routes/pages/Cart";
-import NotFound from "./routes/pages/NotFound";
+import Layout from "./routes/layouts/MainLayout";
+import SignIn from "./routes/pages/SignIn/SignIn";
+import Shop from "./routes/pages/Shop/Shop";
+import SpecificBook from "./routes/pages/SpecificBook/SpecificBook";
+import Cart from "./routes/pages/Cart/Cart";
+import NotFound from "./routes/pages/NotFound/NotFound";
 
 function App() {
   const [userName, setUserName] = useState("");

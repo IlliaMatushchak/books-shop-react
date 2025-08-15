@@ -1,9 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useCart } from "../hooks/useCart";
-import "../assets/styles/Header.css";
-import cartImg from "../assets/images/cart.svg";
-import avatarImg from "../assets/images/avatar.png";
+import { useCart } from "../../hooks/useCart";
+import "./Header.css";
+import cartImg from "../../assets/images/cart.svg";
+import avatarImg from "../../assets/images/avatar.png";
 
 function Header({
   userName = "NoName",

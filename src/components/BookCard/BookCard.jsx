@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
-import imgNotFound from "../assets/images/imgNotFound.png";
-import "../assets/styles/BookCard.css";
+import imgNotFound from "../../assets/images/imgNotFound.png";
+import "./BookCard.css";
 
 function BookCard({ image, title, author, price, id }) {
   return (

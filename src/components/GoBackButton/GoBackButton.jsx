@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import "../assets/styles/GoBackButton.css";
+import "./GoBackButton.css";
 
 export default function GoBackButton() {
   const navigate = useNavigate();

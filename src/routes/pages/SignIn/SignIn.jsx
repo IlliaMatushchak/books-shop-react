@@ -1,5 +1,5 @@
-import "../../assets/styles/SignIn.css";
-import avatarImg from "../../assets/images/avatar.png";
+import "./SignIn.css";
+import avatarImg from "../../../assets/images/avatar.png";
 import { useNavigate } from "react-router-dom";
 
 function SignIn({

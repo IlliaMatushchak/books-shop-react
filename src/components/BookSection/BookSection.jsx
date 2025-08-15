@@ -1,6 +1,6 @@
 import { useState } from "react";
-import imgNotFound from "../assets/images/imgNotFound.png";
-import "../assets/styles/BookSection.css";
+import imgNotFound from "../../assets/images/imgNotFound.png";
+import "./BookSection.css";
 
 function BookSection({
   book: { author, image, title, level, tags, shortDescription, description },

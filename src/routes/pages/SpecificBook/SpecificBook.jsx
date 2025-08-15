@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
-import { useBooks } from "../../hooks/useBooks";
+import { useBooks } from "../../../hooks/useBooks";
 
-import "../../assets/styles/SpecificBook.css";
-import BookSection from "../../components/BookSection";
-import OrderSection from "../../components/OrderSection";
+import "./SpecificBook.css";
+import BookSection from "../../../components/BookSection/BookSection";
+import OrderSection from "../../../components/OrderSection/OrderSection";
 
 function SpecificBook() {
   const books = useBooks();

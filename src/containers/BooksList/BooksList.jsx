@@ -1,5 +1,5 @@
-import "../assets/styles/BooksList.css";
-import BookCard from "../components/BookCard";
+import "./BooksList.css";
+import BookCard from "../../components/BookCard/BookCard";
 
 function BooksList({ books }) {
   return (

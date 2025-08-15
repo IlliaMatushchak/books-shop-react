@@ -1,8 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useCart } from "../../hooks/useCart";
-import "../../assets/styles/Cart.css";
-import cartImg from "../../assets/images/cart.svg";
+import { useCart } from "../../../hooks/useCart";
+import "./Cart.css";
+import cartImg from "../../../assets/images/cart.svg";
 
 function Cart() {
   const { cart, setCart } = useCart();

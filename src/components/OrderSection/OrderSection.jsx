@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { useCart } from "../hooks/useCart";
-import "../assets/styles/OrderSection.css";
+import { useCart } from "../../hooks/useCart";
+import "./OrderSection.css";
 
 function OrderSection({ price, amount, bookID, title }) {
   const { cart, setCart } = useCart();

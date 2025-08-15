@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useBooks } from "../../hooks/useBooks";
-import BookList from "../../containers/BooksList";
-import SearchSection from "../../components/SearchSection";
+import { useBooks } from "../../../hooks/useBooks";
+import BookList from "../../../containers/BooksList/BooksList";
+import SearchSection from "../../../components/SearchSection/SearchSection";
 
 const filterBooksByPriceRange = (books, range) => {
     let priceRange = JSON.parse(range);
