@@ -4,8 +4,10 @@ import { useNavigate } from "react-router-dom";
 
 function SignIn({
   userNameState: { userName, setUserName },
-  isLoggedInState: { isLoggedIn, setIsLoggedIn },
+  isLoggedInState: { setIsLoggedIn },
 }) {
+  console.log('SignIn render');
+  
   const navigate = useNavigate();
 
   function validateUserName(name) {

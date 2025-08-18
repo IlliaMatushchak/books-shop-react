@@ -15,12 +15,12 @@ body {
     font-family: Merienda, 'Courier New', Courier, monospace;
     letter-spacing: 1px;
 
-    background-image: url('./assets/images/background.jpg');
     background-color: rgb(250, 240, 230);
+    /* background-image: url('../public/images/background.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
-    background-attachment: fixed;
+    background-attachment: fixed; */
 }
 
 body #root {

@@ -3,6 +3,7 @@ import { useState } from "react";
 import fetchBooks from "./services/fetchBooks";
 import { BooksProvider } from "./hooks/useBooks";
 import { CartProvider } from "./hooks/useCart";
+import BackgroundImg from "./components/BackgroundImg/BackgroundImg";
 
 import "./App.css";
 
@@ -14,6 +15,8 @@ import Cart from "./routes/pages/Cart/Cart";
 import NotFound from "./routes/pages/NotFound/NotFound";
 
 function App() {
+  console.log("App render");
+
   const [userName, setUserName] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [cart, setCart] = useState([]);
@@ -22,6 +25,7 @@ function App() {
 
   return (
     <>
+      <BackgroundImg />
       <CartProvider value={{ cart, setCart }}>
         <BooksProvider value={books}>
           <Router>
@@ -40,7 +44,7 @@ function App() {
                   element={
                     <SignIn
                       userNameState={{ userName, setUserName }}
-                      isLoggedInState={{ isLoggedIn, setIsLoggedIn }}
+                      isLoggedInState={{ setIsLoggedIn }}
                     />
                   }
                 />
