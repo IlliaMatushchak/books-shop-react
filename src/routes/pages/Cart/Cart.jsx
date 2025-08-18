@@ -5,16 +5,14 @@ import "./Cart.css";
 import cartImg from "../../../assets/images/cart.svg";
 
 function Cart() {
-  const { cart, setCart } = useCart();
+  const { cart, clearCart, removeFromCart } = useCart();
   const isEmpty = !cart.length;
 
   return (
     <div className="cart fancy-background">
       <button
         className="btn-purchase btn-styled-2"
-        onClick={() => {
-          setCart([]);
-        }}
+        onClick={clearCart}
         disabled={isEmpty}
       >
         Purchase
@@ -34,6 +32,14 @@ function Cart() {
                 <span>
                   Count: {orderedCount} / ${(price * orderedCount).toFixed(2)}
                 </span>
+                <button
+                  className="btn-styled-3"
+                  onClick={() => {
+                    removeFromCart(id);
+                  }}
+                >
+                  X
+                </button>
               </div>
             );
           })}

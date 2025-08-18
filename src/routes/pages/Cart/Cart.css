@@ -22,7 +22,7 @@
 }
 
 .cart .product-info {
-    justify-content: space-between;
+    align-items: center;
     padding: 1rem;
     border: 1px solid black;
     border-bottom: none;
@@ -36,7 +36,8 @@
 
 .cart .product-info span {
     min-width: 10rem;
-    margin-left: 1rem;
+    margin-left: auto;
+    margin-right: 1rem;
 }
 
 .cart .product-info:last-of-type {
@@ -57,13 +58,19 @@
     .cart .product-info a {
         width: 100%;
         text-align: center;
+        padding: 0 1rem;
     }
 
     .cart .product-info span {
         width: 100%;
         text-align: center;
-        margin-left: 0;
+        margin: 0;
         padding-top: 1rem;
+    }
+
+    .cart .product-info button {
+        order: -1;
+        align-self: flex-end;
     }
 
 }

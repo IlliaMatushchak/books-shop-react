@@ -3,7 +3,7 @@ import { useCart } from "../../hooks/useCart";
 import "./OrderSection.css";
 
 function OrderSection({ price, amount, bookID, title }) {
-  const { cart, setCart } = useCart();
+  const { cart, addToCart } = useCart();
   const [isValid, setIsValid] = useState(true);
   const [totalCount, setTotalCount] = useState(() => {
     const index = cart.findIndex((el) => {
@@ -14,19 +14,7 @@ function OrderSection({ price, amount, bookID, title }) {
   });
 
   function handleAddToCart() {
-    const index = cart.findIndex((el) => {
-      return el.id === bookID;
-    });
-    if (index === -1) {
-      setCart([
-        ...cart,
-        { id: bookID, orderedCount: totalCount, price, title },
-      ]);
-    } else {
-      const cartNew = [...cart];
-      cartNew[index] = { id: bookID, orderedCount: totalCount, price, title };
-      setCart(cartNew);
-    }
+    addToCart(bookID, totalCount, price, title);
   }
 
   function validateTotalCount(count) {

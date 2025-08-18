@@ -2,8 +2,6 @@ import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
 import fetchBooks from "./services/fetchBooks";
 import { BooksProvider } from "./hooks/useBooks";
-import { CartProvider } from "./hooks/useCart";
-import BackgroundImg from "./components/BackgroundImg/BackgroundImg";
 
 import "./App.css";
 
@@ -13,20 +11,21 @@ import Shop from "./routes/pages/Shop/Shop";
 import SpecificBook from "./routes/pages/SpecificBook/SpecificBook";
 import Cart from "./routes/pages/Cart/Cart";
 import NotFound from "./routes/pages/NotFound/NotFound";
+import BackgroundImg from "./components/BackgroundImg/BackgroundImg";
+import CartProvider from "./containers/CartProvider/CartProvider";
 
 function App() {
   console.log("App render");
 
   const [userName, setUserName] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [cart, setCart] = useState([]);
 
   const books = fetchBooks();
 
   return (
     <>
       <BackgroundImg />
-      <CartProvider value={{ cart, setCart }}>
+      <CartProvider>
         <BooksProvider value={books}>
           <Router>
             <Routes>
