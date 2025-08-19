@@ -1,18 +1,21 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useState, Suspense, lazy } from "react";
 import fetchBooks from "./services/fetchBooks";
 import { BooksProvider } from "./hooks/useBooks";
 
 import "./App.css";
 
 import Layout from "./routes/layouts/MainLayout";
-import SignIn from "./routes/pages/SignIn/SignIn";
-import Shop from "./routes/pages/Shop/Shop";
-import SpecificBook from "./routes/pages/SpecificBook/SpecificBook";
-import Cart from "./routes/pages/Cart/Cart";
-import NotFound from "./routes/pages/NotFound/NotFound";
 import BackgroundImg from "./components/BackgroundImg/BackgroundImg";
 import CartProvider from "./containers/CartProvider/CartProvider";
+
+const SignIn = lazy(() => import("./routes/pages/SignIn/SignIn"));
+const Shop = lazy(() => import("./routes/pages/Shop/Shop"));
+const SpecificBook = lazy(() =>
+  import("./routes/pages/SpecificBook/SpecificBook")
+);
+const Cart = lazy(() => import("./routes/pages/Cart/Cart"));
+const NotFound = lazy(() => import("./routes/pages/NotFound/NotFound"));
 
 function App() {
   console.log("App render");
@@ -28,34 +31,36 @@ function App() {
       <CartProvider>
         <BooksProvider value={books}>
           <Router>
-            <Routes>
-              <Route
-                path="/"
-                element={
-                  <Layout
-                    userNameState={{ userName, setUserName }}
-                    isLoggedInState={{ isLoggedIn, setIsLoggedIn }}
-                  />
-                }
-              >
+            <Suspense fallback={<h2>Loading...</h2>}>
+              <Routes>
                 <Route
-                  index
+                  path="/"
                   element={
-                    <SignIn
+                    <Layout
                       userNameState={{ userName, setUserName }}
-                      isLoggedInState={{ setIsLoggedIn }}
+                      isLoggedInState={{ isLoggedIn, setIsLoggedIn }}
                     />
                   }
-                />
-                <Route path="shop" element={<Shop />} />
-                <Route
-                  path="specific-book/:bookID"
-                  element={<SpecificBook />}
-                />
-                <Route path="cart" element={<Cart />} />
-                <Route path="*" element={<NotFound />} />
-              </Route>
-            </Routes>
+                >
+                  <Route
+                    index
+                    element={
+                      <SignIn
+                        userNameState={{ userName, setUserName }}
+                        isLoggedInState={{ setIsLoggedIn }}
+                      />
+                    }
+                  />
+                  <Route path="shop" element={<Shop />} />
+                  <Route
+                    path="specific-book/:bookID"
+                    element={<SpecificBook />}
+                  />
+                  <Route path="cart" element={<Cart />} />
+                  <Route path="*" element={<NotFound />} />
+                </Route>
+              </Routes>
+            </Suspense>
           </Router>
         </BooksProvider>
       </CartProvider>
@@ -64,3 +69,9 @@ function App() {
 }
 
 export default App;
+
+// function delayForLazy(promise) {
+//   return new Promise((resolve) => {
+//     setTimeout(resolve, 3000);
+//   }).then(() => promise);
+// }
