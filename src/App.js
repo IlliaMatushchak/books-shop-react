@@ -8,6 +8,7 @@ import "./App.css";
 import Layout from "./routes/layouts/MainLayout";
 import BackgroundImg from "./components/BackgroundImg/BackgroundImg";
 import CartProvider from "./containers/CartProvider/CartProvider";
+import Loader from "./components/Loader/Loader";
 
 const SignIn = lazy(() => import("./routes/pages/SignIn/SignIn"));
 const Shop = lazy(() => import("./routes/pages/Shop/Shop"));
@@ -31,7 +32,7 @@ function App() {
       <CartProvider>
         <BooksProvider value={books}>
           <Router>
-            <Suspense fallback={<h2>Loading...</h2>}>
+            <Suspense fallback={<Loader />}>
               <Routes>
                 <Route
                   path="/"
