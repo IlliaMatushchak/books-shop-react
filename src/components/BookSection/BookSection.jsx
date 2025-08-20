@@ -1,6 +1,7 @@
 import { useState } from "react";
 import imgNotFound from "../../assets/images/imgNotFound.png";
 import "./BookSection.css";
+import LazyImage from "../LazyImage/LazyImage";
 
 function BookSection({
   book: { author, image, title, level, tags, shortDescription, description },
@@ -11,7 +12,7 @@ function BookSection({
     <section className="book-section">
       <div className="flex">
         <div className="img-container fancy-background">
-          <img
+          <LazyImage
             className="book-image"
             src={image || imgNotFound}
             alt="Book image"

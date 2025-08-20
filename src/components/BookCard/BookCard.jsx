@@ -1,16 +1,14 @@
 import { Link } from "react-router-dom";
 import imgNotFound from "../../assets/images/imgNotFound.png";
 import "./BookCard.css";
+import LazyImage from "../LazyImage/LazyImage";
 
 function BookCard({ image, title, author, price, id }) {
   return (
     <>
       <div className="book-card fancy-background">
         <div className="img-container">
-          <div
-            className="book-img"
-            style={{ backgroundImage: `url(${image || imgNotFound})` }}
-          ></div>
+          <LazyImage className="book-img" src={image || imgNotFound} alt={title}/>
         </div>
 
         <h2>{title}</h2>

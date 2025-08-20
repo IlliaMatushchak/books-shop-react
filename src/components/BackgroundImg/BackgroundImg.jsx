@@ -16,7 +16,7 @@ function BackgroundImg() {
           aria-hidden="true"
           className={`background-img ${isImgLoaded ? "loaded" : ""}`}
           onLoad={() => {
-            console.log("Img loaded");
+            console.log("BgImg loaded");
             setIsImgLoaded(true);
           }}
         />

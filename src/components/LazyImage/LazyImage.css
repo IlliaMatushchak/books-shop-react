@@ -1,0 +1,15 @@
+.lazy-img {
+    opacity: 0;
+}
+
+.lazy-img.loaded {
+    animation: show 1.5s ease-in-out;
+    animation-fill-mode: forwards;
+}
+
+@keyframes show {
+    to {
+        opacity: 1;
+    }
+}
+    

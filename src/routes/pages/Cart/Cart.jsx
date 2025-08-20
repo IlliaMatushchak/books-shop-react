@@ -20,7 +20,7 @@ function Cart() {
 
       {isEmpty ? (
         <div className="empty-cart-container">
-          <img src={cartImg} alt="Empty cart" />
+          <img src={cartImg} alt="Empty cart" loading="lazy" />
           <p>Cart is empty!</p>
         </div>
       ) : (

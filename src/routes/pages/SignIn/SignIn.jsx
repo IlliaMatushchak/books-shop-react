@@ -1,6 +1,7 @@
 import "./SignIn.css";
 import avatarImg from "../../../assets/images/avatar.png";
 import { useNavigate } from "react-router-dom";
+import LazyImage from "../../../components/LazyImage/LazyImage";
 
 function SignIn({
   userNameState: { userName, setUserName },
@@ -29,7 +30,7 @@ function SignIn({
   return (
     <>
       <div className="signin-container">
-        <img className="fancy-background" src={avatarImg} alt="Avatar" />
+        <LazyImage className="fancy-background" src={avatarImg} alt="User avatar" />
         <form
           className="fancy-background"
           action="#"
