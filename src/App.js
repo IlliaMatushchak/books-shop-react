@@ -1,5 +1,5 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import { useState, Suspense, lazy } from "react";
+import { Suspense, lazy } from "react";
 import fetchBooks from "./services/fetchBooks";
 import { BooksProvider } from "./hooks/useBooks";
 
@@ -8,6 +8,7 @@ import "./App.css";
 import Layout from "./routes/layouts/MainLayout";
 import BackgroundImg from "./components/BackgroundImg/BackgroundImg";
 import CartProvider from "./containers/CartProvider/CartProvider";
+import AuthProvider from "./containers/AuthProvider/AuthProvider";
 import Loader from "./components/Loader/Loader";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 
@@ -22,9 +23,6 @@ const NotFound = lazy(() => import("./routes/pages/NotFound/NotFound"));
 function App() {
   console.log("App render");
 
-  const [userName, setUserName] = useState("");
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   const books = fetchBooks();
 
   return (
@@ -32,63 +30,49 @@ function App() {
       <BackgroundImg />
       <CartProvider>
         <BooksProvider value={books}>
-          <Router>
-            <Suspense fallback={<Loader />}>
-              <Routes>
-                <Route
-                  path="/"
-                  element={
-                    <Layout
-                      userNameState={{ userName, setUserName }}
-                      isLoggedInState={{ isLoggedIn, setIsLoggedIn }}
+          <AuthProvider>
+            <Router>
+              <Suspense fallback={<Loader />}>
+                <Routes>
+                  <Route path="/" element={<Layout />}>
+                    <Route index element={<SignIn />} />
+                    <Route
+                      path="shop"
+                      element={
+                        <PrivateRoute>
+                          <Shop />
+                        </PrivateRoute>
+                      }
                     />
-                  }
-                >
-                  <Route
-                    index
-                    element={
-                      <SignIn
-                        userNameState={{ userName, setUserName }}
-                        isLoggedInState={{ setIsLoggedIn }}
-                      />
-                    }
-                  />
-                  <Route
-                    path="shop"
-                    element={
-                      <PrivateRoute isLoggedIn={isLoggedIn}>
-                        <Shop />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="specific-book/:bookID"
-                    element={
-                      <PrivateRoute isLoggedIn={isLoggedIn}>
-                        <SpecificBook />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="cart"
-                    element={
-                      <PrivateRoute isLoggedIn={isLoggedIn}>
-                        <Cart />
-                      </PrivateRoute>
-                    }
-                  />
-                  <Route
-                    path="*"
-                    element={
-                      <PrivateRoute isLoggedIn={isLoggedIn}>
-                        <NotFound />
-                      </PrivateRoute>
-                    }
-                  />
-                </Route>
-              </Routes>
-            </Suspense>
-          </Router>
+                    <Route
+                      path="specific-book/:bookID"
+                      element={
+                        <PrivateRoute>
+                          <SpecificBook />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="cart"
+                      element={
+                        <PrivateRoute>
+                          <Cart />
+                        </PrivateRoute>
+                      }
+                    />
+                    <Route
+                      path="*"
+                      element={
+                        <PrivateRoute>
+                          <NotFound />
+                        </PrivateRoute>
+                      }
+                    />
+                  </Route>
+                </Routes>
+              </Suspense>
+            </Router>
+          </AuthProvider>
         </BooksProvider>
       </CartProvider>
     </>

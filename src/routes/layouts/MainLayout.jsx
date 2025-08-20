@@ -6,8 +6,7 @@ import Footer from "../../components/Footer/Footer";
 import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopButton";
 import GoBackButton from "../../components/GoBackButton/GoBackButton";
 
-function Layout({ userNameState, isLoggedInState }) {
-
+function Layout() {
   const { pathname } = useLocation();
 
   useEffect(() => {
@@ -16,7 +15,7 @@ function Layout({ userNameState, isLoggedInState }) {
 
   return (
     <>
-      <Header {...userNameState} {...isLoggedInState} />
+      <Header />
       <main>
         <Outlet />
       </main>

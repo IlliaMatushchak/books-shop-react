@@ -1,17 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../hooks/useCart";
+import { useAuth } from "../../hooks/useAuth";
 import "./Header.css";
 import cartImg from "../../assets/images/cart.svg";
 import avatarImg from "../../assets/images/avatar.png";
 
-function Header({
-  userName = "NoName",
-  setUserName,
-  isLoggedIn,
-  setIsLoggedIn,
-}) {
+function Header() {
   const { cart } = useCart();
+  const { userName, setUserName, isLoggedIn, setIsLoggedIn } = useAuth();
   const cartLength = cart.length;
 
   return (

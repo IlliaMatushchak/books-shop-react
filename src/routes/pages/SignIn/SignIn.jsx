@@ -1,14 +1,12 @@
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../hooks/useAuth";
+import LazyImage from "../../../components/LazyImage/LazyImage";
 import "./SignIn.css";
 import avatarImg from "../../../assets/images/avatar.png";
-import { useNavigate } from "react-router-dom";
-import LazyImage from "../../../components/LazyImage/LazyImage";
 
-function SignIn({
-  userNameState: { userName, setUserName },
-  isLoggedInState: { setIsLoggedIn },
-}) {
-  console.log('SignIn render');
-  
+function SignIn() {
+  console.log("SignIn render");
+  const { userName, setUserName, setIsLoggedIn } = useAuth();
   const navigate = useNavigate();
 
   function validateUserName(name) {
@@ -30,7 +28,11 @@ function SignIn({
   return (
     <>
       <div className="signin-container">
-        <LazyImage className="fancy-background" src={avatarImg} alt="User avatar" />
+        <LazyImage
+          className="fancy-background"
+          src={avatarImg}
+          alt="User avatar"
+        />
         <form
           className="fancy-background"
           action="#"
@@ -51,7 +53,11 @@ function SignIn({
               setUserName(e.target.value);
             }}
           />
-          <button type="submit" className="btn-styled-1" disabled={!validateUserName(userName)}>
+          <button
+            type="submit"
+            className="btn-styled-1"
+            disabled={!validateUserName(userName)}
+          >
             Sign-in
           </button>
         </form>
