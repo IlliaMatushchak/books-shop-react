@@ -9,6 +9,7 @@ import Layout from "./routes/layouts/MainLayout";
 import BackgroundImg from "./components/BackgroundImg/BackgroundImg";
 import CartProvider from "./containers/CartProvider/CartProvider";
 import Loader from "./components/Loader/Loader";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 
 const SignIn = lazy(() => import("./routes/pages/SignIn/SignIn"));
 const Shop = lazy(() => import("./routes/pages/Shop/Shop"));
@@ -52,13 +53,38 @@ function App() {
                       />
                     }
                   />
-                  <Route path="shop" element={<Shop />} />
+                  <Route
+                    path="shop"
+                    element={
+                      <PrivateRoute isLoggedIn={isLoggedIn}>
+                        <Shop />
+                      </PrivateRoute>
+                    }
+                  />
                   <Route
                     path="specific-book/:bookID"
-                    element={<SpecificBook />}
+                    element={
+                      <PrivateRoute isLoggedIn={isLoggedIn}>
+                        <SpecificBook />
+                      </PrivateRoute>
+                    }
                   />
-                  <Route path="cart" element={<Cart />} />
-                  <Route path="*" element={<NotFound />} />
+                  <Route
+                    path="cart"
+                    element={
+                      <PrivateRoute isLoggedIn={isLoggedIn}>
+                        <Cart />
+                      </PrivateRoute>
+                    }
+                  />
+                  <Route
+                    path="*"
+                    element={
+                      <PrivateRoute isLoggedIn={isLoggedIn}>
+                        <NotFound />
+                      </PrivateRoute>
+                    }
+                  />
                 </Route>
               </Routes>
             </Suspense>

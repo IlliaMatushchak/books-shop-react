@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
@@ -7,14 +7,8 @@ import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopBut
 import GoBackButton from "../../components/GoBackButton/GoBackButton";
 
 function Layout({ userNameState, isLoggedInState }) {
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
 
-  useEffect(() => {
-    if (!isLoggedInState.isLoggedIn) {
-      navigate("/");
-    }
-  }, [isLoggedInState.isLoggedIn, navigate]);
+  const { pathname } = useLocation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
