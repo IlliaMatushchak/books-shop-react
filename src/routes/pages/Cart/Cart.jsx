@@ -11,7 +11,7 @@ function Cart() {
   return (
     <div className="cart fancy-background">
       <button
-        className="btn-purchase btn-styled-2"
+        className="btn-purchase btn-effect-press"
         onClick={clearCart}
         disabled={isEmpty}
       >
@@ -33,17 +33,17 @@ function Cart() {
                   Count: {orderedCount} / ${(price * orderedCount).toFixed(2)}
                 </span>
                 <button
-                  className="btn-styled-3"
+                  className="btn-text btn-effect-3d"
                   onClick={() => {
                     removeFromCart(id);
                   }}
                 >
-                  X
+                  &times;
                 </button>
               </div>
             );
           })}
-          <p>
+          <p className="total-price">
             Total price, $
             {cart
               .reduce(

@@ -55,7 +55,7 @@ function SignIn() {
           />
           <button
             type="submit"
-            className="btn-styled-1"
+            className="btn-effect-3d"
             disabled={!validateUserName(userName)}
           >
             Sign-in

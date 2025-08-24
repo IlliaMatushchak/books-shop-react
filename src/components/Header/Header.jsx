@@ -18,13 +18,14 @@ function Header() {
 
         {isLoggedIn && (
           <nav className="flex">
-            <Link to="/cart" className="cart-link">
+            <Link to="/cart" className="cart-link btn-effect-3d">
               <img src={cartImg} alt="Cart" loading="lazy" />
               {cartLength ? <span>{cartLength}</span> : ""}
             </Link>
 
             <Link
               to="/"
+              className="btn-effect-3d"
               onClick={() => {
                 setUserName("");
                 setIsLoggedIn(false);
@@ -36,13 +37,13 @@ function Header() {
             <div className="user flex">
               <Link to={"/"}>
                 <img
-                  className="user-avatar"
+                  className="user-avatar btn-effect-3d"
                   src={avatarImg}
                   alt="User avatar"
                   loading="lazy"
                 />
               </Link>
-              <Link to={"/"} className="user-name">
+              <Link to={"/"} className="user-name btn-effect-3d">
                 {userName}
               </Link>
             </div>

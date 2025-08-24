@@ -14,14 +14,7 @@
 .header nav {
     align-items: center;
     padding: 1rem;
-}
-
-.header nav>* {
-    margin-right: 1.5rem;
-}
-
-.header nav :last-child {
-    margin-right: 0;
+    gap: 1.5rem;
 }
 
 .header .cart-link {
@@ -30,12 +23,11 @@
 }
 
 .header .cart-link span{
-    display: block;
     position: absolute;
     bottom: 0;
     right: -0.5rem;
     background-color: rgb(240, 240, 10);
-    border: 1px solid black;
+    border: 0.07rem solid black;
     border-radius: 1rem;
     padding: 0.1rem;
 }
@@ -50,6 +42,9 @@
 
 .header .user-avatar {
     width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+    object-fit: cover;
 }
 
 @media screen and (max-width: 800px) {
@@ -68,15 +63,6 @@
 
     .header nav {
         flex-direction: column;
-    }
-
-    .header nav>* {
-        margin-right: 0;
-        margin-bottom: 1.5rem;
-    }
-    
-    .header nav :last-child {
-        margin-bottom: 0;
     }
 
 }

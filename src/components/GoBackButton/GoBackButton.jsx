@@ -10,7 +10,7 @@ export default function GoBackButton() {
   };
 
   return (
-    <button onClick={navigateBack} id="btn-go-back" aria-label="Go to previous page" title="Go back">
+    <button onClick={navigateBack} id="btn-go-back" className="btn-fixed btn-circle btn-effect-shadow" aria-label="Go to previous page" title="Go back">
       &lt;=
     </button>
   );

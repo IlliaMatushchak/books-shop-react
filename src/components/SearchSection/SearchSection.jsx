@@ -5,23 +5,21 @@ function SearchSection({
 }) {
   return (
     <section className="search-section flex fancy-background">
-      <label id="search-lable">
-        <input
-          id="search"
-          type="search"
-          name="searchBy"
-          placeholder="Search by book name"
-          value={searchValue}
-          onChange={(e) => {
-            setSearchValue(e.target.value);
-          }}
-        />
-      </label>
+      <input
+        className="search-by-name"
+        type="search"
+        name="searchByName"
+        placeholder="Search by book name"
+        value={searchValue}
+        onChange={(e) => {
+          setSearchValue(e.target.value);
+        }}
+      />
 
       <select
         title="Select price range"
         name="priceRange"
-        id="select"
+        className="price-range"
         value={priceRange}
         onChange={(e) => {
           setPriceRange(e.target.value);

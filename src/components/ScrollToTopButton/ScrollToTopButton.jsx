@@ -26,7 +26,7 @@ export default function ScrollToTopButton() {
 
   return (
     isVisible && (
-      <button onClick={scrollToTop} id="btn-scroll-up" aria-label="Scroll up">
+      <button onClick={scrollToTop} id="btn-scroll-up" className="btn-fixed btn-circle btn-effect-shadow" aria-label="Scroll up">
         Up
       </button>
     )

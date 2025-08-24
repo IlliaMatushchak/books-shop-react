@@ -1,9 +1,12 @@
 .order-section {
     margin: 1rem;
     padding: 1rem;
-    border: 2px gray dashed;
-    width: 25%;
+    border: 0.14rem gray dashed;
+    max-width: 20rem;
+    min-width: 16rem;
+    width: 100%;
     user-select: none;
+    flex-shrink: 0;
 }
 
 .order-section div {
@@ -11,7 +14,7 @@
 }
 
 .order-section p {
-    margin: 0px;
+    margin: 0;
 }
 
 .order-section .price-paragr,
@@ -52,7 +55,7 @@
 }
 
 .order-section .add-button {
-    margin: 50px 0 0;
+    margin: 3rem 0 0;
     clear: both;
     float: right;
 }
@@ -60,50 +63,14 @@
 .order-section .btn-plus,
 .order-section .btn-minus {
     float: right;
-    width: 2rem;
-    height: 2rem;
-    border-radius: 100%;
-    background-color: wheat;
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
 }
 
 .order-section .btn-plus {
-    margin-left: 10px;
+    margin-left: 0.6rem;
 }
 
 .order-section .btn-minus {
-    margin-right: 10px;
-}
-
-@media screen and (max-width: 1200px) {
-
-    .order-section {
-        width: 30%;
-    }
-
-}
-
-@media screen and (max-width: 1024px) {
-
-    .order-section {
-        width: 50%;
-    }
-
-}
-
-@media screen and (max-width: 800px) {
-    
-    .order-section {
-        width: 70%;
-    }
-
-}
-
-@media screen and (max-width: 420px) {
-    
-    .order-section {
-        width: 100%;
-    }
-
+    margin-right: 0.6rem;
 }

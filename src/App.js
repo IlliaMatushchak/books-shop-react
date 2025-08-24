@@ -4,6 +4,7 @@ import fetchBooks from "./services/fetchBooks";
 import { BooksProvider } from "./hooks/useBooks";
 
 import "./App.css";
+import "./assets/styles/button.css";
 
 import Layout from "./routes/layouts/MainLayout";
 import BackgroundImg from "./components/BackgroundImg/BackgroundImg";
