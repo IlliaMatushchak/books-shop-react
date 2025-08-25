@@ -12,6 +12,8 @@ import CartProvider from "./containers/CartProvider/CartProvider";
 import AuthProvider from "./containers/AuthProvider/AuthProvider";
 import Loader from "./components/Loader/Loader";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import ErrorBoundary from "./containers/ErrorBoundary/ErrorBoundary";
+import ErrorFallback from "./components/ErrorFallback/ErrorFallback";
 
 const SignIn = lazy(() => import("./routes/pages/SignIn/SignIn"));
 const Shop = lazy(() => import("./routes/pages/Shop/Shop"));
@@ -32,47 +34,55 @@ function App() {
       <CartProvider>
         <BooksProvider value={books}>
           <AuthProvider>
-            <Router>
-              <Suspense fallback={<Loader />}>
-                <Routes>
-                  <Route path="/" element={<Layout />}>
-                    <Route index element={<SignIn />} />
-                    <Route
-                      path="shop"
-                      element={
-                        <PrivateRoute>
-                          <Shop />
-                        </PrivateRoute>
-                      }
-                    />
-                    <Route
-                      path="specific-book/:bookID"
-                      element={
-                        <PrivateRoute>
-                          <SpecificBook />
-                        </PrivateRoute>
-                      }
-                    />
-                    <Route
-                      path="cart"
-                      element={
-                        <PrivateRoute>
-                          <Cart />
-                        </PrivateRoute>
-                      }
-                    />
-                    <Route
-                      path="*"
-                      element={
-                        <PrivateRoute>
-                          <NotFound />
-                        </PrivateRoute>
-                      }
-                    />
-                  </Route>
-                </Routes>
-              </Suspense>
-            </Router>
+            <ErrorBoundary fallback={<ErrorFallback />}>
+              <Router>
+                <Suspense fallback={<Loader />}>
+                  <Routes>
+                    <Route path="/" element={<Layout />}>
+                      <Route index element={<SignIn />} />
+                      <Route
+                        path="shop"
+                        element={
+                          <ErrorBoundary fallback={<ErrorFallback />}>
+                            <PrivateRoute>
+                              <Shop />
+                            </PrivateRoute>
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="specific-book/:bookID"
+                        element={
+                          <ErrorBoundary fallback={<ErrorFallback />}>
+                            <PrivateRoute>
+                              <SpecificBook />
+                            </PrivateRoute>
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="cart"
+                        element={
+                          <ErrorBoundary fallback={<ErrorFallback />}>
+                            <PrivateRoute>
+                              <Cart />
+                            </PrivateRoute>
+                          </ErrorBoundary>
+                        }
+                      />
+                      <Route
+                        path="*"
+                        element={
+                          <PrivateRoute>
+                            <NotFound />
+                          </PrivateRoute>
+                        }
+                      />
+                    </Route>
+                  </Routes>
+                </Suspense>
+              </Router>
+            </ErrorBoundary>
           </AuthProvider>
         </BooksProvider>
       </CartProvider>

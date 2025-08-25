@@ -1,0 +1,48 @@
+.error-container {
+    text-align: center;
+    background-color: rgb(250, 240, 230, 0.7);
+    box-shadow: 0 0 0.5rem 0.3rem rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+    border-radius: 1rem;
+    max-width: 38rem;
+    margin: 2rem auto;
+}
+
+.error-container h1 {
+    font-size: 1.8rem;
+    margin-top: 0;
+    color: #d32f2f;
+}
+
+.error-container .error-msg {
+    color: #b71c1c;
+    font-size: 0.8rem;
+    background: #fdecea;
+    border: 0.07rem solid #f5c6cb;
+    padding: 0.7rem;
+    border-radius: 0.5rem;
+    margin: 1rem auto;
+    max-width: 90%;
+    white-space: pre-wrap;
+}
+
+.error-container button {
+    margin: 0.5rem 1rem;
+    width: 9rem;
+}
+
+@media screen and (max-width: 800px) {
+
+    .error-container .error-msg {
+        white-space: normal;
+    }
+
+}
+
+@media screen and (max-width: 480px) {
+
+    .error-container button {
+        height: 2rem;
+    }
+
+}
