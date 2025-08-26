@@ -1,22 +1,16 @@
 .error-info-container {
-    font-size: clamp(1rem, 2vw + 1rem, 4rem);
-    padding: 1rem;
+    max-width: 30rem;
     text-align: center;
+    margin: 2rem auto;
+    padding: 1rem;
 }
 
-.error-info-container p {
-    margin: 1rem 0;
+.error-info-container h1{
+    color: #d32f2f;
+    margin-top: 0;
+    margin-bottom: 1rem;
 }
-
-.error-info-container span {
-    font-weight: bold;
-    color: red;
-}
-
 .error-info-container a {
-    display: block;
-    margin: 1rem auto;
-    font-size: clamp(0.8rem, 1.5vw + 0.5rem, 2rem);
-    text-decoration: underline;
+    display: inline-block;
     color: purple;
 }
