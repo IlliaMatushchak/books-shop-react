@@ -23,14 +23,24 @@ const filterBooksByName = (books, name) => {
 };
 
 function Shop() {
+  console.log("Shop render");
   const books = useBooks();
   const [searchValue, setSearchValue] = useState("");
   const [priceRange, setPriceRange] = useState("[0, 9999]");
 
+  console.time("filter");
   const filteredBooks = filterBooksByName(
     filterBooksByPriceRange(books, priceRange),
     searchValue
   );
+  // const filteredBooks = useMemo(() => {
+  //   console.log("MEMO");
+  //   return filterBooksByName(
+  //     filterBooksByPriceRange(books, priceRange),
+  //     searchValue
+  //   );
+  // }, [priceRange, searchValue, books]);
+  console.timeEnd("filter");
 
   return (
     <>

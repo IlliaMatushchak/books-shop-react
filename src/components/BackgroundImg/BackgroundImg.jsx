@@ -6,7 +6,7 @@ import "./BackgroundImg.css";
 function BackgroundImg() {
   const isWindowLoaded = useWindowLoaded();
   const [isImgLoaded, setIsImgLoaded] = useState(false);
-  console.log("BgImg render");
+  // console.log("BgImg render");
   return (
     <>
       {isWindowLoaded && (
@@ -16,7 +16,7 @@ function BackgroundImg() {
           aria-hidden="true"
           className={`background-img ${isImgLoaded ? "loaded" : ""}`}
           onLoad={() => {
-            console.log("BgImg loaded");
+            // console.log("BgImg loaded");
             setIsImgLoaded(true);
           }}
         />

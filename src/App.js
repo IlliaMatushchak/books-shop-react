@@ -1,5 +1,5 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useState } from "react";
 import fetchBooks from "./services/fetchBooks";
 import { BooksProvider } from "./hooks/useBooks";
 
@@ -25,11 +25,19 @@ const NotFound = lazy(() => import("./routes/pages/NotFound/NotFound"));
 
 function App() {
   console.log("App render");
+  // const [value, setvalue] = useState(false);
 
   const books = fetchBooks();
 
   return (
     <>
+      {/* <input
+        type="checkbox"
+        value={value}
+        onChange={() => {
+          setvalue((prev) => !prev);
+        }}
+      /> */}
       <BackgroundImg />
       <CartProvider>
         <BooksProvider value={books}>

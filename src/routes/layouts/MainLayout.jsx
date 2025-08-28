@@ -7,6 +7,7 @@ import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopBut
 import GoBackButton from "../../components/GoBackButton/GoBackButton";
 
 function Layout() {
+  console.log("Layout render");
   const { pathname } = useLocation();
 
   useEffect(() => {

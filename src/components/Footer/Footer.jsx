@@ -1,7 +1,8 @@
-import React from "react";
+import React, { memo } from "react";
 import "./Footer.css";
 
-function Footer() {
+const Footer = memo(function Footer() {
+  console.log("Footer render");
   return (
     <footer className="fancy-background">
       <a href="https://github.com/IlliaMatushchak" target="_blank">
@@ -9,6 +10,6 @@ function Footer() {
       </a>
     </footer>
   );
-}
+});
 
 export default Footer;

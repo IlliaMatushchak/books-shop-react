@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../hooks/useCart";
 import { useAuth } from "../../hooks/useAuth";
@@ -6,7 +6,8 @@ import "./Header.css";
 import cartImg from "../../assets/images/cart.svg";
 import avatarImg from "../../assets/images/avatar.png";
 
-function Header() {
+const Header = memo(function Header() {
+  console.log("Header render");
   const { cart } = useCart();
   const { userName, setUserName, isLoggedIn, setIsLoggedIn } = useAuth();
   const cartLength = cart.length;
@@ -52,6 +53,6 @@ function Header() {
       </header>
     </>
   );
-}
+});
 
 export default Header;

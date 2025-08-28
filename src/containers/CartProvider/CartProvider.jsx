@@ -1,10 +1,10 @@
 import { CartContext } from "../../hooks/useCart";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 
 const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
-  const addToCart = (bookID, totalCount, price, title) => {
+  const addToCart = useCallback((bookID, totalCount, price, title) => {
     setCart((prev) => {
       const index = prev.findIndex((el) => el.id === bookID);
 
@@ -19,15 +19,18 @@ const CartProvider = ({ children }) => {
         return updated;
       }
     });
-  };
+  }, []);
 
-  const removeFromCart = (bookID) => {
+  const removeFromCart = useCallback((bookID) => {
     setCart((prev) => prev.filter((item) => item.id !== bookID));
-  };
+  }, []);
 
-  const clearCart = () => setCart([]);
+  const clearCart = useCallback(() => setCart([]), []);
 
-  const value = useMemo(() => ({ cart, addToCart, removeFromCart, clearCart }), [cart]);
+  const value = useMemo(
+    () => ({ cart, addToCart, removeFromCart, clearCart }),
+    [cart, addToCart, removeFromCart, clearCart]
+  );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };

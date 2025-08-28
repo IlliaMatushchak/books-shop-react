@@ -1,10 +1,11 @@
-import React from "react";
+import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../../hooks/useCart";
 import "./Cart.css";
 import cartImg from "../../../assets/images/cart.svg";
 
-function Cart() {
+const Cart = memo(function Cart() {
+  console.log("Cart render");
   const { cart, clearCart, removeFromCart } = useCart();
   const isEmpty = !cart.length;
 
@@ -56,6 +57,6 @@ function Cart() {
       )}
     </div>
   );
-}
+});
 
 export default Cart;

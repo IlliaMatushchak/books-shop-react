@@ -3,7 +3,7 @@ import "./LazyImage.css";
 
 function LazyImage({src, alt, className}) {
   const [isImgLoaded, setIsImgLoaded] = useState(false);
-  console.log("Img render");
+  // console.log("Img render");
   return (
     <>  
         <img
@@ -11,7 +11,7 @@ function LazyImage({src, alt, className}) {
           alt={alt}
           className={`${className} lazy-img ${isImgLoaded ? "loaded" : ""}`}
           onLoad={() => {
-            console.log("Img loaded");
+            // console.log("Img loaded");
             setIsImgLoaded(true);
           }}
         />
