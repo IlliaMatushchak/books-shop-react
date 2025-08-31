@@ -53,7 +53,12 @@ function OrderSection({ price, amount, bookID, title }) {
         <label className="count-label" htmlFor="count">
           Count
         </label>
-        <button className="btn-plus btn-effect-3d btn-circle" onClick={handleChangeTotalCount}>
+        <button
+          type="button"
+          aria-label="Increase count of books"
+          className="btn-plus btn-effect-3d btn-circle"
+          onClick={handleChangeTotalCount}
+        >
           +
         </button>
         <input
@@ -67,7 +72,12 @@ function OrderSection({ price, amount, bookID, title }) {
           value={totalCount}
           onInput={handleChangeTotalCount}
         />
-        <button className="btn-minus btn-effect-3d btn-circle" onClick={handleChangeTotalCount}>
+        <button
+          type="button"
+          aria-label="Decrease count of books"
+          className="btn-minus btn-effect-3d btn-circle"
+          onClick={handleChangeTotalCount}
+        >
           -
         </button>
       </div>
@@ -84,6 +94,7 @@ function OrderSection({ price, amount, bookID, title }) {
       </div>
 
       <button
+        type="button"
         className="add-button btn-effect-press"
         disabled={!isValid}
         onClick={handleAddToCart}

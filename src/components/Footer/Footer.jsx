@@ -5,7 +5,7 @@ const Footer = memo(function Footer() {
   console.log("Footer render");
   return (
     <footer className="fancy-background">
-      <a href="https://github.com/IlliaMatushchak" target="_blank">
+      <a href="https://github.com/IlliaMatushchak" target="_blank" rel="noopener noreferrer author">
         Created by <strong>Illia Matushchak</strong>
       </a>
     </footer>

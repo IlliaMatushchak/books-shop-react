@@ -12,6 +12,7 @@ const Cart = memo(function Cart() {
   return (
     <div className="cart fancy-background">
       <button
+        type="button"
         className="btn-purchase btn-effect-press"
         onClick={clearCart}
         disabled={isEmpty}
@@ -34,7 +35,9 @@ const Cart = memo(function Cart() {
                   Count: {orderedCount} / ${(price * orderedCount).toFixed(2)}
                 </span>
                 <button
+                  type="button"
                   className="btn-text btn-effect-3d"
+                  aria-label="Remove from cart"
                   onClick={() => {
                     removeFromCart(id);
                   }}

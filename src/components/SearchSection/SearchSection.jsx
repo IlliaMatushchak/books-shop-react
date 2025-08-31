@@ -10,6 +10,7 @@ function SearchSection({
         type="search"
         name="searchByName"
         placeholder="Search by book name"
+        aria-label="Search by book name"
         value={searchValue}
         onChange={(e) => {
           setSearchValue(e.target.value);

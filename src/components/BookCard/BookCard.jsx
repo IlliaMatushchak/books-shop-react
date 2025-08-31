@@ -14,7 +14,7 @@ const BookCard = memo(function BookCard({ image, title, author, price, id }) {
           <LazyImage
             className="book-img"
             src={image || imgNotFound}
-            alt={title}
+            alt="Book image"
           />
         </div>
 

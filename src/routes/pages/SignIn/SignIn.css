@@ -6,6 +6,8 @@
     border-radius: 50%;
     object-fit: cover;
     transition: transform 0.5s ease-in-out;
+    text-align: center;
+    line-height: 10rem;
 }
 
 .signin-container img:hover {
@@ -31,6 +33,7 @@
         width: 14rem;
         height: 14rem;
         margin: 0 auto 3rem;
+        line-height: 14rem;
     }
 
     .signin-container form {
@@ -49,6 +52,7 @@
     .signin-container img {
         width: 12.5rem;
         height: 12.5rem;
+        line-height: 12.5rem;
     }
 
     .signin-container input,

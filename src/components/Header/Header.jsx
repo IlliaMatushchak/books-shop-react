@@ -40,7 +40,7 @@ const Header = memo(function Header() {
                 <img
                   className="user-avatar btn-effect-3d"
                   src={avatarImg}
-                  alt="User avatar"
+                  alt="Avatar"
                   loading="lazy"
                 />
               </Link>

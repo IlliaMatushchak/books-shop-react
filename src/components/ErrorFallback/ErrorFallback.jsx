@@ -6,10 +6,15 @@ export default function ErrorFallback({ error, resetErrorBoundary }) {
       <h1>Oops, something went wrong!</h1>
       <p>Try reset the error or reload the page</p>
       {error && <pre className="error-msg">{error.message}</pre>}
-      <button className="btn-effect-press" onClick={resetErrorBoundary}>
+      <button
+        type="button"
+        className="btn-effect-press"
+        onClick={resetErrorBoundary}
+      >
         Reset error
       </button>
       <button
+        type="button"
         className="btn-effect-press"
         onClick={() => {
           window.location.reload();

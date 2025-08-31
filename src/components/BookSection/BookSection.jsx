@@ -7,6 +7,12 @@ function BookSection({
   book: { author, image, title, level, tags, shortDescription, description },
 }) {
   const [showFullDescription, setShowFullDescription] = useState(false);
+  const btnText = `Click to see ${showFullDescription ? "less" : "more..."}`;
+
+  function handleDescriptionClick(event) {
+    event.stopPropagation();
+    setShowFullDescription((prev) => !prev);
+  }
 
   return (
     <section className="book-section">
@@ -40,16 +46,21 @@ function BookSection({
 
       <p
         className="book-description fancy-background"
-        onClick={() => {
-          setShowFullDescription((prev) => !prev);
+        onClick={(e) => {
+          handleDescriptionClick(e);
         }}
       >
         <span className="book-span">Description: </span>
-        <span>
-          {showFullDescription
-            ? description
-            : `${shortDescription} (Click to see more)...`}
-        </span>
+        <span>{showFullDescription ? description : shortDescription} </span>
+        <button
+          type="button"
+          className="btn-text"
+          onClick={(e) => {
+            handleDescriptionClick(e);
+          }}
+        >
+          {btnText}
+        </button>
       </p>
     </section>
   );
