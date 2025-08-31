@@ -1,20 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useBooks } from "../../../hooks/useBooks";
 import BookList from "../../../containers/BooksList/BooksList";
 import SearchSection from "../../../components/SearchSection/SearchSection";
+import useDebouncedValue from "../../../hooks/useDebouncedValue";
 
 const filterBooksByPriceRange = (books, range) => {
-    let priceRange = JSON.parse(range);
-    let filteredBooks = books.filter(({ price }) => {
-      let minPrice = priceRange[0],
-        maxPrice = priceRange[1];
-      return price > minPrice && price < maxPrice;
-    });
+  let priceRange = JSON.parse(range);
+  let filteredBooks = books.filter(({ price }) => {
+    let minPrice = priceRange[0],
+      maxPrice = priceRange[1];
+    return price > minPrice && price < maxPrice;
+  });
 
-    return filteredBooks;
+  return filteredBooks;
 };
 
 const filterBooksByName = (books, name) => {
+  console.log('Filtering');
   let filteredBooks = books.filter(({ title }) => {
     return title.toLowerCase().includes(name.toLowerCase());
   });
@@ -27,19 +29,15 @@ function Shop() {
   const books = useBooks();
   const [searchValue, setSearchValue] = useState("");
   const [priceRange, setPriceRange] = useState("[0, 9999]");
+  const debouncedSearchValue = useDebouncedValue(searchValue, 500);
 
   console.time("filter");
-  const filteredBooks = filterBooksByName(
-    filterBooksByPriceRange(books, priceRange),
-    searchValue
-  );
-  // const filteredBooks = useMemo(() => {
-  //   console.log("MEMO");
-  //   return filterBooksByName(
-  //     filterBooksByPriceRange(books, priceRange),
-  //     searchValue
-  //   );
-  // }, [priceRange, searchValue, books]);
+  const filteredBooks = useMemo(() => {
+    return filterBooksByName(
+      filterBooksByPriceRange(books, priceRange),
+      debouncedSearchValue
+    );
+  }, [priceRange, debouncedSearchValue, books]);
   console.timeEnd("filter");
 
   return (

@@ -1,8 +1,8 @@
-// import { memo } from "react";
+import { memo } from "react";
 import "./BooksList.css";
 import BookCard from "../../components/BookCard/BookCard";
 
-function BooksList({ books }) {
+const BooksList = memo(function BooksList({ books }) {
   console.log("BookList render");
   return (
     <section className="book-list flex">
@@ -11,6 +11,6 @@ function BooksList({ books }) {
       })}
     </section>
   );
-};
+});
 
 export default BooksList;
