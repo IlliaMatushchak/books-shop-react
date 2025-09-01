@@ -1,7 +1,5 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { Suspense, lazy, useState } from "react";
-import fetchBooks from "./services/fetchBooks";
-import { BooksProvider } from "./hooks/useBooks";
 
 import "./App.css";
 import "./assets/styles/button.css";
@@ -27,8 +25,6 @@ function App() {
   console.log("App render");
   // const [value, setvalue] = useState(false);
 
-  const books = fetchBooks();
-
   return (
     <>
       {/* <input
@@ -40,7 +36,6 @@ function App() {
       /> */}
       <BackgroundImg />
       <CartProvider>
-        <BooksProvider value={books}>
           <AuthProvider>
             <ErrorBoundary fallback={<ErrorFallback />}>
               <Router>
@@ -92,7 +87,6 @@ function App() {
               </Router>
             </ErrorBoundary>
           </AuthProvider>
-        </BooksProvider>
       </CartProvider>
     </>
   );

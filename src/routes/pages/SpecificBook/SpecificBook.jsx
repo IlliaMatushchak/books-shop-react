@@ -1,24 +1,30 @@
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useBooks } from "../../../hooks/useBooks";
+import fetchBooks from "../../../services/fetchBooks";
 
 import "./SpecificBook.css";
 import BookSection from "../../../components/BookSection/BookSection";
 import OrderSection from "../../../components/OrderSection/OrderSection";
 
 function SpecificBook() {
-  const books = useBooks();
   const { bookID } = useParams();
+  const [specificBook, setSpecificBook] = useState(null);
 
-  const currentBook = books.find(({ id }) => id === Number(bookID));
-  const { amount, price, title } = currentBook;
+  useEffect(() => {
+    fetchBooks(bookID)
+    .then((response) => {
+      setSpecificBook(response);
+    })
+    .catch((error) => {console.error(error);});
+  }, [bookID]);
 
   return (
-    <div className="specific-book-container flex">
-      <BookSection book={currentBook} />
+    specificBook && <div className="specific-book-container flex">
+      <BookSection book={specificBook} />
       <OrderSection
-        price={price}
-        amount={amount}
-        title={title}
+        price={specificBook.price}
+        amount={specificBook.amount}
+        title={specificBook.title}
         bookID={bookID}
       />
     </div>

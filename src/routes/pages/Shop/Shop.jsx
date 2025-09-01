@@ -1,5 +1,5 @@
-import React, { useState, useMemo } from "react";
-import { useBooks } from "../../../hooks/useBooks";
+import React, { useState, useMemo, useEffect } from "react";
+import fetchBooks from "../../../services/fetchBooks";
 import BookList from "../../../containers/BooksList/BooksList";
 import SearchSection from "../../../components/SearchSection/SearchSection";
 import useDebouncedValue from "../../../hooks/useDebouncedValue";
@@ -26,11 +26,19 @@ const filterBooksByName = (books, name) => {
 
 function Shop() {
   console.log("Shop render");
-  const books = useBooks();
+  const [books, setBooks] = useState([]);
   const [searchValue, setSearchValue] = useState("");
   const [priceRange, setPriceRange] = useState("[0, 9999]");
   const debouncedSearchValue = useDebouncedValue(searchValue, 500);
 
+  useEffect(() => {
+    fetchBooks()
+      .then((response) => {
+        setBooks(response);
+      })
+      .catch((error) => {console.error(error);});
+  }, []);
+  
   console.time("filter");
   const filteredBooks = useMemo(() => {
     return filterBooksByName(
