@@ -16,7 +16,7 @@ const filterBooksByPriceRange = (books, range) => {
 };
 
 const filterBooksByName = (books, name) => {
-  console.log('Filtering');
+  console.log("Filtering");
   let filteredBooks = books.filter(({ title }) => {
     return title.toLowerCase().includes(name.toLowerCase());
   });
@@ -30,23 +30,41 @@ function Shop() {
   const [searchValue, setSearchValue] = useState("");
   const [priceRange, setPriceRange] = useState("[0, 9999]");
   const debouncedSearchValue = useDebouncedValue(searchValue, 500);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    setLoading(true);
+    setError(null);
+
     fetchBooks()
       .then((response) => {
         setBooks(response);
       })
-      .catch((error) => {console.error(error);});
+      .catch((error) => {
+        console.error(error);
+        setError(error.message);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, []);
-  
-  console.time("filter");
+
+  // console.time("filter");
   const filteredBooks = useMemo(() => {
     return filterBooksByName(
       filterBooksByPriceRange(books, priceRange),
       debouncedSearchValue
     );
   }, [priceRange, debouncedSearchValue, books]);
-  console.timeEnd("filter");
+  // console.timeEnd("filter");
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <>
