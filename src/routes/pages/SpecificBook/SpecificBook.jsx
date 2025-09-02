@@ -1,35 +1,16 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import fetchBooks from "../../../services/fetchBooks";
+import useFetch from "../../../hooks/useFetch";
 
 import "./SpecificBook.css";
 import BookSection from "../../../components/BookSection/BookSection";
 import OrderSection from "../../../components/OrderSection/OrderSection";
 
 function SpecificBook() {
-  console.log('Book page render');
-  
+  console.log("Book-page render");
+
   const { bookID } = useParams();
-  const [specificBook, setSpecificBook] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    setLoading(true);
-    setError(null);
-
-    fetchBooks(bookID)
-      .then((response) => {
-        setSpecificBook(response);
-      })
-      .catch((error) => {
-        console.error(error);
-        setError(error.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, [bookID]);
+  const { data: specificBook, loading, error } = useFetch(`/books/${bookID}`);
 
   if (loading) {
     return <div>Loading...</div>;

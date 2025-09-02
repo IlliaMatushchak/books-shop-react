@@ -1,6 +1,6 @@
 import data from "../data/books.json";
 
-const fetchBooks = (bookID) => {
+const fetchBooks = (src = "") => {
   console.log("Fetching books");
 
   return new Promise((resolve, reject) => {
@@ -8,12 +8,13 @@ const fetchBooks = (bookID) => {
 
     if (delay < 2000) {
       setTimeout(() => {
-        if (bookID === undefined) {
+        if (src === "/books") {
           resolve(data.books);
         } else {
-          const currentBook = data.books.find(
-            ({ id }) => id === Number(bookID)
-          );
+          let index = src.lastIndexOf("/");
+          let bookID = Number(src.substring(index + 1));
+
+          const currentBook = data.books.find(({ id }) => id === bookID);
           resolve(currentBook);
         }
       }, delay);
