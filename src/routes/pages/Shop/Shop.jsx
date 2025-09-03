@@ -4,6 +4,7 @@ import useDebouncedValue from "../../../hooks/useDebouncedValue";
 
 import BookList from "../../../containers/BooksList/BooksList";
 import SearchSection from "../../../components/SearchSection/SearchSection";
+import Loader from "../../../components/Loader/Loader";
 
 const filterBooksByPriceRange = (books, range) => {
   if (!books || !books.length) {
@@ -49,7 +50,7 @@ function Shop() {
   // console.timeEnd("filter");
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader type="named"/>;
   }
   if (error) {
     return <div>{error}</div>;

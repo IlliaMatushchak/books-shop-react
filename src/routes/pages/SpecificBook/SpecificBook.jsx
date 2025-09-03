@@ -5,6 +5,7 @@ import useFetch from "../../../hooks/useFetch";
 import "./SpecificBook.css";
 import BookSection from "../../../components/BookSection/BookSection";
 import OrderSection from "../../../components/OrderSection/OrderSection";
+import Loader from "../../../components/Loader/Loader";
 
 function SpecificBook() {
   console.log("Book-page render");
@@ -13,7 +14,7 @@ function SpecificBook() {
   const { data: specificBook, loading, error } = useFetch(`/books/${bookID}`);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader type="named" />;
   }
   if (error) {
     return <div>{error}</div>;

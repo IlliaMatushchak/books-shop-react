@@ -39,7 +39,7 @@ function App() {
           <AuthProvider>
             <ErrorBoundary fallback={<ErrorFallback />}>
               <Router>
-                <Suspense fallback={<Loader />}>
+                <Suspense fallback={<Loader type="global" />}>
                   <Routes>
                     <Route path="/" element={<Layout />}>
                       <Route index element={<SignIn />} />
