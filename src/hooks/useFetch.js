@@ -1,38 +1,53 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import fetchBooks from "../services/fetchBooks";
 
 function useFetch(url) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const ignore = useRef(false);
+  const abortControllerRef = useRef(null);
 
-  useEffect(() => {
+  const fetchData = useCallback(() => {
     if (!url) return;
 
-    let ignore = false;
+    ignore.current = false;
+
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     setLoading(true);
     setError(null);
 
-    fetchBooks(url)
+    fetchBooks(url, { signal: controller.signal })
       .then((response) => {
-        if (!ignore) setData(response);
+        if (!ignore.current) setData(response);
       })
       .catch((error) => {
-        if (!ignore) {
-          setError(error.message);
+        if (!ignore.current) {
+          setError(error);
           console.error(error);
         }
       })
       .finally(() => {
-        if (!ignore) setLoading(false);
+        if (!ignore.current) setLoading(false);
       });
-
-    return () => {
-      ignore = true; // щоб уникнути setState на розмонтованому компоненті
-    };
   }, [url]);
 
-  return { data, loading, error };
+  useEffect(() => {
+    fetchData();
+    return () => {
+      ignore.current = true; // щоб уникнути setState на розмонтованому компоненті
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, [fetchData]);
+
+  return { data, loading, error, refetch: fetchData };
 }
 
 export default useFetch;

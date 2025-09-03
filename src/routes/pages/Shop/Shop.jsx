@@ -38,7 +38,7 @@ function Shop() {
   const [searchValue, setSearchValue] = useState("");
   const [priceRange, setPriceRange] = useState("[0, 9999]");
   const debouncedSearchValue = useDebouncedValue(searchValue, 500);
-  const { data: books, loading, error } = useFetch("/books");
+  const { data: books, loading, error, refetch } = useFetch("/books");
 
   // console.time("filter");
   const filteredBooks = useMemo(() => {
@@ -50,10 +50,15 @@ function Shop() {
   // console.timeEnd("filter");
 
   if (loading) {
-    return <Loader type="named"/>;
+    return <Loader type="named" />;
   }
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div>
+        {error}
+        <button onClick={refetch}>Try again</button>
+      </div>
+    );
   }
 
   return (

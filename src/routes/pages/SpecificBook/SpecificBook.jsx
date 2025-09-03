@@ -11,13 +11,23 @@ function SpecificBook() {
   console.log("Book-page render");
 
   const { bookID } = useParams();
-  const { data: specificBook, loading, error } = useFetch(`/books/${bookID}`);
+  const {
+    data: specificBook,
+    loading,
+    error,
+    refetch,
+  } = useFetch(`/books/${bookID}`);
 
   if (loading) {
     return <Loader type="named" />;
   }
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div>
+        {error}
+        <button onClick={refetch}>Try again</button>
+      </div>
+    );
   }
 
   return (
