@@ -5,6 +5,7 @@ import useDebouncedValue from "../../../hooks/useDebouncedValue";
 import BookList from "../../../containers/BooksList/BooksList";
 import SearchSection from "../../../components/SearchSection/SearchSection";
 import Loader from "../../../components/Loader/Loader";
+import ErrorFallback from "../../../components/ErrorFallback/ErrorFallback";
 
 const filterBooksByPriceRange = (books, range) => {
   if (!books || !books.length) {
@@ -53,12 +54,7 @@ function Shop() {
     return <Loader type="named" />;
   }
   if (error) {
-    return (
-      <div>
-        {error}
-        <button onClick={refetch}>Try again</button>
-      </div>
-    );
+    return <ErrorFallback error={error} refetch={refetch} />;
   }
 
   return (

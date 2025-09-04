@@ -6,6 +6,7 @@ import "./SpecificBook.css";
 import BookSection from "../../../components/BookSection/BookSection";
 import OrderSection from "../../../components/OrderSection/OrderSection";
 import Loader from "../../../components/Loader/Loader";
+import ErrorFallback from "../../../components/ErrorFallback/ErrorFallback";
 
 function SpecificBook() {
   console.log("Book-page render");
@@ -22,12 +23,7 @@ function SpecificBook() {
     return <Loader type="named" />;
   }
   if (error) {
-    return (
-      <div>
-        {error}
-        <button onClick={refetch}>Try again</button>
-      </div>
-    );
+    return <ErrorFallback error={error} refetch={refetch} />;
   }
 
   return (

@@ -31,14 +31,6 @@
     width: 9rem;
 }
 
-@media screen and (max-width: 800px) {
-
-    .error-container .error-msg {
-        white-space: normal;
-    }
-
-}
-
 @media screen and (max-width: 480px) {
 
     .error-container button {
