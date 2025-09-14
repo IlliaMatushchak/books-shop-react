@@ -1,8 +1,13 @@
 import { CartContext } from "../../hooks/useCart";
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { LocalStorageService, LS_KEYS } from "../../services/localStorage";
 
 const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(LocalStorageService.get(LS_KEYS.CART) || []);
+
+  useEffect(() => {
+    LocalStorageService.set(LS_KEYS.CART, cart);
+  }, [cart]);
 
   const addToCart = useCallback((bookID, totalCount, price, title) => {
     setCart((prev) => {

@@ -4,9 +4,9 @@ const fetchBooks = (src = "") => {
   console.log("Fetching books");
 
   return new Promise((resolve, reject) => {
-    let delay = Math.floor(Math.random() * 3000 + 1);
+    let delay = Math.floor(Math.random() * 2000 + 1);
 
-    if (delay < 2000) {
+    if (delay < 1900) {
       setTimeout(() => {
         if (src === "/books") {
           resolve(data.books);
