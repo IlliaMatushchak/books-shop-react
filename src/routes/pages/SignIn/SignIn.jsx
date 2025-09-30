@@ -1,8 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
-import LazyImage from "../../../components/LazyImage/LazyImage";
+import AvatarUploader from "../../../components/AvatarUploader/AvatarUploader";
 import "./SignIn.css";
-import avatarImg from "../../../assets/images/avatar.png";
 
 function SignIn() {
   console.log("SignIn render");
@@ -28,11 +27,7 @@ function SignIn() {
   return (
     <>
       <div className="signin-container">
-        <LazyImage
-          className="fancy-background"
-          src={avatarImg}
-          alt="User avatar"
-        />
+        <AvatarUploader />
         <form
           className="fancy-background"
           action="#"
