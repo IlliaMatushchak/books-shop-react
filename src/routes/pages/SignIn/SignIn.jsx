@@ -27,7 +27,7 @@ function SignIn() {
   return (
     <>
       <div className="signin-container">
-        <AvatarUploader />
+        <AvatarUploader className="avatar" />
         <form
           className="fancy-background"
           action="#"

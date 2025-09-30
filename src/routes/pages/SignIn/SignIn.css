@@ -1,17 +1,16 @@
-.signin-container img {
-    width: 10rem;
-    height: 10rem;
-    display: block;
-    margin: 2rem auto 3rem;
-    border-radius: 50%;
-    object-fit: cover;
-    transition: transform 0.5s ease-in-out;
-    text-align: center;
-    line-height: 10rem;
+:root {
+  --avatar-size: 10rem;
 }
 
-.signin-container img:hover {
-    transform: scale(1.2);
+.signin-container .avatar {
+  margin: 2rem auto 3rem;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  /* transition: transform 0.5s ease-in-out; */
+}
+
+.signin-container .avatar:hover {
+  /* transform: scale(1.2); */
 }
 
 .signin-container form {
@@ -29,11 +28,12 @@
 
 @media screen and (max-width: 480px) {
 
-    .signin-container img {
-        width: 14rem;
-        height: 14rem;
+    :root {
+        --avatar-size: 14rem;
+    }
+
+    .signin-container .avatar {
         margin: 0 auto 3rem;
-        line-height: 14rem;
     }
 
     .signin-container form {
@@ -49,10 +49,8 @@
 
 @media screen and (max-width: 320px) {
 
-    .signin-container img {
-        width: 12.5rem;
-        height: 12.5rem;
-        line-height: 12.5rem;
+    :root {
+        --avatar-size: 12.5rem;
     }
 
     .signin-container input,
