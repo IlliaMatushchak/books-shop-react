@@ -6,6 +6,7 @@ import "./AvatarUploader.css";
 
 function AvatarUploader({ className = "", size = "10rem" }) {
   const [avatar, setAvatar] = useState(null);
+  const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
@@ -21,6 +22,17 @@ function AvatarUploader({ className = "", size = "10rem" }) {
     const file = e.target.files[0];
     if (!file) return;
 
+    // Validate file type and size (max 1MB, only JPG/PNG)
+    if (!["image/jpeg", "image/png"].includes(file.type)) {
+      setError("Only JPG or PNG are allowed");
+      return;
+    }
+    if (file.size > 1 * 1024 * 1024) {
+      setError("The file cannot be larger than 1MB");
+      return;
+    }
+    setError(null);
+
     const reader = new FileReader();
     reader.onloadend = () => {
       setAvatar(reader.result);
@@ -31,18 +43,21 @@ function AvatarUploader({ className = "", size = "10rem" }) {
 
   return (
     <>
-      <div
-        className={`avatar-container fancy-background ${className}`}
-        style={{ width: size, height: size }}
-        title="Click to change avatar"
-        onClick={handleImageClick}
-      >
-        <LazyImage
-          src={avatar || avatarImg}
-          style={{ lineHeight: size }}
-          alt="User Avatar"
-        />
-        <div className="avatar-overlay">📷</div> {/* &#128247; */}
+      <div className={className} style={{ width: size }}>
+        <div
+          className="avatar-img-container fancy-background"
+          style={{ width: "100%", height: size }}
+          title="Click to change avatar"
+          onClick={handleImageClick}
+        >
+          <LazyImage
+            src={avatar || avatarImg}
+            style={{ lineHeight: size }}
+            alt="User Avatar"
+          />
+          <div className="avatar-overlay">📷</div> {/* &#128247; */}
+        </div>
+        {error && <p>{error}</p>}
       </div>
       <input
         type="file"
