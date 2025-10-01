@@ -1,16 +1,5 @@
-:root {
-  --avatar-size: 10rem;
-}
-
 .signin-container .avatar {
   margin: 2rem auto 3rem;
-  width: var(--avatar-size);
-  height: var(--avatar-size);
-  /* transition: transform 0.5s ease-in-out; */
-}
-
-.signin-container .avatar:hover {
-  /* transform: scale(1.2); */
 }
 
 .signin-container form {
@@ -28,10 +17,6 @@
 
 @media screen and (max-width: 480px) {
 
-    :root {
-        --avatar-size: 14rem;
-    }
-
     .signin-container .avatar {
         margin: 0 auto 3rem;
     }
@@ -48,10 +33,6 @@
 }
 
 @media screen and (max-width: 320px) {
-
-    :root {
-        --avatar-size: 12.5rem;
-    }
 
     .signin-container input,
     .signin-container button[type="submit"] {

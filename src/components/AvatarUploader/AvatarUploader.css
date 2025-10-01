@@ -12,7 +12,6 @@
   border-radius: 50%;
   object-fit: cover;
   text-align: center;
-  line-height: var(--avatar-size);
 }
 
 .avatar-container .avatar-overlay {

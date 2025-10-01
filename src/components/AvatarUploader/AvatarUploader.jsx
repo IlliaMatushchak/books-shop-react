@@ -4,7 +4,7 @@ import avatarImg from "../../assets/images/avatar.png";
 import { LocalStorageService, LS_KEYS } from "../../services/localStorage";
 import "./AvatarUploader.css";
 
-function AvatarUploader({ className = "" }) {
+function AvatarUploader({ className = "", size = "10rem" }) {
   const [avatar, setAvatar] = useState(null);
   const fileInputRef = useRef(null);
 
@@ -33,10 +33,15 @@ function AvatarUploader({ className = "" }) {
     <>
       <div
         className={`avatar-container fancy-background ${className}`}
+        style={{ width: size, height: size }}
         title="Click to change avatar"
         onClick={handleImageClick}
       >
-        <LazyImage src={avatar || avatarImg} alt="User Avatar" />
+        <LazyImage
+          src={avatar || avatarImg}
+          style={{ lineHeight: size }}
+          alt="User Avatar"
+        />
         <div className="avatar-overlay">📷</div> {/* &#128247; */}
       </div>
       <input

@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../../hooks/useAuth";
 import AvatarUploader from "../../../components/AvatarUploader/AvatarUploader";
@@ -7,6 +8,32 @@ function SignIn() {
   console.log("SignIn render");
   const { userName, setUserName, setIsLoggedIn } = useAuth();
   const navigate = useNavigate();
+  const [avatarSize, setAvatarSize] = useState("10rem");
+
+  useEffect(() => {
+    let timeoutId;
+
+    const handleResize = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        if (window.innerWidth <= 320) {
+          setAvatarSize("12.5rem");
+        } else if (window.innerWidth <= 480) {
+          setAvatarSize("14rem");
+        } else {
+          setAvatarSize("10rem");
+        }
+      }, 500);
+    };
+
+    handleResize(); // Set initial size based on current window width
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      clearTimeout(timeoutId);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   function validateUserName(name) {
     return name.length >= 4 && name.length <= 16;
@@ -27,7 +54,7 @@ function SignIn() {
   return (
     <>
       <div className="signin-container">
-        <AvatarUploader className="avatar" />
+        <AvatarUploader className="avatar" size={avatarSize} />
         <form
           className="fancy-background"
           action="#"
