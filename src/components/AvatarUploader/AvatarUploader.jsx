@@ -41,6 +41,11 @@ function AvatarUploader({ className = "", size = "10rem" }) {
     reader.readAsDataURL(file);
   };
 
+  const handleImageRemove = () => {
+    setAvatar(null);
+    LocalStorageService.remove(LS_KEYS.AVATAR);
+  };
+
   return (
     <>
       <div className={className} style={{ width: size }}>
@@ -55,7 +60,22 @@ function AvatarUploader({ className = "", size = "10rem" }) {
             style={{ lineHeight: size }}
             alt="User Avatar"
           />
-          <div className="avatar-overlay">📷</div> {/* &#128247; */}
+          <div className="avatar-overlay">
+            📷{/* &#128247; */}
+            {avatar && (
+              <button
+                type="button"
+                className="btn-text btn-effect-3d"
+                aria-label="Remove avatar"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleImageRemove();
+                }}
+              >
+                &times;
+              </button>
+            )}
+          </div>
         </div>
         {error && <p>{error}</p>}
       </div>
