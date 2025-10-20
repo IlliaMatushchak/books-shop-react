@@ -7,7 +7,9 @@ import "./AvatarUploader.css";
 function AvatarUploader({ className = "", size = "10rem" }) {
   const [avatar, setAvatar] = useState(null);
   const [error, setError] = useState(null);
+  const [focused, setFocused] = useState(false);
   const fileInputRef = useRef(null);
+  const avatarImgContainerRef = useRef(null);
 
   useEffect(() => {
     const savedAvatar = LocalStorageService.get(LS_KEYS.AVATAR);
@@ -46,14 +48,42 @@ function AvatarUploader({ className = "", size = "10rem" }) {
     LocalStorageService.remove(LS_KEYS.AVATAR);
   };
 
+  const handleImageKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+      handleImageClick();
+    }
+  };
+
+  const handleImgRemoveKeyDown = (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+      handleImageRemove();
+      avatarImgContainerRef.current.focus(); // To prevent focus staying bug when avatar is removed
+    }
+  };
+
   return (
     <>
       <div className={className} style={{ width: size }}>
         <div
-          className="avatar-img-container fancy-background"
+          className={
+            "avatar-img-container fancy-background" +
+            (focused ? " focused" : "")
+          }
           style={{ width: "100%", height: size }}
           title="Click to change avatar"
+          aria-label="Change avatar"
+          role="button"
+          aria-pressed={!!avatar}
+          tabIndex={0}
           onClick={handleImageClick}
+          onKeyDown={handleImageKeyDown}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          ref={avatarImgContainerRef}
         >
           <LazyImage
             src={avatar || avatarImg}
@@ -70,14 +100,16 @@ function AvatarUploader({ className = "", size = "10rem" }) {
                 onClick={(e) => {
                   e.stopPropagation();
                   handleImageRemove();
+                  setFocused(false); // To prevent focus staying bug when avatar is removed
                 }}
+                onKeyDown={handleImgRemoveKeyDown}
               >
                 &times;
               </button>
             )}
           </div>
         </div>
-        {error && <p>{error}</p>}
+        {error && <p role="alert">{error}</p>}
       </div>
       <input
         type="file"
