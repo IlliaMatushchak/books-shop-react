@@ -4,6 +4,16 @@ import avatarImg from "../../assets/images/avatar.png";
 import { LocalStorageService, LS_KEYS } from "../../services/localStorage";
 import "./AvatarUploader.css";
 
+function validateFile(file) {
+  if (!["image/jpeg", "image/png"].includes(file.type)) {
+    return "Only JPG or PNG are allowed";
+  }
+  if (file.size > 1 * 1024 * 1024) {
+    return "The file cannot be larger than 1MB";
+  }
+  return null;
+}
+
 function AvatarUploader({ className = "", size = "10rem" }) {
   const [avatar, setAvatar] = useState(null);
   const [error, setError] = useState(null);
@@ -24,12 +34,9 @@ function AvatarUploader({ className = "", size = "10rem" }) {
     if (!file) return;
 
     // Validate file type and size (max 1MB, only JPG/PNG)
-    if (!["image/jpeg", "image/png"].includes(file.type)) {
-      setError("Only JPG or PNG are allowed");
-      return;
-    }
-    if (file.size > 1 * 1024 * 1024) {
-      setError("The file cannot be larger than 1MB");
+    const errorMsg = validateFile(file);
+    if (errorMsg) {
+      setError(errorMsg);
       return;
     }
     setError(null);
@@ -106,7 +113,7 @@ function AvatarUploader({ className = "", size = "10rem" }) {
       </div>
       <input
         type="file"
-        accept="image/*"
+        accept="image/jpeg,image/png"
         ref={fileInputRef}
         style={{ display: "none" }}
         onChange={handleFileChange}
