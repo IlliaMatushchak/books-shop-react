@@ -7,7 +7,6 @@ import "./AvatarUploader.css";
 function AvatarUploader({ className = "", size = "10rem" }) {
   const [avatar, setAvatar] = useState(null);
   const [error, setError] = useState(null);
-  const [focused, setFocused] = useState(false);
   const fileInputRef = useRef(null);
   const avatarImgContainerRef = useRef(null);
 
@@ -61,7 +60,7 @@ function AvatarUploader({ className = "", size = "10rem" }) {
       e.preventDefault();
       e.stopPropagation();
       handleImageRemove();
-      avatarImgContainerRef.current.focus(); // To prevent focus staying bug when avatar is removed
+      avatarImgContainerRef.current.focus();
     }
   };
 
@@ -69,10 +68,7 @@ function AvatarUploader({ className = "", size = "10rem" }) {
     <>
       <div className={className} style={{ width: size }}>
         <div
-          className={
-            "avatar-img-container fancy-background" +
-            (focused ? " focused" : "")
-          }
+          className="avatar-img-container fancy-background"
           style={{ width: "100%", height: size }}
           title="Click to change avatar"
           aria-label="Change avatar"
@@ -81,8 +77,6 @@ function AvatarUploader({ className = "", size = "10rem" }) {
           tabIndex={0}
           onClick={handleImageClick}
           onKeyDown={handleImageKeyDown}
-          onFocus={() => setFocused(true)}
-          onBlur={() => setFocused(false)}
           ref={avatarImgContainerRef}
         >
           <LazyImage
@@ -100,7 +94,6 @@ function AvatarUploader({ className = "", size = "10rem" }) {
                 onClick={(e) => {
                   e.stopPropagation();
                   handleImageRemove();
-                  setFocused(false); // To prevent focus staying bug when avatar is removed
                 }}
                 onKeyDown={handleImgRemoveKeyDown}
               >
