@@ -19,6 +19,7 @@ function AvatarUploader({ className = "", size = "10rem" }) {
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
   const avatarImgContainerRef = useRef(null);
+  let errorTimerId = useRef(null);
 
   useEffect(() => {
     const savedAvatar = LocalStorageService.get(LS_KEYS.AVATAR);
@@ -37,6 +38,11 @@ function AvatarUploader({ className = "", size = "10rem" }) {
     const errorMsg = validateFile(file);
     if (errorMsg) {
       setError(errorMsg);
+      if (errorTimerId.current) clearTimeout(errorTimerId.current);
+      errorTimerId.current = setTimeout(() => {
+        setError(null);
+        errorTimerId.current = null;
+      }, 8000);
       return;
     }
     setError(null);
