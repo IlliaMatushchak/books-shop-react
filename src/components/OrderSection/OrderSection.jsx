@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useCart } from "../../hooks/useCart";
+import { useCart } from "../../contexts/CartContext";
 import "./OrderSection.css";
 
 function OrderSection({ price, amount, bookID, title }) {

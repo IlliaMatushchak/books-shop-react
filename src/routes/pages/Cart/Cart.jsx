@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import { Link } from "react-router-dom";
-import { useCart } from "../../../hooks/useCart";
+import { useCart } from "../../../contexts/CartContext";
 import "./Cart.css";
 import cartImg from "../../../assets/images/cart.svg";
 

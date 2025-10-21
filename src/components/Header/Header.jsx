@@ -1,7 +1,7 @@
 import React, { memo } from "react";
 import { Link } from "react-router-dom";
-import { useCart } from "../../hooks/useCart";
-import { useAuth } from "../../hooks/useAuth";
+import { useCart } from "../../contexts/CartContext";
+import { useAuth } from "../../contexts/AuthContext";
 import { useAvatar } from "../../contexts/AvatarContext";
 import "./Header.css";
 import cartImg from "../../assets/images/cart.svg";

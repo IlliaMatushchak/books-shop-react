@@ -6,8 +6,8 @@ import "./assets/styles/button.css";
 
 import Layout from "./routes/layouts/MainLayout";
 import BackgroundImg from "./components/BackgroundImg/BackgroundImg";
-import CartProvider from "./containers/CartProvider/CartProvider";
-import AuthProvider from "./containers/AuthProvider/AuthProvider";
+import { CartProvider } from "./contexts/CartContext";
+import { AuthProvider } from "./contexts/AuthContext";
 import { AvatarProvider } from "./contexts/AvatarContext";
 import Loader from "./components/Loader/Loader";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
@@ -37,8 +37,8 @@ function App() {
       /> */}
       <BackgroundImg />
       <CartProvider>
-          <AuthProvider>
-            <AvatarProvider>
+        <AuthProvider>
+          <AvatarProvider>
             <ErrorBoundary fallback={<ErrorFallback />}>
               <Router>
                 <Suspense fallback={<Loader type="global" />}>
@@ -88,8 +88,8 @@ function App() {
                 </Suspense>
               </Router>
             </ErrorBoundary>
-            </AvatarProvider>
-          </AuthProvider>
+          </AvatarProvider>
+        </AuthProvider>
       </CartProvider>
     </>
   );

@@ -1,8 +1,16 @@
-import { CartContext } from "../../hooks/useCart";
-import { useState, useMemo, useCallback, useEffect } from "react";
-import { LocalStorageService, LS_KEYS } from "../../services/localStorage";
+import {
+  createContext,
+  useContext,
+  useState,
+  useMemo,
+  useCallback,
+  useEffect,
+} from "react";
+import { LocalStorageService, LS_KEYS } from "../services/localStorage";
 
-const CartProvider = ({ children }) => {
+const CartContext = createContext(null);
+
+function CartProvider({ children }) {
   const [cart, setCart] = useState(LocalStorageService.get(LS_KEYS.CART) || []);
 
   useEffect(() => {
@@ -38,6 +46,14 @@ const CartProvider = ({ children }) => {
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
-};
+}
 
-export default CartProvider;
+function useCart() {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error("useCart must be used within a CartProvider");
+  }
+  return context;
+}
+
+export { CartProvider, useCart };

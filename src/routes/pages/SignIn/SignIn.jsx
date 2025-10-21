@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import useResponsiveValue from "../../../hooks/useResponsiveValue";
-import { useAuth } from "../../../hooks/useAuth";
+import { useAuth } from "../../../contexts/AuthContext";
 import AvatarUploader from "../../../components/AvatarUploader/AvatarUploader";
 import "./SignIn.css";
 
