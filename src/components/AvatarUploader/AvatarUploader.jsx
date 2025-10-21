@@ -1,7 +1,7 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
+import { useAvatar } from "../../contexts/AvatarContext";
 import LazyImage from "../LazyImage/LazyImage";
 import avatarImg from "../../assets/images/avatar.png";
-import { LocalStorageService, LS_KEYS } from "../../services/localStorage";
 import "./AvatarUploader.css";
 
 function validateFile(file) {
@@ -15,16 +15,11 @@ function validateFile(file) {
 }
 
 function AvatarUploader({ className = "", size = "10rem" }) {
-  const [avatar, setAvatar] = useState(null);
+  const { avatar, changeAvatar, removeAvatar } = useAvatar();
   const [error, setError] = useState(null);
   const fileInputRef = useRef(null);
   const avatarImgContainerRef = useRef(null);
   let errorTimerId = useRef(null);
-
-  useEffect(() => {
-    const savedAvatar = LocalStorageService.get(LS_KEYS.AVATAR);
-    if (savedAvatar) setAvatar(savedAvatar);
-  }, []);
 
   const handleImageClick = () => {
     fileInputRef.current.click();
@@ -49,15 +44,13 @@ function AvatarUploader({ className = "", size = "10rem" }) {
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      setAvatar(reader.result);
-      LocalStorageService.set(LS_KEYS.AVATAR, reader.result);
+      changeAvatar(reader.result);
     };
     reader.readAsDataURL(file);
   };
 
   const handleImageRemove = () => {
-    setAvatar(null);
-    LocalStorageService.remove(LS_KEYS.AVATAR);
+    removeAvatar();
   };
 
   const handleImageKeyDown = (e) => {

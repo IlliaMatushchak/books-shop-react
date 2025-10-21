@@ -8,6 +8,7 @@ import Layout from "./routes/layouts/MainLayout";
 import BackgroundImg from "./components/BackgroundImg/BackgroundImg";
 import CartProvider from "./containers/CartProvider/CartProvider";
 import AuthProvider from "./containers/AuthProvider/AuthProvider";
+import { AvatarProvider } from "./contexts/AvatarContext";
 import Loader from "./components/Loader/Loader";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import ErrorBoundary from "./containers/ErrorBoundary/ErrorBoundary";
@@ -37,6 +38,7 @@ function App() {
       <BackgroundImg />
       <CartProvider>
           <AuthProvider>
+            <AvatarProvider>
             <ErrorBoundary fallback={<ErrorFallback />}>
               <Router>
                 <Suspense fallback={<Loader type="global" />}>
@@ -86,6 +88,7 @@ function App() {
                 </Suspense>
               </Router>
             </ErrorBoundary>
+            </AvatarProvider>
           </AuthProvider>
       </CartProvider>
     </>
