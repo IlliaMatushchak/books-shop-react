@@ -1,4 +1,6 @@
 const LS_KEYS = {
+  TOKEN: "token",
+  USER: "user",
   CART: "cart",
   AVATAR: "avatar",
 };
