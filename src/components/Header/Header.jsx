@@ -11,16 +11,15 @@ const Header = memo(function Header() {
   console.log("Header render");
   const { cart } = useCart();
   const { avatar } = useAvatar();
-  const { userName, setUserName, isLoggedIn, setIsLoggedIn } = useAuth();
+  const { user, isLoggedIn, logout } = useAuth();
   const cartLength = cart.length;
 
   return (
-    <>
-      <header className="header flex fancy-background">
-        <h1>Books shop</h1>
-
-        {isLoggedIn && (
-          <nav className="flex">
+    <header className="header flex fancy-background">
+      <h1>Books shop</h1>
+      <nav className="flex">
+        {isLoggedIn ? (
+          <>
             <Link to="/cart" className="cart-link btn-effect-3d">
               <img src={cartImg} alt="Cart" loading="lazy" />
               {cartLength ? <span>{cartLength}</span> : ""}
@@ -30,11 +29,10 @@ const Header = memo(function Header() {
               to="/"
               className="btn-effect-3d"
               onClick={() => {
-                setUserName("");
-                setIsLoggedIn(false);
+                logout();
               }}
             >
-              Sign-out
+              Logout
             </Link>
 
             <div className="user flex">
@@ -47,13 +45,23 @@ const Header = memo(function Header() {
                 />
               </Link>
               <Link to={"/"} className="user-name btn-effect-3d">
-                {userName}
+                {user?.username}
               </Link>
             </div>
-          </nav>
+          </>
+        ) : (
+          <>
+            <Link to="/" className="btn-effect-3d">
+              Login
+            </Link>
+
+            <Link to="/register" className="btn-effect-3d">
+              Register
+            </Link>
+          </>
         )}
-      </header>
-    </>
+      </nav>
+    </header>
   );
 });
 

@@ -11,9 +11,14 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { AvatarProvider } from "./contexts/AvatarContext";
 import Loader from "./components/Loader/Loader";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import PublicRoute from "./components/PublicRoute/PublicRoute";
 import ErrorBoundary from "./containers/ErrorBoundary/ErrorBoundary";
 import ErrorFallback from "./components/ErrorFallback/ErrorFallback";
 
+const Registration = lazy(() =>
+  import("./routes/pages/Registration/Registration")
+);
+const Login = lazy(() => import("./routes/pages/Login/Login"));
 const SignIn = lazy(() => import("./routes/pages/SignIn/SignIn"));
 const Shop = lazy(() => import("./routes/pages/Shop/Shop"));
 const SpecificBook = lazy(() =>
@@ -44,12 +49,29 @@ function App() {
                 <Suspense fallback={<Loader type="global" />}>
                   <Routes>
                     <Route path="/" element={<Layout />}>
-                      <Route index element={<SignIn />} />
+                      <Route
+                        index
+                        element={
+                          <PublicRoute>
+                            <Login />
+                          </PublicRoute>
+                        }
+                      />
+                      <Route
+                        path="register"
+                        element={
+                          <ErrorBoundary fallback={<ErrorFallback />}>
+                            <PublicRoute>
+                              <Registration />
+                            </PublicRoute>
+                          </ErrorBoundary>
+                        }
+                      />
                       <Route
                         path="shop"
                         element={
                           <ErrorBoundary fallback={<ErrorFallback />}>
-                            <PrivateRoute>
+                            <PrivateRoute allowedRoles={["user", "admin"]}>
                               <Shop />
                             </PrivateRoute>
                           </ErrorBoundary>
@@ -59,7 +81,7 @@ function App() {
                         path="specific-book/:bookID"
                         element={
                           <ErrorBoundary fallback={<ErrorFallback />}>
-                            <PrivateRoute>
+                            <PrivateRoute allowedRoles={["user", "admin"]}>
                               <SpecificBook />
                             </PrivateRoute>
                           </ErrorBoundary>
@@ -69,20 +91,13 @@ function App() {
                         path="cart"
                         element={
                           <ErrorBoundary fallback={<ErrorFallback />}>
-                            <PrivateRoute>
+                            <PrivateRoute allowedRoles={["user", "admin"]}>
                               <Cart />
                             </PrivateRoute>
                           </ErrorBoundary>
                         }
                       />
-                      <Route
-                        path="*"
-                        element={
-                          <PrivateRoute>
-                            <NotFound />
-                          </PrivateRoute>
-                        }
-                      />
+                      <Route path="*" element={<NotFound />} />
                     </Route>
                   </Routes>
                 </Suspense>
