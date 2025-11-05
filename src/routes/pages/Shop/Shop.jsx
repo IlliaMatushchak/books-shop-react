@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useEffect } from "react";
 import useFetch from "../../../hooks/useFetch";
 import useDebouncedValue from "../../../hooks/useDebouncedValue";
+import { BookService } from "../../../services/bookService";
 
 import BookList from "../../../containers/BooksList/BooksList";
 import SearchSection from "../../../components/SearchSection/SearchSection";
@@ -39,7 +40,7 @@ function Shop() {
   const [searchValue, setSearchValue] = useState("");
   const [priceRange, setPriceRange] = useState("[0, 9999]");
   const debouncedSearchValue = useDebouncedValue(searchValue, 500);
-  const { data: books, loading, error, refetch } = useFetch("/books");
+  const { data: books, loading, error, refetch } = useFetch(BookService.getAll);
 
   // console.time("filter");
   const filteredBooks = useMemo(() => {

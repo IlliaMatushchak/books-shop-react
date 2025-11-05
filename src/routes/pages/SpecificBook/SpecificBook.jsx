@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useFetch from "../../../hooks/useFetch";
+import { BookService } from "../../../services/bookService";
 
 import "./SpecificBook.css";
 import BookSection from "../../../components/BookSection/BookSection";
@@ -17,7 +18,7 @@ function SpecificBook() {
     loading,
     error,
     refetch,
-  } = useFetch(`/books/${bookID}`);
+  } = useFetch(() => BookService.getById(bookID), [bookID]);
 
   if (loading) {
     return <Loader type="named" />;
