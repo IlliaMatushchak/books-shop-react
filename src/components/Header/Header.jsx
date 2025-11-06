@@ -35,8 +35,8 @@ const Header = memo(function Header() {
               Logout
             </Link>
 
-            <div className="user flex">
-              <Link to={"/"}>
+            <div className="user flex" title="Edit profile">
+              <Link to={"/profile"}>
                 <img
                   className="user-avatar btn-effect-3d"
                   src={avatar || avatarImg}
@@ -44,7 +44,7 @@ const Header = memo(function Header() {
                   loading="lazy"
                 />
               </Link>
-              <Link to={"/"} className="user-name btn-effect-3d">
+              <Link to={"/profile"} className="user-name btn-effect-3d">
                 {user?.username}
               </Link>
             </div>

@@ -19,6 +19,7 @@ const Registration = lazy(() =>
   import("./routes/pages/Registration/Registration")
 );
 const Login = lazy(() => import("./routes/pages/Login/Login"));
+const Profile = lazy(() => import("./routes/pages/Profile/Profile"));
 const SignIn = lazy(() => import("./routes/pages/SignIn/SignIn"));
 const Shop = lazy(() => import("./routes/pages/Shop/Shop"));
 const SpecificBook = lazy(() =>
@@ -93,6 +94,16 @@ function App() {
                           <ErrorBoundary fallback={<ErrorFallback />}>
                             <PrivateRoute allowedRoles={["user", "admin"]}>
                               <Cart />
+                            </PrivateRoute>
+                          </ErrorBoundary>
+                        }
+                      />
+                       <Route
+                        path="profile"
+                        element={
+                          <ErrorBoundary fallback={<ErrorFallback />}>
+                            <PrivateRoute allowedRoles={["user", "admin"]}>
+                              <Profile />
                             </PrivateRoute>
                           </ErrorBoundary>
                         }
