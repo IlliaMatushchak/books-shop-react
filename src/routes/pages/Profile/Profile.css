@@ -1,0 +1,62 @@
+.profile-container {
+  text-align: center;
+}
+
+.profile-container form {
+  margin: 1rem auto;
+  padding: 1rem;
+  max-width: 18rem;
+}
+
+.profile-container form :first-child {
+  margin-top: 0;
+}
+
+.profile-container form :last-child {
+  margin-bottom: 0;
+}
+
+.profile-container input,
+.profile-container select,
+.profile-container button {
+  width: 100%;
+  height: 2rem;
+  margin-bottom: 1rem;
+}
+
+.profile-container hr {
+  margin: 0 0 1rem 0;
+}
+
+.profile-container .alert {
+  max-width: 18rem;
+  text-align: center;
+  margin: 1rem auto 0;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  border-radius: 1rem;
+  line-height: 1.5;
+  color: #fff;
+}
+
+.profile-container .error {
+  background-color: rgba(180, 50, 40, 0.8);
+}
+
+.profile-container .message {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+@media screen and (max-width: 320px) {
+  .profile-container input,
+  .profile-container select,
+  .profile-container button {
+    height: 3rem;
+    border-radius: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .profile-container hr {
+    margin: 0 0 1.5rem 0;
+  }
+}
