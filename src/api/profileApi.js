@@ -9,3 +9,7 @@ export const getUserProfileApi = () => {
 export const updateUserProfileApi = (userData) => {
   return axiosInstance.put(API_URL, userData);
 };
+
+export const changeUserPasswordApi = (passwordData) => {
+  return axiosInstance.put(API_URL + "/password", passwordData);
+};
