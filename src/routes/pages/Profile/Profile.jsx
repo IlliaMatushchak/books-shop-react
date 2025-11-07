@@ -21,6 +21,11 @@ export default function Profile() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState(null);
+  const [passwordData, setPasswordData] = useState({
+    oldPassword: "",
+    newPassword: "",
+    confirm: "",
+  });
 
   useEffect(() => {
     async function loadProfile() {
@@ -41,6 +46,11 @@ export default function Profile() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleChangePassword = (e) => {
+    const { name, value } = e.target;
+    setPasswordData((prev) => ({ ...prev, [name]: value }));
   };
 
   const removeNotification = () => {
@@ -68,10 +78,32 @@ export default function Profile() {
     }
   };
 
+  const handlePasswordChange = async (e) => {
+    e.preventDefault(e);
+    removeNotification();
+    if (passwordData.newPassword !== passwordData.confirm) {
+      return setError("New passwords do not match!");
+    }
+    try {
+      setLoading(true);
+      const data = await ProfileService.changePassword({
+        oldPassword: passwordData.oldPassword,
+        newPassword: passwordData.newPassword,
+      });
+      setMessage(data.message);
+      setPasswordData({ oldPassword: "", newPassword: "", confirm: "" });
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading && !profile) return <Loader />;
 
   return (
     <div className="profile-container">
+      <div className="forms-container flex">
       <form className="fancy-background" onSubmit={handleSubmit}>
         <h2 className="">My profile</h2>
         <label htmlFor="user-name">User name</label>
@@ -160,6 +192,39 @@ export default function Profile() {
           </>
         )}
       </form>
+
+        <form className="fancy-background" onSubmit={handlePasswordChange}>
+          <h2>Change password</h2>
+          <input
+            type="password"
+            name="oldPassword"
+            placeholder="Old password"
+            value={passwordData.oldPassword}
+            onChange={handleChangePassword}
+            required
+          />
+          <input
+            type="password"
+            name="newPassword"
+            placeholder="New password"
+            value={passwordData.newPassword}
+            onChange={handleChangePassword}
+            required
+          />
+          <input
+            type="password"
+            name="confirm"
+            placeholder="Confirm password"
+            value={passwordData.confirm}
+            onChange={handleChangePassword}
+            required
+          />
+          <hr />
+          <button type="submit" disabled={loading}>
+            Change
+          </button>
+        </form>
+      </div>
       {error && (
         <p className="alert error" role="alert">
           {error}

@@ -1,11 +1,12 @@
-.profile-container {
-  text-align: center;
+.profile-container .forms-container {
+  align-items: flex-start;
 }
 
 .profile-container form {
   margin: 1rem auto;
   padding: 1rem;
   max-width: 18rem;
+  text-align: center;
 }
 
 .profile-container form :first-child {
@@ -16,15 +17,15 @@
   margin-bottom: 0;
 }
 
-.profile-container input,
-.profile-container select,
-.profile-container button {
+.profile-container form input,
+.profile-container form select,
+.profile-container form button {
   width: 100%;
   height: 2rem;
   margin-bottom: 1rem;
 }
 
-.profile-container hr {
+.profile-container form hr {
   margin: 0 0 1rem 0;
 }
 
@@ -48,15 +49,15 @@
 }
 
 @media screen and (max-width: 320px) {
-  .profile-container input,
-  .profile-container select,
-  .profile-container button {
+  .profile-container form input,
+  .profile-container form select,
+  .profile-container form button {
     height: 3rem;
     border-radius: 1.5rem;
     margin-bottom: 1.5rem;
   }
 
-  .profile-container hr {
+  .profile-container form hr {
     margin: 0 0 1.5rem 0;
   }
 }
