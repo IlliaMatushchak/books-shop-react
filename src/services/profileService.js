@@ -3,7 +3,6 @@ import {
   updateUserProfileApi,
   changeUserPasswordApi,
 } from "../api/profileApi";
-import { LocalStorageService, LS_KEYS } from "./localStorage";
 
 export const ProfileService = {
   async getProfile() {
@@ -14,10 +13,8 @@ export const ProfileService = {
 
   async updateProfile(userData) {
     const response = await updateUserProfileApi(userData);
-    const updatedUser = response.data;
-    LocalStorageService.set(LS_KEYS.USER, updatedUser);
 
-    return updatedUser;
+    return response.data;
   },
 
   async changePassword(passwordData) {
