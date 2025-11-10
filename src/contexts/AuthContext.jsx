@@ -11,14 +11,27 @@ function AuthProvider({ children }) {
 
   const login = async (credentials) => {
     const data = await AuthService.login(credentials);
-    setUser(data.user);
-    setToken(data.token);
+    const {
+      token,
+      user: { id, username, role },
+    } = data;
+    LocalStorageService.set(LS_KEYS.TOKEN, token);
+    LocalStorageService.set(LS_KEYS.USER, { id, username, role });
+    setUser({ id, username, role });
+    setToken(token);
   };
 
   const logout = () => {
-    AuthService.logout();
+    LocalStorageService.remove(LS_KEYS.TOKEN);
+    LocalStorageService.remove(LS_KEYS.USER);
     setUser(null);
     setToken(null);
+  };
+
+  const updateUser = (newProfile) => {
+    const { id, username, role } = newProfile;
+    setUser({ id, username, role });
+    LocalStorageService.set(LS_KEYS.USER, { id, username, role });
   };
 
   const value = useMemo(
@@ -28,6 +41,7 @@ function AuthProvider({ children }) {
       isLoggedIn: isAuthenticated,
       login,
       logout,
+      updateUser,
     }),
     [user, token, isAuthenticated]
   );

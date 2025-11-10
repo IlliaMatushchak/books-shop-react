@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { ProfileService } from "../../../services/profileService";
+import { useAuth } from "../../../contexts/AuthContext";
 import Loader from "../../../components/Loader/Loader";
 import "./Profile.css";
 
@@ -9,6 +10,7 @@ function validateForm(form) {
 }
 
 export default function Profile() {
+  const { updateUser } = useAuth();
   const [profile, setProfile] = useState(null);
   const [form, setForm] = useState({
     username: "",
@@ -64,8 +66,14 @@ export default function Profile() {
     if (validateForm(form)) {
       try {
         setLoading(true);
-        const data = await ProfileService.updateProfile(form);
+        const { email, phoneNumber, gender } = form;
+        const data = await ProfileService.updateProfile({
+          email,
+          phoneNumber,
+          gender,
+        });
         setProfile(data);
+        updateUser(data);
         setEditing(false);
         setMessage("Profile updated!");
       } catch (error) {
@@ -110,7 +118,7 @@ export default function Profile() {
         <input
           id="user-name"
           type="text"
-          name="username"
+        name="username"
           value={form?.username || ""}
           disabled
         />
@@ -161,7 +169,7 @@ export default function Profile() {
         />
 
         <hr />
-
+        
         {!editing ? (
           <button
             type="button"
