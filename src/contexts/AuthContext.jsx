@@ -13,11 +13,11 @@ function AuthProvider({ children }) {
     const data = await AuthService.login(credentials);
     const {
       token,
-      user: { id, username, role },
+      user: { id, username, role, avatar },
     } = data;
     LocalStorageService.set(LS_KEYS.TOKEN, token);
-    LocalStorageService.set(LS_KEYS.USER, { id, username, role });
-    setUser({ id, username, role });
+    LocalStorageService.set(LS_KEYS.USER, { id, username, role, avatar });
+    setUser({ id, username, role, avatar });
     setToken(token);
   };
 
@@ -29,9 +29,23 @@ function AuthProvider({ children }) {
   };
 
   const updateUser = (newProfile) => {
-    const { id, username, role } = newProfile;
-    setUser({ id, username, role });
-    LocalStorageService.set(LS_KEYS.USER, { id, username, role });
+    const { id, username, role, avatar } = newProfile;
+    setUser({ id, username, role, avatar });
+    LocalStorageService.set(LS_KEYS.USER, { id, username, role, avatar });
+  };
+
+  const updateAvatar = (newAvatarUrl) => {
+    if (!user) return;
+    const updatedUser = { ...user, avatar: newAvatarUrl };
+    setUser(updatedUser);
+    LocalStorageService.set(LS_KEYS.USER, updatedUser);
+  };
+
+  const deleteAvatar = () => {
+    if (!user) return;
+    const updatedUser = { ...user, avatar: null };
+    setUser(updatedUser);
+    LocalStorageService.set(LS_KEYS.USER, updatedUser);
   };
 
   const value = useMemo(
@@ -42,6 +56,8 @@ function AuthProvider({ children }) {
       login,
       logout,
       updateUser,
+      updateAvatar,
+      deleteAvatar,
     }),
     [user, token, isAuthenticated]
   );
