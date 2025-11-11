@@ -1,12 +1,14 @@
-import { useState, useRef } from "react";
-import { useAvatar } from "../../contexts/AvatarContext";
+import { useState, useRef, useEffect } from "react";
+import { useAuth } from "../../contexts/AuthContext";
+import { ProfileService } from "../../services/profileService";
 import LazyImage from "../LazyImage/LazyImage";
+import Loader from "../Loader/Loader";
 import avatarImg from "../../assets/images/avatar.png";
 import "./AvatarUploader.css";
 
 function validateFile(file) {
-  if (!["image/jpeg", "image/png"].includes(file.type)) {
-    return "Only JPG or PNG are allowed";
+  if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+    return "Allowed formats: JPG, PNG, WEBP";
   }
   if (file.size > 1 * 1024 * 1024) {
     return "The file cannot be larger than 1MB";
@@ -14,19 +16,43 @@ function validateFile(file) {
   return null;
 }
 
-function AvatarUploader({ className = "", size = "10rem" }) {
-  const { avatar, changeAvatar, removeAvatar } = useAvatar();
+function toBase64(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function AvatarUploader({ className = "", size = "16rem" }) {
+  const {
+    user: { avatar },
+    updateAvatar,
+    deleteAvatar,
+  } = useAuth();
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
   const avatarImgContainerRef = useRef(null);
   let errorTimerId = useRef(null);
+  const isMounted = useRef(true);
+
+  useEffect(() => {
+    isMounted.current = true; // Fix bug in StrictMode
+    return () => {
+      isMounted.current = false;
+      if (errorTimerId.current) clearTimeout(errorTimerId.current);
+    };
+  }, []);
 
   const handleImageClick = () => {
+    if (loading) return;
     fileInputRef.current.click();
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
+  const handleFileChange = async (e) => {
+    const file = e.target.files?.[0];
     if (!file) return;
 
     // Validate file type and size (max 1MB, only JPG/PNG)
@@ -35,25 +61,43 @@ function AvatarUploader({ className = "", size = "10rem" }) {
       setError(errorMsg);
       if (errorTimerId.current) clearTimeout(errorTimerId.current);
       errorTimerId.current = setTimeout(() => {
-        setError(null);
+        if (isMounted.current) setError(null);
         errorTimerId.current = null;
       }, 8000);
       return;
     }
     setError(null);
 
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      changeAvatar(reader.result);
-    };
-    reader.readAsDataURL(file);
+    try {
+      setLoading(true);
+      const base64 = await toBase64(file);
+      const { avatar: updatedAvatar } = await ProfileService.updateAvatar(
+        base64
+      );
+      if (isMounted.current) updateAvatar(updatedAvatar);
+    } catch (err) {
+      if (isMounted.current) setError(err.message);
+    } finally {
+      if (isMounted.current) setLoading(false);
+      if (isMounted.current) avatarImgContainerRef.current.blur();
+    }
   };
 
-  const handleImageRemove = () => {
-    removeAvatar();
+  const handleImageRemove = async () => {
+    setError(null);
+    try {
+      setLoading(true);
+      await ProfileService.deleteAvatar();
+      if (isMounted.current) deleteAvatar();
+    } catch (err) {
+      if (isMounted.current) setError(err.message);
+    } finally {
+      if (isMounted.current) setLoading(false);
+    }
   };
 
   const handleImageKeyDown = (e) => {
+    if (loading) return;
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       e.stopPropagation();
@@ -90,29 +134,35 @@ function AvatarUploader({ className = "", size = "10rem" }) {
             style={{ lineHeight: size }}
             alt="User Avatar"
           />
-          <div className="avatar-overlay">
-            📷{/* &#128247; */}
-            {avatar && (
-              <button
-                type="button"
-                className="btn-text btn-effect-3d"
-                aria-label="Remove avatar"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleImageRemove();
-                }}
-                onKeyDown={handleImgRemoveKeyDown}
-              >
-                &times;
-              </button>
-            )}
-          </div>
+          {loading ? (
+            <div className="avatar-overlay">
+              <Loader type="small" />
+            </div>
+          ) : (
+            <div className="avatar-overlay">
+              📷{/* &#128247; */}
+              {avatar && (
+                <button
+                  type="button"
+                  className="btn-text btn-effect-3d"
+                  aria-label="Remove avatar"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleImageRemove();
+                  }}
+                  onKeyDown={handleImgRemoveKeyDown}
+                >
+                  &times;
+                </button>
+              )}
+            </div>
+          )}
         </div>
         {error && <p role="alert">{error}</p>}
       </div>
       <input
         type="file"
-        accept="image/jpeg,image/png"
+        accept="image/jpeg,image/png,image/webp"
         ref={fileInputRef}
         style={{ display: "none" }}
         onChange={handleFileChange}
