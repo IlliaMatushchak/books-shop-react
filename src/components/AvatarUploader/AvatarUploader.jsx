@@ -6,13 +6,14 @@ import Loader from "../Loader/Loader";
 import avatarImg from "../../assets/images/avatar.png";
 import "./AvatarUploader.css";
 
+const MAX_SIZE = 1 * 1024 * 1024; // max file size = 1MB
+const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
 function validateFile(file) {
-  if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+  if (!ALLOWED_TYPES.includes(file.type))
     return "Allowed formats: JPG, PNG, WEBP";
-  }
-  if (file.size > 1 * 1024 * 1024) {
-    return "The file cannot be larger than 1MB";
-  }
+  if (file.size > MAX_SIZE) return "The file cannot be larger than 1MB";
+
   return null;
 }
 
@@ -46,9 +47,17 @@ function AvatarUploader({ className = "", size = "16rem" }) {
     };
   }, []);
 
+  const showErrorWithTimeout = (message, delay) => {
+    setError(message);
+    if (errorTimerId.current) clearTimeout(errorTimerId.current);
+    errorTimerId.current = setTimeout(() => {
+      if (isMounted.current) setError(null);
+      errorTimerId.current = null;
+    }, delay);
+  };
+
   const handleImageClick = () => {
-    if (loading) return;
-    fileInputRef.current.click();
+    if (!loading) fileInputRef.current.click();
   };
 
   const handleFileChange = async (e) => {
@@ -58,12 +67,7 @@ function AvatarUploader({ className = "", size = "16rem" }) {
     // Validate file type and size (max 1MB, only JPG/PNG)
     const errorMsg = validateFile(file);
     if (errorMsg) {
-      setError(errorMsg);
-      if (errorTimerId.current) clearTimeout(errorTimerId.current);
-      errorTimerId.current = setTimeout(() => {
-        if (isMounted.current) setError(null);
-        errorTimerId.current = null;
-      }, 8000);
+      showErrorWithTimeout(errorMsg, 8000);
       return;
     }
     setError(null);
