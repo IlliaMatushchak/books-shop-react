@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { ProfileService } from "../../../services/profileService";
 import { useAuth } from "../../../contexts/AuthContext";
+import useResponsiveValue from "../../../hooks/useResponsiveValue";
+import AvatarUploader from "../../../components/AvatarUploader/AvatarUploader";
 import Loader from "../../../components/Loader/Loader";
 import "./Profile.css";
 
@@ -11,6 +13,11 @@ function validateForm(form) {
 
 export default function Profile() {
   const { updateUser } = useAuth();
+  const avatarSize = useResponsiveValue({
+    320: "12.5rem",
+    480: "14rem",
+    default: "16rem",
+  });
   const [profile, setProfile] = useState(null);
   const [form, setForm] = useState({
     username: "",
@@ -111,95 +118,96 @@ export default function Profile() {
 
   return (
     <div className="profile-container">
+      <AvatarUploader className="avatar" size={avatarSize} />
       <div className="forms-container flex">
-      <form className="fancy-background" onSubmit={handleSubmit}>
-        <h2 className="">My profile</h2>
-        <label htmlFor="user-name">User name</label>
-        <input
-          id="user-name"
-          type="text"
-        name="username"
-          value={form?.username || ""}
-          disabled
-        />
+        <form className="fancy-background" onSubmit={handleSubmit}>
+          <h2 className="">My profile</h2>
+          <label htmlFor="user-name">User name</label>
+          <input
+            id="user-name"
+            type="text"
+            name="username"
+            value={form?.username || ""}
+            disabled
+          />
 
-        <label htmlFor="email">Email</label>
-        <input
-          id="email"
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form?.email || ""}
-          onChange={handleChange}
-          required
-          disabled={!editing}
-        />
+          <label htmlFor="email">Email</label>
+          <input
+            id="email"
+            type="email"
+            name="email"
+            placeholder="Email"
+            value={form?.email || ""}
+            onChange={handleChange}
+            required
+            disabled={!editing}
+          />
 
-        <label htmlFor="phone-number">Phone Number</label>
-        <input
-          id="phone-number"
-          type="tel"
-          name="phoneNumber"
-          placeholder="Phone Number"
-          value={form?.phoneNumber || ""}
-          onChange={handleChange}
-          required
-          disabled={!editing}
-        />
+          <label htmlFor="phone-number">Phone Number</label>
+          <input
+            id="phone-number"
+            type="tel"
+            name="phoneNumber"
+            placeholder="Phone Number"
+            value={form?.phoneNumber || ""}
+            onChange={handleChange}
+            required
+            disabled={!editing}
+          />
 
-        <label htmlFor="gender">Gender</label>
-        <select
-          id="gender"
-          name="gender"
-          value={form?.gender || ""}
-          onChange={handleChange}
-          disabled={!editing}
-        >
-          <option value="MALE">Male</option>
-          <option value="FEMALE">Female</option>
-        </select>
-
-        <label htmlFor="role">Role</label>
-        <input
-          id="role"
-          type="text"
-          name="role"
-          value={form?.role || ""}
-          disabled
-        />
-
-        <hr />
-        
-        {!editing ? (
-          <button
-            type="button"
-            onClick={(e) => {
-              e.preventDefault();
-              setEditing(true);
-              removeNotification();
-            }}
+          <label htmlFor="gender">Gender</label>
+          <select
+            id="gender"
+            name="gender"
+            value={form?.gender || ""}
+            onChange={handleChange}
+            disabled={!editing}
           >
-            Edit
-          </button>
-        ) : (
-          <>
-            <button type="submit" disabled={loading}>
-              Save
-            </button>
+            <option value="MALE">Male</option>
+            <option value="FEMALE">Female</option>
+          </select>
+
+          <label htmlFor="role">Role</label>
+          <input
+            id="role"
+            type="text"
+            name="role"
+            value={form?.role || ""}
+            disabled
+          />
+
+          <hr />
+
+          {!editing ? (
             <button
               type="button"
               onClick={(e) => {
                 e.preventDefault();
-                setEditing(false);
-                setForm(profile ?? form);
+                setEditing(true);
                 removeNotification();
               }}
             >
-              Cancel
+              Edit
             </button>
-          </>
-        )}
-      </form>
+          ) : (
+            <>
+              <button type="submit" disabled={loading}>
+                Save
+              </button>
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setEditing(false);
+                  setForm(profile ?? form);
+                  removeNotification();
+                }}
+              >
+                Cancel
+              </button>
+            </>
+          )}
+        </form>
 
         <form className="fancy-background" onSubmit={handlePasswordChange}>
           <h2>Change password</h2>

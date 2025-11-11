@@ -2,7 +2,6 @@ import React, { memo } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../contexts/CartContext";
 import { useAuth } from "../../contexts/AuthContext";
-import { useAvatar } from "../../contexts/AvatarContext";
 import "./Header.css";
 import cartImg from "../../assets/images/cart.svg";
 import avatarImg from "../../assets/images/avatar.png";
@@ -10,7 +9,6 @@ import avatarImg from "../../assets/images/avatar.png";
 const Header = memo(function Header() {
   console.log("Header render");
   const { cart } = useCart();
-  const { avatar } = useAvatar();
   const { user, isLoggedIn, logout } = useAuth();
   const cartLength = cart.length;
 
@@ -39,7 +37,7 @@ const Header = memo(function Header() {
               <Link to={"/profile"}>
                 <img
                   className="user-avatar btn-effect-3d"
-                  src={avatar || avatarImg}
+                  src={user?.avatar || avatarImg}
                   alt="Avatar"
                   loading="lazy"
                 />
