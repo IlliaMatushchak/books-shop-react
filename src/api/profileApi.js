@@ -13,3 +13,11 @@ export const updateUserProfileApi = (userData) => {
 export const changeUserPasswordApi = (passwordData) => {
   return axiosInstance.put(API_URL + "/password", passwordData);
 };
+
+export const updateUserAvatarApi = (avatar) => {
+  return axiosInstance.put(API_URL + "/avatar", { avatar });
+};
+
+export const deleteUserAvatarApi = () => {
+  return axiosInstance.delete(API_URL + "/avatar");
+};
