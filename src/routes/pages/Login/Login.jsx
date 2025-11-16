@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTimedMessage } from "../../../hooks/useTimedMessage";
 import { useAuth } from "../../../contexts/AuthContext";
 import "./Login.css";
 
@@ -10,7 +11,7 @@ function validateForm(form) {
 function Login() {
   const { login } = useAuth();
   const [form, setForm] = useState({ username: "", password: "" });
-  const [error, setError] = useState(null);
+  const { message, type, showMessage, clearMessage } = useTimedMessage();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -19,7 +20,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
+    clearMessage();
     if (validateForm(form)) {
       try {
         await login(form);
@@ -28,17 +29,20 @@ function Login() {
           password: "",
         });
       } catch (error) {
-        setError(error.message);
+        showMessage(error.message, "error");
       }
     } else {
-      setError("Invalid form data");
+      showMessage("Invalid form data", "error");
     }
   };
 
   return (
     <>
       <div className="login-container">
-        <form className="fancy-background" onSubmit={handleSubmit}>
+        <form
+          className={`fancy-background ${type || ""}`}
+          onSubmit={handleSubmit}
+        >
           <label htmlFor="user-name">User name</label>
           <input
             id="user-name"
@@ -69,9 +73,12 @@ function Login() {
             Login
           </button>
         </form>
-        {error && <p className="error" role="alert">{error}</p>}
+        {message && (
+          <p className={`message message-${type || ""}`} role="alert">
+            {message}
+          </p>
+        )}
       </div>
-      
     </>
   );
 }

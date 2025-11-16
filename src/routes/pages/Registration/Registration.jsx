@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTimedMessage } from "../../../hooks/useTimedMessage";
 import { AuthService } from "../../../services/authService";
 import "./Registration.css";
 
@@ -16,8 +17,7 @@ function Registration() {
     phoneNumber: "",
     gender: "MALE",
   });
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState(null);
+  const { message, type, showMessage, clearMessage } = useTimedMessage();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,12 +26,15 @@ function Registration() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(null);
-    setMessage("");
+    clearMessage();
     if (validateForm(form)) {
       try {
         const data = await AuthService.register(form);
-        setMessage(data.message || "User registered successfully!");
+        showMessage(
+          data.message || "Successful registration!",
+          "success",
+          8000
+        );
         setForm({
           username: "",
           password: "",
@@ -41,17 +44,26 @@ function Registration() {
           gender: "MALE",
         });
       } catch (error) {
-        setError(error.message);
+        showMessage(error.message, "error", 8000);
       }
     } else {
-      setError("Invalid form data");
+      showMessage("Invalid form data", "error", 8000);
     }
   };
 
   return (
     <>
       <div className="register-container">
-        <form className="fancy-background" onSubmit={handleSubmit}>
+        <form
+          className={`fancy-background ${type || ""}`}
+          onSubmit={handleSubmit}
+        >
+          <h2 className="">Registration</h2>
+          {message && (
+            <p className={`message message-${type || ""}`} role="alert">
+              {message}
+            </p>
+          )}
           <label htmlFor="user-name">User name</label>
           <input
             id="user-name"
@@ -117,16 +129,6 @@ function Registration() {
             Register
           </button>
         </form>
-        {error && (
-          <p className="alert error" role="alert">
-            {error}
-          </p>
-        )}
-        {message && (
-          <p className="alert message" role="alert">
-            {message}
-          </p>
-        )}
       </div>
     </>
   );

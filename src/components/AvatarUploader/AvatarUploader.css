@@ -59,7 +59,7 @@
   opacity: 1;
 }
 
-.avatar-img-container + p {
+.avatar-img-container + .message-error {
   text-align: center;
   margin: 1rem 0 0 0;
   padding: 0.5rem;

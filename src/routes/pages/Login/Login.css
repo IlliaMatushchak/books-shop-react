@@ -12,7 +12,11 @@
   margin-bottom: 1rem;
 }
 
-.login-container .error {
+.login-container form.error {
+  border: 2px solid rgba(180, 50, 40);
+}
+
+.login-container .message-error {
   max-width: 14rem;
   text-align: center;
   margin: 1rem auto 0;

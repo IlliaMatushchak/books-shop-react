@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTimedMessage } from "../../hooks/useTimedMessage";
 import { ProfileService } from "../../services/profileService";
 
 function PasswordForm() {
@@ -8,14 +9,7 @@ function PasswordForm() {
     confirm: "",
   });
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState(null);
-  const errorClass = error ? " error" : "";
-
-  const removeNotification = () => {
-    setError(null);
-    setMessage("");
-  };
+  const { message, type, showMessage, clearMessage } = useTimedMessage();
 
   const handleChangePassword = (e) => {
     const { name, value } = e.target;
@@ -24,9 +18,10 @@ function PasswordForm() {
 
   const handlePasswordChange = async (e) => {
     e.preventDefault(e);
-    removeNotification();
+    clearMessage();
     if (passwordData.newPassword !== passwordData.confirm) {
-      return setError("New passwords do not match!");
+      showMessage("New passwords do not match!", "error", 8000);
+      return;
     }
     try {
       setLoading(true);
@@ -34,10 +29,10 @@ function PasswordForm() {
         oldPassword: passwordData.oldPassword,
         newPassword: passwordData.newPassword,
       });
-      setMessage(data.message);
+      showMessage(data.message, "success", 8000);
       setPasswordData({ oldPassword: "", newPassword: "", confirm: "" });
     } catch (error) {
-      setError(error.message);
+      showMessage(error.message, "error", 8000);
     } finally {
       setLoading(false);
     }
@@ -45,17 +40,12 @@ function PasswordForm() {
 
   return (
     <form
-      className={"fancy-background" + errorClass}
+      className={`fancy-background ${type || ""}`}
       onSubmit={handlePasswordChange}
     >
       <h2>Change password</h2>
-      {error && (
-        <p className="alert error" role="alert">
-          {error}
-        </p>
-      )}
       {message && (
-        <p className="alert message" role="alert">
+        <p className={`message message-${type || ""}`} role="alert">
           {message}
         </p>
       )}

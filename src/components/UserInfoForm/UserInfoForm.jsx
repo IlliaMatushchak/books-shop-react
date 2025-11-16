@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTimedMessage } from "../../hooks/useTimedMessage";
 import { ProfileService } from "../../services/profileService";
 import { useAuth } from "../../contexts/AuthContext";
 import Loader from "../../components/Loader/Loader";
@@ -20,18 +21,11 @@ function UserInfoForm() {
   });
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState(null);
-  const errorClass = error ? " error" : "";
+  const { message, type, showMessage, clearMessage } = useTimedMessage();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const removeNotification = () => {
-    setError(null);
-    setMessage("");
   };
 
   useEffect(() => {
@@ -42,7 +36,7 @@ function UserInfoForm() {
         setProfile(data);
         setForm(data);
       } catch (error) {
-        setError(error.message);
+        showMessage(error.message, "error");
       } finally {
         setLoading(false);
       }
@@ -52,7 +46,7 @@ function UserInfoForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    removeNotification();
+    clearMessage();
     if (validateForm(form)) {
       try {
         setLoading(true);
@@ -65,14 +59,14 @@ function UserInfoForm() {
         setProfile(data);
         updateUser(data);
         setEditing(false);
-        setMessage("Profile updated!");
+        showMessage("Profile updated!", "success", 8000);
       } catch (error) {
-        setError(error.message);
+        showMessage(error.message, "error", 8000);
       } finally {
         setLoading(false);
       }
     } else {
-      setError("Invalid form data");
+      showMessage("Invalid form data!", "error", 8000);
     }
   };
 
@@ -84,15 +78,10 @@ function UserInfoForm() {
     );
 
   return (
-    <form className={"fancy-background" + errorClass} onSubmit={handleSubmit}>
+    <form className={`fancy-background ${type || ""}`} onSubmit={handleSubmit}>
       <h2 className="">My profile</h2>
-      {error && (
-        <p className="alert error" role="alert">
-          {error}
-        </p>
-      )}
       {message && (
-        <p className="alert message" role="alert">
+        <p className={`message message-${type || ""}`} role="alert">
           {message}
         </p>
       )}
@@ -158,7 +147,6 @@ function UserInfoForm() {
           onClick={(e) => {
             e.preventDefault();
             setEditing(true);
-            removeNotification();
           }}
         >
           Edit
@@ -174,7 +162,6 @@ function UserInfoForm() {
               e.preventDefault();
               setEditing(false);
               setForm(profile ?? form);
-              removeNotification();
             }}
           >
             Cancel
