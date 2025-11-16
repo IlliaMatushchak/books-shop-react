@@ -4,6 +4,7 @@ import { useAuth } from "../../contexts/AuthContext";
 import { ProfileService } from "../../services/profileService";
 import LazyImage from "../LazyImage/LazyImage";
 import Loader from "../Loader/Loader";
+import Message from "../Message/Message";
 import avatarImg from "../../assets/images/avatar.png";
 import "./AvatarUploader.css";
 
@@ -152,11 +153,7 @@ function AvatarUploader({ className = "", size = "16rem" }) {
             </div>
           )}
         </div>
-        {message && (
-          <p className={`message message-${type}`} role="alert">
-            {message}
-          </p>
-        )}
+        {message && <Message message={message} type={type} />}
       </div>
       <input
         type="file"

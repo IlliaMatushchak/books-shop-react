@@ -41,29 +41,6 @@
   margin: 0 0 1rem 0;
 }
 
-.profile-container form.error {
-  border: 2px solid rgba(180, 50, 40);
-}
-
-.profile-container form > .message {
-  max-width: 16rem;
-  text-align: center;
-  margin: 0 auto 1rem;
-  padding: 0.5rem;
-  font-size: 0.9rem;
-  border-radius: 1rem;
-  line-height: 1.5;
-  color: #fff;
-}
-
-.profile-container form > .message-error {
-  background-color: rgba(180, 50, 40, 0.8);
-}
-
-.profile-container form > .message-success {
-  background-color: rgba(0, 160, 0, 0.8);
-}
-
 @media screen and (max-width: 320px) {
   .profile-container form input,
   .profile-container form select {

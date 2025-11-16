@@ -58,14 +58,3 @@
 .avatar-img-container .avatar-overlay:hover {
   opacity: 1;
 }
-
-.avatar-img-container + .message-error {
-  text-align: center;
-  margin: 1rem 0 0 0;
-  padding: 0.5rem;
-  font-size: 0.9rem;
-  color: #fff;
-  background-color: rgba(180, 50, 40, 0.8);
-  border-radius: 1rem;
-  line-height: 1.5;
-}

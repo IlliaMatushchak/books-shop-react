@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTimedMessage } from "../../hooks/useTimedMessage";
 import { ProfileService } from "../../services/profileService";
+import Message from "../Message/Message";
 
 function PasswordForm() {
   const [passwordData, setPasswordData] = useState({
@@ -44,11 +45,7 @@ function PasswordForm() {
       onSubmit={handlePasswordChange}
     >
       <h2>Change password</h2>
-      {message && (
-        <p className={`message message-${type || ""}`} role="alert">
-          {message}
-        </p>
-      )}
+      {message && <Message message={message} type={type} />}
       <input
         type="password"
         name="oldPassword"

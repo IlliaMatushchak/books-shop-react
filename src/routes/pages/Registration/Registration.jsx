@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTimedMessage } from "../../../hooks/useTimedMessage";
 import { AuthService } from "../../../services/authService";
+import Message from "../../../components/Message/Message";
 import "./Registration.css";
 
 function validateForm(form) {
@@ -58,12 +59,8 @@ function Registration() {
           className={`fancy-background ${type || ""}`}
           onSubmit={handleSubmit}
         >
-          <h2 className="">Registration</h2>
-          {message && (
-            <p className={`message message-${type || ""}`} role="alert">
-              {message}
-            </p>
-          )}
+          <h2>Registration</h2>
+          {message && <Message message={message} type={type} />}
           <label htmlFor="user-name">User name</label>
           <input
             id="user-name"

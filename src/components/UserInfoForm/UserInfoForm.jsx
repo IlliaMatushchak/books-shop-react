@@ -3,6 +3,7 @@ import { useTimedMessage } from "../../hooks/useTimedMessage";
 import { ProfileService } from "../../services/profileService";
 import { useAuth } from "../../contexts/AuthContext";
 import Loader from "../../components/Loader/Loader";
+import Message from "../Message/Message";
 
 function validateForm(form) {
   // Needs improvement !!!!!!!!!!!!!!!!!
@@ -79,12 +80,8 @@ function UserInfoForm() {
 
   return (
     <form className={`fancy-background ${type || ""}`} onSubmit={handleSubmit}>
-      <h2 className="">My profile</h2>
-      {message && (
-        <p className={`message message-${type || ""}`} role="alert">
-          {message}
-        </p>
-      )}
+      <h2>My profile</h2>
+      {message && <Message message={message} type={type} />}
       <label htmlFor="user-name">User name</label>
       <input
         id="user-name"

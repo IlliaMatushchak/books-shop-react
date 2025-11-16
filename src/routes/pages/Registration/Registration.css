@@ -25,29 +25,6 @@
   margin-bottom: 0;
 }
 
-.register-container form.error {
-  border: 2px solid rgba(180, 50, 40);
-}
-
-.register-container form > .message {
-  max-width: 18rem;
-  text-align: center;
-  margin: 0 auto 1rem;
-  padding: 0.5rem;
-  font-size: 0.9rem;
-  border-radius: 1rem;
-  line-height: 1.5;
-  color: #fff;
-}
-
-.register-container form > .message-error {
-  background-color: rgba(180, 50, 40, 0.8);
-}
-
-.register-container form > .message-success {
-  background-color: rgba(0, 160, 0, 0.8);
-}
-
 @media screen and (max-width: 320px) {
   .register-container input,
   .register-container select,

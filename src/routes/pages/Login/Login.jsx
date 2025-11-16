@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useTimedMessage } from "../../../hooks/useTimedMessage";
 import { useAuth } from "../../../contexts/AuthContext";
+import Message from "../../../components/Message/Message";
 import "./Login.css";
 
 function validateForm(form) {
@@ -43,6 +44,8 @@ function Login() {
           className={`fancy-background ${type || ""}`}
           onSubmit={handleSubmit}
         >
+          <h2>Login</h2>
+          {message && <Message message={message} type={type} />}
           <label htmlFor="user-name">User name</label>
           <input
             id="user-name"
@@ -73,11 +76,6 @@ function Login() {
             Login
           </button>
         </form>
-        {message && (
-          <p className={`message message-${type || ""}`} role="alert">
-            {message}
-          </p>
-        )}
       </div>
     </>
   );

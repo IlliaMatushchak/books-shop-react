@@ -95,3 +95,11 @@ select:focus {
 .invalid-text {
     color: red;
 }
+
+form.success {
+    border: 2px solid rgb(10, 100, 70);
+}
+
+form.error {
+    border: 2px solid rgb(180, 50, 40);
+}
