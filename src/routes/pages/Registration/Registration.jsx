@@ -1,13 +1,9 @@
 import { useState } from "react";
-import { useTimedMessage } from "../../../hooks/useTimedMessage";
+import { useTimedMessages } from "../../../hooks/useTimedMessages";
 import { AuthService } from "../../../services/authService";
 import Message from "../../../components/Message/Message";
+import { validateRegistrationForm } from "../../../utils/validation/formValidation";
 import "./Registration.css";
-
-function validateForm(form) {
-  // Needs improvement !!!!!!!!!!!!!!!!!
-  return form?.username?.length >= 4 && form?.username?.length <= 16;
-}
 
 function Registration() {
   const [form, setForm] = useState({
@@ -18,7 +14,7 @@ function Registration() {
     phoneNumber: "",
     gender: "MALE",
   });
-  const { message, type, showMessage, clearMessage } = useTimedMessage();
+  const { messages, type, showMessages, clearMessages } = useTimedMessages();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,28 +23,31 @@ function Registration() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    clearMessage();
-    if (validateForm(form)) {
-      try {
-        const data = await AuthService.register(form);
-        showMessage(
-          data.message || "Successful registration!",
-          "success",
-          8000
-        );
-        setForm({
-          username: "",
-          password: "",
-          role: "USER",
-          email: "",
-          phoneNumber: "",
-          gender: "MALE",
-        });
-      } catch (error) {
-        showMessage(error.message, "error", 8000);
-      }
-    } else {
-      showMessage("Invalid form data", "error", 8000);
+    clearMessages();
+    let { valid, errors } = validateRegistrationForm(form);
+
+    if (!valid) {
+      showMessages(errors, "error", 8000);
+      return;
+    }
+
+    try {
+      const data = await AuthService.register(form);
+      showMessages(
+        { success: data.message || "Successful registration!" },
+        "success",
+        8000
+      );
+      setForm({
+        username: "",
+        password: "",
+        role: "USER",
+        email: "",
+        phoneNumber: "",
+        gender: "MALE",
+      });
+    } catch (error) {
+      showMessages({ error: error.message }, "error", 8000);
     }
   };
 
@@ -60,7 +59,12 @@ function Registration() {
           onSubmit={handleSubmit}
         >
           <h2>Registration</h2>
-          {message && <Message message={message} type={type} />}
+          {(messages?.success || messages?.error) && (
+            <Message
+              message={messages?.success || messages?.error}
+              type={type}
+            />
+          )}
           <label htmlFor="user-name">User name</label>
           <input
             id="user-name"
@@ -71,6 +75,9 @@ function Registration() {
             onChange={handleChange}
             required
           />
+          {messages?.username && (
+            <Message message={messages.username} type={type} />
+          )}
 
           <label htmlFor="email">Email</label>
           <input
@@ -82,6 +89,7 @@ function Registration() {
             onChange={handleChange}
             required
           />
+          {messages?.email && <Message message={messages.email} type={type} />}
 
           <label htmlFor="password">Password</label>
           <input
@@ -93,6 +101,9 @@ function Registration() {
             onChange={handleChange}
             required
           />
+          {messages?.password && (
+            <Message message={messages.password} type={type} />
+          )}
 
           <label htmlFor="phone-number">Phone Number</label>
           <input
@@ -104,6 +115,9 @@ function Registration() {
             onChange={handleChange}
             required
           />
+          {messages?.phoneNumber && (
+            <Message message={messages.phoneNumber} type={type} />
+          )}
 
           <label htmlFor="gender">Gender</label>
           <select
