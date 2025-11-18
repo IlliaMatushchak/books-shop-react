@@ -24,3 +24,11 @@ export function validateRegistrationForm(form) {
   };
   return validateForm(form, config);
 }
+
+export function validateUserInfoForm(form) {
+  const config = {
+    email: "email",
+    phoneNumber: "phoneNumber",
+  };
+  return validateForm(form, config);
+}

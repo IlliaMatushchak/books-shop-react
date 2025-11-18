@@ -1,14 +1,10 @@
 import { useState, useEffect } from "react";
-import { useTimedMessage } from "../../hooks/useTimedMessage";
+import { useTimedMessages } from "../../hooks/useTimedMessages";
 import { ProfileService } from "../../services/profileService";
 import { useAuth } from "../../contexts/AuthContext";
 import Loader from "../../components/Loader/Loader";
 import Message from "../Message/Message";
-
-function validateForm(form) {
-  // Needs improvement !!!!!!!!!!!!!!!!!
-  return form?.email?.length >= 4 && form?.email?.length <= 16;
-}
+import { validateUserInfoForm } from "../../utils/validation/formValidation";
 
 function UserInfoForm() {
   const { updateUser } = useAuth();
@@ -22,7 +18,7 @@ function UserInfoForm() {
   });
   const [editing, setEditing] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { message, type, showMessage, clearMessage } = useTimedMessage();
+  const { messages, type, showMessages, clearMessages } = useTimedMessages();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,7 +33,7 @@ function UserInfoForm() {
         setProfile(data);
         setForm(data);
       } catch (error) {
-        showMessage(error.message, "error");
+        showMessages({ error: error.message }, "error");
       } finally {
         setLoading(false);
       }
@@ -47,27 +43,30 @@ function UserInfoForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    clearMessage();
-    if (validateForm(form)) {
-      try {
-        setLoading(true);
-        const { email, phoneNumber, gender } = form;
-        const data = await ProfileService.updateProfile({
-          email,
-          phoneNumber,
-          gender,
-        });
-        setProfile(data);
-        updateUser(data);
-        setEditing(false);
-        showMessage("Profile updated!", "success", 8000);
-      } catch (error) {
-        showMessage(error.message, "error", 8000);
-      } finally {
-        setLoading(false);
-      }
-    } else {
-      showMessage("Invalid form data!", "error", 8000);
+    clearMessages();
+    let { valid, errors } = validateUserInfoForm(form);
+
+    if (!valid) {
+      showMessages(errors, "error", 8000);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const { email, phoneNumber, gender } = form;
+      const data = await ProfileService.updateProfile({
+        email,
+        phoneNumber,
+        gender,
+      });
+      setProfile(data);
+      updateUser(data);
+      setEditing(false);
+      showMessages({ success: "Profile updated!" }, "success", 8000);
+    } catch (error) {
+      showMessages({ error: error.message }, "error", 8000);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -81,7 +80,9 @@ function UserInfoForm() {
   return (
     <form className={`fancy-background ${type || ""}`} onSubmit={handleSubmit}>
       <h2>My profile</h2>
-      {message && <Message message={message} type={type} />}
+      {(messages?.success || messages?.error) && (
+        <Message message={messages?.success || messages?.error} type={type} />
+      )}
       <label htmlFor="user-name">User name</label>
       <input
         id="user-name"
@@ -102,6 +103,7 @@ function UserInfoForm() {
         required
         disabled={!editing}
       />
+      {messages?.email && <Message message={messages.email} type={type} />}
 
       <label htmlFor="phone-number">Phone Number</label>
       <input
@@ -114,6 +116,9 @@ function UserInfoForm() {
         required
         disabled={!editing}
       />
+      {messages?.phoneNumber && (
+        <Message message={messages.phoneNumber} type={type} />
+      )}
 
       <label htmlFor="gender">Gender</label>
       <select
@@ -159,6 +164,7 @@ function UserInfoForm() {
               e.preventDefault();
               setEditing(false);
               setForm(profile ?? form);
+              clearMessages();
             }}
           >
             Cancel
