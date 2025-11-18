@@ -1,5 +1,6 @@
 import {
   NameValidator,
+  PasswordValidator,
 } from "./validator-strategies";
 
 export default class ValidatorSelector {
@@ -7,6 +8,7 @@ export default class ValidatorSelector {
 
   static initialize() {
     ValidatorSelector.#validators["name"] = new NameValidator();
+    ValidatorSelector.#validators["password"] = new PasswordValidator();
 
     ValidatorSelector.initialize = () => {}; // для уникнення повторної ініціалізації
   }

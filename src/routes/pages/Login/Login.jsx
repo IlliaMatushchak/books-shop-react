@@ -1,18 +1,14 @@
 import { useState } from "react";
-import { useTimedMessage } from "../../../hooks/useTimedMessage";
+import { useTimedMessages } from "../../../hooks/useTimedMessages";
 import { useAuth } from "../../../contexts/AuthContext";
 import Message from "../../../components/Message/Message";
+import { validateLoginForm } from "../../../utils/validation/formValidation";
 import "./Login.css";
-
-function validateForm(form) {
-  // Needs improvement !!!!!!!!!!!!!!!!!
-  return form?.username?.length >= 4 && form?.username?.length <= 16;
-}
 
 function Login() {
   const { login } = useAuth();
   const [form, setForm] = useState({ username: "", password: "" });
-  const { message, type, showMessage, clearMessage } = useTimedMessage();
+  const { messages, type, showMessages, clearMessages } = useTimedMessages();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,19 +17,22 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    clearMessage();
-    if (validateForm(form)) {
-      try {
-        await login(form);
-        setForm({
-          username: "",
-          password: "",
-        });
-      } catch (error) {
-        showMessage(error.message, "error");
-      }
-    } else {
-      showMessage("Invalid form data", "error");
+    clearMessages();
+    let { valid, errors } = validateLoginForm(form);
+
+    if (!valid) {
+      showMessages(errors, "error");
+      return;
+    }
+
+    try {
+      await login(form);
+      setForm({
+        username: "",
+        password: "",
+      });
+    } catch (error) {
+      showMessages({ error: error.message }, "error");
     }
   };
 
@@ -45,7 +44,7 @@ function Login() {
           onSubmit={handleSubmit}
         >
           <h2>Login</h2>
-          {message && <Message message={message} type={type} />}
+          {messages?.error && <Message message={messages.error} type={type} />}
           <label htmlFor="user-name">User name</label>
           <input
             id="user-name"
@@ -56,6 +55,9 @@ function Login() {
             onChange={handleChange}
             required
           />
+          {messages?.username && (
+            <Message message={messages.username} type={type} />
+          )}
 
           <label htmlFor="password">Password</label>
           <input
@@ -67,6 +69,9 @@ function Login() {
             onChange={handleChange}
             required
           />
+          {messages?.password && (
+            <Message message={messages.password} type={type} />
+          )}
 
           <button
             type="submit"
