@@ -62,3 +62,22 @@ export class PhoneNumberValidator {
   }
   // ^\+380\d{9}$
 }
+
+export class AvatarValidator {
+  MAX_SIZE = 1 * 1024 * 1024; // max file size = 1MB
+  ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+  message;
+
+  validate(file) {
+    this.message = "";
+    if (!file) {
+      this.message = "File is required.";
+    } else if (!this.ALLOWED_TYPES.includes(file.type)) {
+      this.message = "Allowed formats: JPG, PNG, WEBP.";
+    } else if (file.size > this.MAX_SIZE) {
+      this.message = "The file cannot be larger than 1MB.";
+    }
+
+    return !this.message.length;
+  }
+}

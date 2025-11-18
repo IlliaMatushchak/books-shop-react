@@ -1,23 +1,13 @@
 import { useState, useRef, useEffect } from "react";
-import { useTimedMessage } from "../../hooks/useTimedMessage";
+import { useTimedMessages } from "../../hooks/useTimedMessages";
 import { useAuth } from "../../contexts/AuthContext";
 import { ProfileService } from "../../services/profileService";
 import LazyImage from "../LazyImage/LazyImage";
 import Loader from "../Loader/Loader";
 import Message from "../Message/Message";
 import avatarImg from "../../assets/images/avatar.png";
+import { validateAvatar } from "../../utils/validation/valueValidation";
 import "./AvatarUploader.css";
-
-const MAX_SIZE = 1 * 1024 * 1024; // max file size = 1MB
-const ALLOWED_TYPES = ["image/jpeg", "image/png", "image/webp"];
-
-function validateFile(file) {
-  if (!ALLOWED_TYPES.includes(file.type))
-    return "Allowed formats: JPG, PNG, WEBP";
-  if (file.size > MAX_SIZE) return "The file cannot be larger than 1MB";
-
-  return null;
-}
 
 function toBase64(file) {
   return new Promise((resolve, reject) => {
@@ -34,7 +24,7 @@ function AvatarUploader({ className = "", size = "16rem" }) {
     updateAvatar,
     deleteAvatar,
   } = useAuth();
-  const { message, type, showMessage, clearMessage } = useTimedMessage();
+  const { messages, type, showMessages, clearMessages } = useTimedMessages();
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
   const avatarImgContainerRef = useRef(null);
@@ -55,13 +45,12 @@ function AvatarUploader({ className = "", size = "16rem" }) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file type and size (max 1MB, only JPG/PNG)
-    const errorMsg = validateFile(file);
-    if (errorMsg) {
-      showMessage(errorMsg, "error", 8000);
+    clearMessages();
+    let { valid, errors } = validateAvatar(file);
+    if (!valid) {
+      showMessages({ error: errors.avatar }, "error", 8000);
       return;
     }
-    clearMessage();
 
     try {
       setLoading(true);
@@ -71,7 +60,8 @@ function AvatarUploader({ className = "", size = "16rem" }) {
       );
       if (isMounted.current) updateAvatar(updatedAvatar);
     } catch (err) {
-      if (isMounted.current) showMessage(err.message, "error", 8000);
+      if (isMounted.current)
+        showMessages({ error: err.message }, "error", 8000);
     } finally {
       if (isMounted.current) setLoading(false);
       if (isMounted.current) avatarImgContainerRef.current.blur();
@@ -79,13 +69,14 @@ function AvatarUploader({ className = "", size = "16rem" }) {
   };
 
   const handleImageRemove = async () => {
-    clearMessage();
+    clearMessages();
     try {
       setLoading(true);
       await ProfileService.deleteAvatar();
       if (isMounted.current) deleteAvatar();
     } catch (err) {
-      if (isMounted.current) showMessage(err.message);
+      if (isMounted.current)
+        showMessages({ error: err.message }, "error", 8000);
     } finally {
       if (isMounted.current) setLoading(false);
     }
@@ -153,7 +144,7 @@ function AvatarUploader({ className = "", size = "16rem" }) {
             </div>
           )}
         </div>
-        {message && <Message message={message} type={type} />}
+        {messages?.error && <Message message={messages.error} type={type} />}
       </div>
       <input
         type="file"

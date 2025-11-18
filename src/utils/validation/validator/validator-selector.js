@@ -3,6 +3,7 @@ import {
   PasswordValidator,
   EmailValidator,
   PhoneNumberValidator,
+  AvatarValidator,
 } from "./validator-strategies";
 
 export default class ValidatorSelector {
@@ -13,6 +14,7 @@ export default class ValidatorSelector {
     ValidatorSelector.#validators["password"] = new PasswordValidator();
     ValidatorSelector.#validators["email"] = new EmailValidator();
     ValidatorSelector.#validators["phoneNumber"] = new PhoneNumberValidator();
+    ValidatorSelector.#validators["avatar"] = new AvatarValidator();
 
     ValidatorSelector.initialize = () => {}; // для уникнення повторної ініціалізації
   }
