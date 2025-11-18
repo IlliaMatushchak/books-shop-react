@@ -32,3 +32,20 @@ export function validateUserInfoForm(form) {
   };
   return validateForm(form, config);
 }
+
+export function validatePasswordForm(form) {
+  if (!form) throw new Error("No data found for validation " + form);
+
+  const config = {
+    newPassword: "password",
+  };
+
+  if (form.newPassword !== form.confirm) {
+    return {
+      valid: false,
+      errors: { confirm: "New passwords do not match!" },
+    };
+  }
+
+  return validateForm(form, config);
+}

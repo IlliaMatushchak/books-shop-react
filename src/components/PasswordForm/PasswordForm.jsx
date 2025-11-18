@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { useTimedMessage } from "../../hooks/useTimedMessage";
+import { useTimedMessages } from "../../hooks/useTimedMessages";
 import { ProfileService } from "../../services/profileService";
+import { validatePasswordForm } from "../../utils/validation/formValidation";
 import Message from "../Message/Message";
 
 function PasswordForm() {
@@ -10,7 +11,7 @@ function PasswordForm() {
     confirm: "",
   });
   const [loading, setLoading] = useState(false);
-  const { message, type, showMessage, clearMessage } = useTimedMessage();
+  const { messages, type, showMessages, clearMessages } = useTimedMessages();
 
   const handleChangePassword = (e) => {
     const { name, value } = e.target;
@@ -19,9 +20,11 @@ function PasswordForm() {
 
   const handlePasswordChange = async (e) => {
     e.preventDefault(e);
-    clearMessage();
-    if (passwordData.newPassword !== passwordData.confirm) {
-      showMessage("New passwords do not match!", "error", 8000);
+    clearMessages();
+    let { valid, errors } = validatePasswordForm(passwordData);
+
+    if (!valid) {
+      showMessages(errors, "error", 8000);
       return;
     }
     try {
@@ -30,10 +33,14 @@ function PasswordForm() {
         oldPassword: passwordData.oldPassword,
         newPassword: passwordData.newPassword,
       });
-      showMessage(data.message, "success", 8000);
+      showMessages(
+        { success: data.message || "Password changed!" },
+        "success",
+        8000
+      );
       setPasswordData({ oldPassword: "", newPassword: "", confirm: "" });
     } catch (error) {
-      showMessage(error.message, "error", 8000);
+      showMessages({ error: error.message }, "error", 8000);
     } finally {
       setLoading(false);
     }
@@ -45,7 +52,9 @@ function PasswordForm() {
       onSubmit={handlePasswordChange}
     >
       <h2>Change password</h2>
-      {message && <Message message={message} type={type} />}
+      {(messages?.success || messages?.error) && (
+        <Message message={messages?.success || messages?.error} type={type} />
+      )}
       <input
         type="password"
         name="oldPassword"
@@ -62,6 +71,9 @@ function PasswordForm() {
         onChange={handleChangePassword}
         required
       />
+      {messages?.newPassword && (
+        <Message message={messages.newPassword} type={type} />
+      )}
       <input
         type="password"
         name="confirm"
@@ -70,6 +82,7 @@ function PasswordForm() {
         onChange={handleChangePassword}
         required
       />
+      {messages?.confirm && <Message message={messages.confirm} type={type} />}
       <hr />
       <button type="submit" disabled={loading}>
         Change
