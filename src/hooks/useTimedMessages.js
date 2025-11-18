@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 
-export function useTimedMessage() {
-  const [state, setState] = useState({ text: null, type: null });
+export function useTimedMessages() {
+  const [state, setState] = useState({ messages: {}, type: null });
   const timerRef = useRef(null);
   const isMounted = useRef(true);
 
@@ -13,29 +13,29 @@ export function useTimedMessage() {
     };
   }, []);
 
-  const showMessage = (text, type = "error", delay = null) => {
-    setState({ text, type });
+  const showMessages = (messages = {}, type = "error", delay = null) => {
+    setState({ messages, type });
 
     if (timerRef.current) clearTimeout(timerRef.current);
 
     if (delay) {
       timerRef.current = setTimeout(() => {
-        if (isMounted.current) setState({ text: null, type: null });
+        if (isMounted.current) setState({ messages: {}, type: null });
         timerRef.current = null;
       }, delay);
     }
   };
 
-  const clearMessage = () => {
+  const clearMessages = () => {
     if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = null;
-    setState({ text: null, type: null });
+    setState({ messages: {}, type: null });
   };
 
   return {
-    message: state.text,
+    messages: state.messages,
     type: state.type,
-    showMessage,
-    clearMessage,
+    showMessages,
+    clearMessages,
   };
 }
