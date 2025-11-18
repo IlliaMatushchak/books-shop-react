@@ -5,6 +5,10 @@
   overflow: hidden;
 }
 
+.avatar-img-container + * {
+  margin-top: 1rem;
+}
+
 .avatar-img-container:focus-visible {
   outline: 0.14rem dashed black;
   outline-offset: 0.1rem;
