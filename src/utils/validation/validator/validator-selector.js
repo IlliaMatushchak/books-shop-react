@@ -4,6 +4,7 @@ import {
   EmailValidator,
   PhoneNumberValidator,
   AvatarValidator,
+  PasswordEqualityValidator,
 } from "./validator-strategies";
 
 export default class ValidatorSelector {
@@ -15,6 +16,7 @@ export default class ValidatorSelector {
     ValidatorSelector.#validators["email"] = new EmailValidator();
     ValidatorSelector.#validators["phoneNumber"] = new PhoneNumberValidator();
     ValidatorSelector.#validators["avatar"] = new AvatarValidator();
+    ValidatorSelector.#validators["passwordEquality"] = new PasswordEqualityValidator();
 
     ValidatorSelector.initialize = () => {}; // для уникнення повторної ініціалізації
   }
