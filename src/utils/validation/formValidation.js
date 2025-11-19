@@ -33,19 +33,16 @@ export function validateUserInfoForm(form) {
   return validateForm(form, config);
 }
 
-export function validatePasswordForm(form) {
-  if (!form) throw new Error("No data found for validation " + form);
+export function validatePasswordForm({ newPassword, confirm }) {
+  const newForm = {
+    newPassword: newPassword,
+    confirm: { newPassword, confirm },
+  };
 
   const config = {
     newPassword: "password",
+    confirm: "passwordEquality",
   };
 
-  if (form.newPassword !== form.confirm) {
-    return {
-      valid: false,
-      errors: { confirm: "New passwords do not match!" },
-    };
-  }
-
-  return validateForm(form, config);
+  return validateForm(newForm, config);
 }

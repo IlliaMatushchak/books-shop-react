@@ -81,3 +81,16 @@ export class AvatarValidator {
     return !this.message.length;
   }
 }
+
+export class PasswordEqualityValidator {
+  message;
+
+  validate({ newPassword, confirm }) {
+    this.message = "";
+    if (newPassword !== confirm) {
+      this.message = "New passwords do not match!";
+    }
+
+    return !this.message.length;
+  }
+}
