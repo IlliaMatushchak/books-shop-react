@@ -9,28 +9,24 @@ export default class Validator {
   }
 
   validate(data) {
-    const messages = {};
-
+    const errors = {};
     const keys = Object.keys(data);
-    keys.forEach((key) => {
-      const validatorName = this.#config[key];
 
-      if (!validatorName) {
-        return;
-      }
+    for (const key of keys) {
+      const validatorName = this.#config[key];
+      if (!validatorName) continue;
 
       const validator = ValidatorSelector.select(validatorName);
-      const validatorValue = data[key];
-      const isValid = validator.validate(validatorValue);
+      const isValid = validator.validate(data[key]);
 
       if (!isValid) {
-        messages[key] = validator.message;
+        errors[key] = validator.message;
       }
-    });
+    }
 
     return {
-      valid: Object.keys(messages).length === 0,
-      errors: messages,
+      valid: Object.keys(errors).length === 0,
+      errors,
     };
   }
 }
