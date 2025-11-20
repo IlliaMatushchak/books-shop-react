@@ -1,4 +1,5 @@
 import {
+  RequiredValidator,
   NameValidator,
   PasswordValidator,
   EmailValidator,
@@ -12,6 +13,7 @@ export default class ValidatorSelector {
 
   static initialize() {
     ValidatorSelector.#validators = {
+      required: new RequiredValidator(),
       name: new NameValidator(),
       password: new PasswordValidator(),
       email: new EmailValidator(),

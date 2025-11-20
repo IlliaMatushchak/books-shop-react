@@ -13,14 +13,21 @@ export default class Validator {
     const keys = Object.keys(data);
 
     for (const key of keys) {
-      const validatorName = this.#config[key];
-      if (!validatorName) continue;
+      let validatorNamesArr = this.#config[key];
+      if (!validatorNamesArr) continue;
 
-      const validator = ValidatorSelector.select(validatorName);
-      const isValid = validator.validate(data[key]);
+      if (typeof validatorNamesArr === "string") {
+        validatorNamesArr = [validatorNamesArr];
+      }
 
-      if (!isValid) {
-        errors[key] = validator.message;
+      for (const validatorName of validatorNamesArr) {
+        const validator = ValidatorSelector.select(validatorName);
+        const isValid = validator.validate(data[key]);
+
+        if (!isValid) {
+          errors[key] = validator.message;   
+          break;
+        }
       }
     }
 
