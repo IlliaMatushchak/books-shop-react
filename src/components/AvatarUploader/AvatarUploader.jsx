@@ -46,9 +46,9 @@ function AvatarUploader({ className = "", size = "16rem" }) {
     if (!file) return;
 
     clearMessages();
-    let { valid, errors } = validateAvatar(file);
+    let { valid, error } = validateAvatar(file);
     if (!valid) {
-      showMessages({ error: errors.avatar }, "error", 8000);
+      showMessages({ error: error }, "error", 8000);
       return;
     }
 

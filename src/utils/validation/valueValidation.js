@@ -1,15 +1,19 @@
 import Validator from "./validator/validator";
 
-function validateValue(value, validatorName) {
-  let form = { [validatorName]: value };
-  let config = { [validatorName]: validatorName };
+function validateValue(value, ...validatorNames) {
+  let validatorNamesArr = [];
+  if (Array.isArray(validatorNames[0])) {
+    validatorNamesArr = validatorNames[0];
+  } else {
+    validatorNamesArr = validatorNames;
+  }
 
-  const validator = new Validator(config);
-  let result = validator.validate(form);
+  const validator = new Validator(validatorNamesArr);
+  let result = validator.validate(value);
 
   return result;
 }
 
 export function validateAvatar(file) {
-  return validateValue(file, "avatar");
+  return validateValue(file, "required", "avatar");
 }
