@@ -9,26 +9,26 @@ function validateForm(form, config) {
 
 export function validateLoginForm(form) {
   const config = {
-    username: "name",
-    password: "password",
+    username: ["required", "name"],
+    password: ["required", "password"],
   };
   return validateForm(form, config);
 }
 
 export function validateRegistrationForm(form) {
   const config = {
-    username: "name",
-    password: "password",
-    email: "email",
-    phoneNumber: "phoneNumber",
+    username: ["required", "name"],
+    password: ["required", "password"],
+    email: ["required", "email"],
+    phoneNumber: ["required", "phoneNumber"],
   };
   return validateForm(form, config);
 }
 
 export function validateUserInfoForm(form) {
   const config = {
-    email: "email",
-    phoneNumber: "phoneNumber",
+    email: ["required", "email"],
+    phoneNumber: ["required", "phoneNumber"],
   };
   return validateForm(form, config);
 }
@@ -40,7 +40,7 @@ export function validatePasswordForm({ newPassword, confirm }) {
   };
 
   const config = {
-    newPassword: "password",
+    newPassword: ["required", "password"],
     confirm: "passwordEquality",
   };
 
