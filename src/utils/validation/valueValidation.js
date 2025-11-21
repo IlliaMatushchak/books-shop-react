@@ -17,3 +17,8 @@ function validateValue(value, ...validatorNames) {
 export function validateAvatar(file) {
   return validateValue(file, "required", "avatar");
 }
+
+export function validateOrderQuantity(totalCount, maxTotalCount) {
+  return validateValue({ totalCount, maxTotalCount }, "orderQuantity");
+}
+

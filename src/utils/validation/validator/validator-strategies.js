@@ -86,7 +86,8 @@ export class AvatarValidator extends BaseValidator {
     if (!this.ALLOWED_TYPES.includes(file.type)) {
       this.setError("Allowed formats: JPG, PNG, WEBP.");
       return false;
-    } else if (file.size > this.MAX_SIZE) {
+    }
+    if (file.size > this.MAX_SIZE) {
       this.setError("The file cannot be larger than 1MB.");
       return false;
     }
@@ -99,6 +100,25 @@ export class PasswordEqualityValidator extends BaseValidator {
     this.reset();
     if (newPassword !== confirm) {
       this.setError("New passwords do not match!");
+      return false;
+    }
+    return true;
+  }
+}
+
+export class OrderQuantityValidator extends BaseValidator {
+  validate({ totalCount, maxTotalCount }) {
+    this.reset();
+    if (typeof totalCount !== "number" || typeof maxTotalCount !== "number") {
+      this.setError("Invalid quantity data!");
+      return false;
+    }
+    if (totalCount <= 0) {
+      this.setError("The value is not valid!");
+      return false;
+    }
+    if (totalCount > maxTotalCount) {
+      this.setError(`Only ${maxTotalCount} available!`);
       return false;
     }
     return true;
