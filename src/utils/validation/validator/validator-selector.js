@@ -6,6 +6,7 @@ import {
   PhoneNumberValidator,
   AvatarValidator,
   PasswordEqualityValidator,
+  OrderQuantityValidator,
 } from "./validator-strategies";
 
 export default class ValidatorSelector {
@@ -20,6 +21,7 @@ export default class ValidatorSelector {
       phoneNumber: new PhoneNumberValidator(),
       avatar: new AvatarValidator(),
       passwordEquality: new PasswordEqualityValidator(),
+      orderQuantity: new OrderQuantityValidator(),
     };
 
     ValidatorSelector.initialize = () => {}; // для уникнення повторної ініціалізації
