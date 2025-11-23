@@ -1,17 +1,12 @@
 import Validator from "./validator/validator";
 
 function validateValue(value, ...validatorNames) {
-  let validatorNamesArr = [];
-  if (Array.isArray(validatorNames[0])) {
-    validatorNamesArr = validatorNames[0];
-  } else {
-    validatorNamesArr = validatorNames;
-  }
+  const validatorNamesArr = Array.isArray(validatorNames[0])
+    ? validatorNames[0]
+    : validatorNames;
 
   const validator = new Validator(validatorNamesArr);
-  let result = validator.validate(value);
-
-  return result;
+  return validator.validate(value);
 }
 
 export function validateAvatar(file) {
@@ -21,4 +16,3 @@ export function validateAvatar(file) {
 export function validateOrderQuantity(totalCount, maxTotalCount) {
   return validateValue({ totalCount, maxTotalCount }, "orderQuantity");
 }
-

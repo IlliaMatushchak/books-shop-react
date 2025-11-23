@@ -27,8 +27,11 @@ export default class Validator {
   }
 
   #validateObj(data) {
+    if (!data || typeof data !== "object")
+      throw new Error("Validation failed: data is missing or invalid.");
+
     const errors = {};
-    const keys = Object.keys(data);
+    const keys = Object.keys(this.#config);
 
     for (const key of keys) {
       let validatorNamesArr = this.#config[key];
