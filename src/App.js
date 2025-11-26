@@ -1,5 +1,5 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
-import { Suspense, lazy, useState } from "react";
+import { Suspense, lazy } from "react";
 
 import "./App.css";
 import "./assets/styles/button.css";
@@ -42,8 +42,8 @@ function App() {
         }}
       /> */}
       <BackgroundImg />
-      <CartProvider>
-        <AuthProvider>
+      <AuthProvider>
+        <CartProvider>
           <AvatarProvider>
             <ErrorBoundary fallback={<ErrorFallback />}>
               <Router>
@@ -98,7 +98,7 @@ function App() {
                           </ErrorBoundary>
                         }
                       />
-                       <Route
+                      <Route
                         path="profile"
                         element={
                           <ErrorBoundary fallback={<ErrorFallback />}>
@@ -115,8 +115,8 @@ function App() {
               </Router>
             </ErrorBoundary>
           </AvatarProvider>
-        </AuthProvider>
-      </CartProvider>
+        </CartProvider>
+      </AuthProvider>
     </>
   );
 }

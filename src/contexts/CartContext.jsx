@@ -6,43 +6,113 @@ import {
   useCallback,
   useEffect,
 } from "react";
+import { useAuth } from "./AuthContext";
+import { CartService } from "../services/cartService";
 import { LocalStorageService, LS_KEYS } from "../services/localStorage";
 
 const CartContext = createContext(null);
 
 function CartProvider({ children }) {
-  const [cart, setCart] = useState(LocalStorageService.get(LS_KEYS.CART) || []);
-
-  useEffect(() => {
-    LocalStorageService.set(LS_KEYS.CART, cart);
+  const [cart, setCart] = useState([]);
+  const { isLoggedIn } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const { totalCount, totalPrice } = useMemo(() => {
+    return cart.reduce(
+      (acc, item) => ({
+        totalCount: acc.totalCount + item.quantity,
+        totalPrice: acc.totalPrice + item.quantity * item.book.price,
+      }),
+      { totalCount: 0, totalPrice: 0 }
+    );
   }, [cart]);
 
-  const addToCart = useCallback((bookID, totalCount, price, title) => {
-    setCart((prev) => {
-      const index = prev.findIndex((el) => el.id === bookID);
-
-      if (index === -1) {
-        return [
-          ...prev,
-          { id: bookID, orderedCount: totalCount, price, title },
-        ];
-      } else {
-        const updated = [...prev];
-        updated[index] = { id: bookID, orderedCount: totalCount, price, title };
-        return updated;
-      }
-    });
+  const loadCart = useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await CartService.get();
+      setCart(data);
+    } catch (err) {
+      setError(err);
+      console.error("Cart error:", err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  const removeFromCart = useCallback((bookID) => {
-    setCart((prev) => prev.filter((item) => item.id !== bookID));
+  useEffect(() => {
+    if (isLoggedIn) {
+      loadCart();
+    } else {
+      setCart([]);
+    }
+  }, [isLoggedIn, loadCart]);
+
+  const addToCart = useCallback(async (productId, quantity) => {
+    try {
+      const data = await CartService.add(productId, quantity);
+      setCart(data);
+    } catch (err) {
+      setError(err);
+      console.error("Cart error:", err);
+    }
   }, []);
 
-  const clearCart = useCallback(() => setCart([]), []);
+  const changeQuantity = useCallback(async (productId, quantity) => {
+    try {
+      const data = await CartService.update(productId, quantity);
+      setCart(data);
+    } catch (err) {
+      setError(err);
+      console.error("Cart error:", err);
+    }
+  }, []);
+
+  const removeFromCart = useCallback(async (productId) => {
+    try {
+      const data = await CartService.remove(productId);
+      setCart(data);
+    } catch (err) {
+      setError(err);
+      console.error("Cart error:", err);
+    }
+  }, []);
+
+  const clearCart = useCallback(async () => {
+    try {
+      const data = await CartService.clear();
+      setCart(data);
+    } catch (err) {
+      setError(err);
+      console.error("Cart error:", err);
+    }
+  }, []);
 
   const value = useMemo(
-    () => ({ cart, addToCart, removeFromCart, clearCart }),
-    [cart, addToCart, removeFromCart, clearCart]
+    () => ({
+      cart,
+      totalCount,
+      totalPrice,
+      loading,
+      error,
+      loadCart,
+      addToCart,
+      changeQuantity,
+      removeFromCart,
+      clearCart,
+    }),
+    [
+      cart,
+      totalCount,
+      totalPrice,
+      loading,
+      error,
+      loadCart,
+      addToCart,
+      changeQuantity,
+      removeFromCart,
+      clearCart,
+    ]
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
