@@ -50,11 +50,14 @@ function CartProvider({ children }) {
 
   const addToCart = useCallback(async (productId, quantity) => {
     try {
+      setLoading(true);
       const data = await CartService.add(productId, quantity);
       setCart(data);
     } catch (err) {
       setError(err);
       console.error("Cart error:", err);
+    } finally {
+      setLoading(false);
     }
   }, []);
 

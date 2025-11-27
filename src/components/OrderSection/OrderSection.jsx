@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCart } from "../../contexts/CartContext";
 import { validateOrderQuantity } from "../../utils/validation/valueValidation";
 import { useTimedMessages } from "../../hooks/useTimedMessages";
@@ -6,49 +6,48 @@ import Message from "../Message/Message";
 import "./OrderSection.css";
 
 function OrderSection({ price, amount, bookID }) {
-  const { cart, addToCart } = useCart();
+  const { cart, addToCart, loading } = useCart();
   const item = cart.find((el) => el.productId === Number(bookID));
   const isInCart = !!item;
   const countInCart = item?.quantity || 0;
   const maxAllowed = amount - countInCart;
   const [totalCount, setTotalCount] = useState(1);
   const { messages, type, showMessages, clearMessages } = useTimedMessages();
-  let isValid = !messages.error;
+  const { valid, error } = validateOrderQuantity(totalCount, maxAllowed);
+  const isValid = valid;
 
-  function validateTotalCount(value) {
-    let { valid, error } = validateOrderQuantity(value, maxAllowed);
-    if (valid) {
+  useEffect(() => {
+    if (isValid) {
       clearMessages();
     } else {
       showMessages({ error }, "error");
     }
-    return valid;
-  }
+  }, [isValid, error]);
 
   function increment() {
     const newValue = totalCount + 1;
     setTotalCount(newValue);
-    validateTotalCount(newValue);
   }
 
   function decrement() {
+    if (totalCount <= 1) return;
     const newValue = totalCount - 1;
     setTotalCount(newValue);
-    validateTotalCount(newValue);
   }
 
   function handleInputChange(e) {
-    const value = Number(e.target.value);
-    e.target.value = value; // fix problem with 0 before value
+    let value = Number(e.target.value);
+    // e.target.value = value; // fix problem with 0 before value
+    if (value < 1 || Number.isNaN(value)) {
+      value = 1;
+    }
     setTotalCount(value);
-    validateTotalCount(value);
   }
 
   function handleAddToCart() {
-    if (validateTotalCount(totalCount)) {
-      addToCart(Number(bookID), totalCount);
-      setTotalCount(1);
-    }
+    if (!isValid) return;
+    addToCart(Number(bookID), totalCount);
+    setTotalCount(1);
   }
 
   return (
@@ -107,7 +106,7 @@ function OrderSection({ price, amount, bookID }) {
       <button
         type="button"
         className="add-button btn-effect-press"
-        disabled={!isValid}
+        disabled={!isValid || loading}
         onClick={handleAddToCart}
       >
         Add to cart
