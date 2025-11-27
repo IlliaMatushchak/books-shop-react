@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import { memo } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../contexts/CartContext";
 import { useAuth } from "../../contexts/AuthContext";
@@ -8,9 +8,8 @@ import avatarImg from "../../assets/images/avatar.png";
 
 const Header = memo(function Header() {
   console.log("Header render");
-  const { cart } = useCart();
+  const { totalCount } = useCart();
   const { user, isLoggedIn, logout } = useAuth();
-  const cartLength = cart.length;
 
   return (
     <header className="header flex fancy-background">
@@ -20,7 +19,7 @@ const Header = memo(function Header() {
           <>
             <Link to="/cart" className="cart-link btn-effect-3d">
               <img src={cartImg} alt="Cart" loading="lazy" />
-              {cartLength ? <span>{cartLength}</span> : ""}
+              {totalCount ? <span>{totalCount}</span> : ""}
             </Link>
 
             <Link

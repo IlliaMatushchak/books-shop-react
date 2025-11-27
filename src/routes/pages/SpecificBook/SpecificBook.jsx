@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useFetch from "../../../hooks/useFetch";
 import { BookService } from "../../../services/bookService";
@@ -34,7 +33,6 @@ function SpecificBook() {
         <OrderSection
           price={specificBook.price}
           amount={specificBook.amount}
-          title={specificBook.title}
           bookID={bookID}
         />
       </div>

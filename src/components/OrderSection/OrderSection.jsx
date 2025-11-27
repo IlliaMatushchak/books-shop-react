@@ -5,24 +5,24 @@ import { useTimedMessages } from "../../hooks/useTimedMessages";
 import Message from "../Message/Message";
 import "./OrderSection.css";
 
-function OrderSection({ price, amount, bookID, title }) {
+function OrderSection({ price, amount, bookID }) {
   const { cart, addToCart } = useCart();
-  const [totalCount, setTotalCount] = useState(() => {
-    const index = cart.findIndex((el) => {
-      return el.id === bookID;
-    });
-    return index === -1 ? 1 : cart[index].orderedCount;
-  });
+  const item = cart.find((el) => el.productId === Number(bookID));
+  const isInCart = !!item;
+  const countInCart = item?.quantity || 0;
+  const maxAllowed = amount - countInCart;
+  const [totalCount, setTotalCount] = useState(1);
   const { messages, type, showMessages, clearMessages } = useTimedMessages();
   let isValid = !messages.error;
 
   function validateTotalCount(value) {
-    let { valid, error } = validateOrderQuantity(value, amount);
+    let { valid, error } = validateOrderQuantity(value, maxAllowed);
     if (valid) {
       clearMessages();
     } else {
       showMessages({ error }, "error");
     }
+    return valid;
   }
 
   function increment() {
@@ -45,7 +45,10 @@ function OrderSection({ price, amount, bookID, title }) {
   }
 
   function handleAddToCart() {
-    addToCart(bookID, totalCount, price, title);
+    if (validateTotalCount(totalCount)) {
+      addToCart(Number(bookID), totalCount);
+      setTotalCount(1);
+    }
   }
 
   return (
@@ -54,7 +57,6 @@ function OrderSection({ price, amount, bookID, title }) {
         <p className="price-paragr">Price, $</p>
         <p className="price">{price}</p>
       </div>
-
       <div>
         <label className="count-label" htmlFor="count">
           Count
@@ -75,7 +77,7 @@ function OrderSection({ price, amount, bookID, title }) {
           required
           step="1"
           min="1"
-          max={amount}
+          max={maxAllowed}
           value={totalCount}
           onChange={handleInputChange}
         />
@@ -88,7 +90,6 @@ function OrderSection({ price, amount, bookID, title }) {
           -
         </button>
       </div>
-
       <div>
         <p className="total-price-paragr">Total price</p>
         <p className="total-price">
@@ -100,7 +101,9 @@ function OrderSection({ price, amount, bookID, title }) {
         </p>
       </div>
       {messages?.error && <Message message={messages.error} type={type} />}
-
+      {isInCart && (
+        <Message message={`Already in cart: ${countInCart}`} type="success" />
+      )}
       <button
         type="button"
         className="add-button btn-effect-press"
