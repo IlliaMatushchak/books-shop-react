@@ -18,60 +18,8 @@
     width: 100%;
 }
 
-.cart .product-info {
-    align-items: center;
-    padding: 1rem;
-    border: 0.07rem solid black;
-    border-bottom: none;
-}
-
-.cart .product-info:last-of-type {
-    border-bottom: 0.07rem solid black;
-}
-
-.cart .product-info a {
-    text-decoration: underline;
-    color: purple;
-}
-
-.cart .product-info span {
-    min-width: 10rem;
-    margin-left: auto;
-    margin-right: 1rem;
-}
-
-.cart .product-info button {
-    font-size: 1.5rem;
-}
-
 .cart .total-price {
     text-align: right;
     margin-bottom: 0;
     font-weight: bold;
-}
-
-@media screen and (max-width: 800px) {
-
-    .cart .product-info {
-        flex-direction: column;
-    }
-
-    .cart .product-info a {
-        width: 100%;
-        text-align: center;
-        padding: 0 1rem;
-    }
-
-    .cart .product-info span {
-        width: 100%;
-        text-align: center;
-        margin: 0;
-        padding-top: 1rem;
-    }
-
-    .cart .product-info button {
-        order: -1;
-        align-self: flex-end;
-    }
-
 }
