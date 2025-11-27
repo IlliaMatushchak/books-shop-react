@@ -63,31 +63,40 @@ function CartProvider({ children }) {
 
   const changeQuantity = useCallback(async (productId, quantity) => {
     try {
+      setLoading(true);
       const data = await CartService.update(productId, quantity);
       setCart(data);
     } catch (err) {
       setError(err);
       console.error("Cart error:", err);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   const removeFromCart = useCallback(async (productId) => {
     try {
+      setLoading(true);
       const data = await CartService.remove(productId);
       setCart(data);
     } catch (err) {
       setError(err);
       console.error("Cart error:", err);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   const clearCart = useCallback(async () => {
     try {
+      setLoading(true);
       const data = await CartService.clear();
       setCart(data);
     } catch (err) {
       setError(err);
       console.error("Cart error:", err);
+    } finally {
+      setLoading(false);
     }
   }, []);
 

@@ -5,7 +5,7 @@ import cartImg from "../../../assets/images/cart.svg";
 import CartItemsList from "../../../containers/CartItemsList/CartItemsList";
 
 const Cart = memo(function Cart() {
-  const { totalPrice, totalCount, clearCart } = useCart();
+  const { totalPrice, totalCount, clearCart, loading } = useCart();
   const isEmpty = totalCount === 0;
 
   return (
@@ -14,7 +14,7 @@ const Cart = memo(function Cart() {
         type="button"
         className="btn-purchase btn-effect-press"
         onClick={clearCart}
-        disabled={isEmpty}
+        disabled={isEmpty || loading}
       >
         Purchase
       </button>
