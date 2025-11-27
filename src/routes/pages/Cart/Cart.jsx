@@ -6,7 +6,7 @@ import cartImg from "../../../assets/images/cart.svg";
 
 const Cart = memo(function Cart() {
   console.log("Cart render");
-  const { cart, clearCart, removeFromCart } = useCart();
+  const { cart, totalPrice, clearCart, removeFromCart } = useCart();
   const isEmpty = !cart.length;
 
   return (
@@ -27,19 +27,19 @@ const Cart = memo(function Cart() {
         </div>
       ) : (
         <>
-          {cart.map(({ id, orderedCount, price, title }) => {
+          {cart.map(({ productId, quantity, book: { price, title } }) => {
             return (
-              <div key={id} className="product-info flex">
-                <Link to={`/specific-book/${id}`}>{title}</Link>
+              <div key={productId} className="product-info flex">
+                <Link to={`/specific-book/${productId}`}>{title}</Link>
                 <span>
-                  Count: {orderedCount} / ${(price * orderedCount).toFixed(2)}
+                  Count: {quantity} / ${(price * quantity).toFixed(2)}
                 </span>
                 <button
                   type="button"
                   className="btn-text btn-effect-3d"
                   aria-label="Remove from cart"
                   onClick={() => {
-                    removeFromCart(id);
+                    removeFromCart(productId);
                   }}
                 >
                   &times;
@@ -47,15 +47,7 @@ const Cart = memo(function Cart() {
               </div>
             );
           })}
-          <p className="total-price">
-            Total price, $
-            {cart
-              .reduce(
-                (acc, { orderedCount, price }) => acc + orderedCount * price,
-                0
-              )
-              .toFixed(2)}
-          </p>
+          <p className="total-price">Total price, ${totalPrice.toFixed(2)}</p>
         </>
       )}
     </div>
