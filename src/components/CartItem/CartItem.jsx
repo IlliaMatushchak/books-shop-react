@@ -8,7 +8,7 @@ const CartItem = memo(function CartItem({
   quantity,
   book: { price, title },
 }) {
-  const { changeQuantity, removeFromCart } = useCart();
+  const { changeQuantity, removeFromCart, loading } = useCart();
   const totalPrice = (price * quantity).toFixed(2);
 
   return (
@@ -21,6 +21,7 @@ const CartItem = memo(function CartItem({
         type="button"
         className="btn-text btn-effect-3d"
         aria-label="Remove from cart"
+        disabled={loading}
         onClick={() => {
           removeFromCart(productId);
         }}
