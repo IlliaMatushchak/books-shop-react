@@ -13,7 +13,7 @@ import { LocalStorageService, LS_KEYS } from "../services/localStorage";
 const CartContext = createContext(null);
 
 function CartProvider({ children }) {
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(LocalStorageService.get(LS_KEYS.CART) || []);
   const { isLoggedIn } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -40,65 +40,136 @@ function CartProvider({ children }) {
     }
   }, []);
 
+  const mergeWithRemoteCart = useCallback(async (localCart) => {
+    try {
+      setLoading(true);
+      const data = await CartService.merge(localCart);
+      setCart(data);
+      LocalStorageService.remove(LS_KEYS.CART);
+    } catch (err) {
+      setError(err);
+      console.error("Cart error:", err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     if (isLoggedIn) {
-      loadCart();
+      const localCart = LocalStorageService.get(LS_KEYS.CART);
+
+      if (localCart?.length > 0) {
+        mergeWithRemoteCart(localCart);
+      } else {
+        loadCart();
+      }
+    }
+  }, [isLoggedIn, loadCart, mergeWithRemoteCart]);
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      LocalStorageService.set(LS_KEYS.CART, cart);
+    }
+  }, [cart, isLoggedIn]);
+
+  const addToCart = useCallback(
+    async (productId, quantity, book) => {
+      if (isLoggedIn) {
+        try {
+          setLoading(true);
+          const data = await CartService.add(productId, quantity);
+          setCart(data);
+        } catch (err) {
+          setError(err);
+          console.error("Cart error:", err);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setCart((prevCart) => {
+          const updated = [...prevCart];
+          const index = updated.findIndex(
+            (item) => item.productId === productId
+          );
+          if (index === -1) {
+            updated.push({ productId, quantity, book });
+          } else {
+            updated[index] = {
+              productId,
+              quantity: updated[index].quantity + quantity,
+              book,
+            };
+          }
+          return updated;
+        });
+      }
+    },
+    [isLoggedIn]
+  );
+
+  const changeQuantity = useCallback(
+    async (productId, quantity) => {
+      if (isLoggedIn) {
+        try {
+          setLoading(true);
+          const data = await CartService.update(productId, quantity);
+          setCart(data);
+        } catch (err) {
+          setError(err);
+          console.error("Cart error:", err);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setCart((prevCart) => {
+          const updated = prevCart.map((item) => {
+            return item.productId === productId ? { ...item, quantity } : item;
+          });
+          return updated;
+        });
+      }
+    },
+    [isLoggedIn]
+  );
+
+  const removeFromCart = useCallback(
+    async (productId) => {
+      if (isLoggedIn) {
+        try {
+          setLoading(true);
+          const data = await CartService.remove(productId);
+          setCart(data);
+        } catch (err) {
+          setError(err);
+          console.error("Cart error:", err);
+        } finally {
+          setLoading(false);
+        }
+      } else {
+        setCart((prevCart) =>
+          prevCart.filter((item) => item.productId !== productId)
+        );
+      }
+    },
+    [isLoggedIn]
+  );
+
+  const clearCart = useCallback(async () => {
+    if (isLoggedIn) {
+      try {
+        setLoading(true);
+        const data = await CartService.clear();
+        setCart(data);
+      } catch (err) {
+        setError(err);
+        console.error("Cart error:", err);
+      } finally {
+        setLoading(false);
+      }
     } else {
       setCart([]);
     }
-  }, [isLoggedIn, loadCart]);
-
-  const addToCart = useCallback(async (productId, quantity) => {
-    try {
-      setLoading(true);
-      const data = await CartService.add(productId, quantity);
-      setCart(data);
-    } catch (err) {
-      setError(err);
-      console.error("Cart error:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const changeQuantity = useCallback(async (productId, quantity) => {
-    try {
-      setLoading(true);
-      const data = await CartService.update(productId, quantity);
-      setCart(data);
-    } catch (err) {
-      setError(err);
-      console.error("Cart error:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const removeFromCart = useCallback(async (productId) => {
-    try {
-      setLoading(true);
-      const data = await CartService.remove(productId);
-      setCart(data);
-    } catch (err) {
-      setError(err);
-      console.error("Cart error:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  const clearCart = useCallback(async () => {
-    try {
-      setLoading(true);
-      const data = await CartService.clear();
-      setCart(data);
-    } catch (err) {
-      setError(err);
-      console.error("Cart error:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  }, [isLoggedIn]);
 
   const value = useMemo(
     () => ({

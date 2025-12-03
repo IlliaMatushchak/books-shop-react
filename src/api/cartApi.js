@@ -14,6 +14,10 @@ export const updateCartApi = (productId, quantity) => {
   return axiosInstance.put(`${API_URL}/${productId}`, { quantity });
 };
 
+export const mergeWithRemoteCartApi = (localCart) => {
+  return axiosInstance.post(`${API_URL}/merge`, { localCart });
+};
+
 export const removeFromCartApi = (productId) => {
   return axiosInstance.delete(`${API_URL}/${productId}`);
 };

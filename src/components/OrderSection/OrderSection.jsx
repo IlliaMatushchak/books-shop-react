@@ -5,9 +5,10 @@ import { useTimedMessages } from "../../hooks/useTimedMessages";
 import Message from "../Message/Message";
 import "./OrderSection.css";
 
-function OrderSection({ price, amount, bookID }) {
+function OrderSection({ book }) {
+  const { price, amount, id: bookId } = book;
   const { cart, addToCart, loading } = useCart();
-  const item = cart.find((el) => el.productId === Number(bookID));
+  const item = cart.find((el) => el.productId === bookId);
   const isInCart = !!item;
   const countInCart = item?.quantity || 0;
   const maxAllowed = amount - countInCart;
@@ -46,7 +47,7 @@ function OrderSection({ price, amount, bookID }) {
 
   function handleAddToCart() {
     if (!isValid) return;
-    addToCart(Number(bookID), totalCount);
+    addToCart(bookId, totalCount, book);
     setTotalCount(1);
   }
 
