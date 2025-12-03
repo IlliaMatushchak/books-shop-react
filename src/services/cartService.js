@@ -2,6 +2,7 @@ import {
   getUserCartApi,
   addToCartApi,
   updateCartApi,
+  mergeWithRemoteCartApi,
   removeFromCartApi,
   clearCartApi,
 } from "../api/cartApi";
@@ -21,6 +22,11 @@ export const CartService = {
   async update(productId, quantity) {
     if (quantity <= 0) throw new Error("Quantity must be > 0");
     const response = await updateCartApi(productId, quantity);
+    return response.data;
+  },
+
+  async merge(localCart) {
+    const response = await mergeWithRemoteCartApi(localCart);
     return response.data;
   },
 

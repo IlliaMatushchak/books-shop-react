@@ -30,11 +30,7 @@ function SpecificBook() {
     specificBook && (
       <div className="specific-book-container flex">
         <BookSection book={specificBook} />
-        <OrderSection
-          price={specificBook.price}
-          amount={specificBook.amount}
-          bookID={bookID}
-        />
+        <OrderSection book={specificBook} />
       </div>
     )
   );
