@@ -1,25 +1,18 @@
-.cart {
+.cart-container {
     padding: 1rem;
 }
 
-.cart .btn-purchase {
+.cart-container .btn-clear-cart {
     display: block;
     margin-left: auto;
     margin-bottom: 1rem;
 }
 
-.cart .empty-cart-container {
-    max-width: 12.5rem;
-    margin: auto;
-    text-align: center;
-}
-
-.cart .empty-cart-container img {
-    width: 100%;
-}
-
-.cart .total-price {
+.cart-container .total-price {
     text-align: right;
     margin-bottom: 0;
+}
+
+.cart-container .total-price span {
     font-weight: bold;
 }
