@@ -1,5 +1,7 @@
 .cart-item {
-  align-items: center;
+  position: relative;
+  align-items: stretch;
+  gap: 1rem;
   padding: 1rem;
   border: 0.07rem solid black;
   border-bottom: none;
@@ -9,45 +11,92 @@
   border-bottom: 0.07rem solid black;
 }
 
-.cart-item a {
+.cart-item .book-image {
+  width: 10rem;
+}
+
+.cart-item .item-info {
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-grow: 1;
+}
+
+.cart-item .item-info a {
   text-decoration: underline;
   color: purple;
+  padding-right: 1rem;
 }
 
-.cart-item span {
-  min-width: 10rem;
-  margin-left: auto;
-  margin-right: 1rem;
+.cart-item .price-quantity-container {
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 1rem;
 }
 
-.cart-item button {
+.cart-item .price-block {
+  text-align: center;
+}
+
+.cart-item .price-block p {
+  display: inline-block;
+  min-width: 8rem;
+  margin: 0.3rem;
+}
+
+.cart-item .price-block p span {
+  font-weight: bold;
+}
+
+.cart-item .quantity-block {
+  flex-shrink: 0;
+}
+
+.cart-item .quantity-block .input-quantity {
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+  width: 3rem;
+  height: 2rem;
+  margin: 0 0.6rem;
+}
+
+.cart-item .quantity-block .input-quantity:focus {
+  transform: none;
+}
+
+.cart-item .quantity-block .input-quantity::-webkit-outer-spin-button,
+.cart-item .quantity-block .input-quantity::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.cart-item .btn-remove {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
   font-size: 1.5rem;
 }
 
-.cart-item button:disabled:hover {
+.cart-item .btn-remove:disabled:hover {
   background: none;
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 600px) {
+  .cart-item .price-quantity-container {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media screen and (max-width: 480px) {
   .cart-item {
     flex-direction: column;
-  }
-
-  .cart-item a {
-    width: 100%;
+    align-items: center;
     text-align: center;
-    padding: 0 1rem;
   }
 
-  .cart-item span {
-    width: 100%;
-    text-align: center;
-    margin: 0;
-    padding-top: 1rem;
-  }
-
-  .cart-item button {
-    order: -1;
-    align-self: flex-end;
+  .cart-item .item-info a {
+    padding-right: 0;
   }
 }
