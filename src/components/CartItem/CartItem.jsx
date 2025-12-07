@@ -1,6 +1,7 @@
 import { memo, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../contexts/CartContext";
+import useDebouncedValue from "../../hooks/useDebouncedValue";
 import LazyImage from "../LazyImage/LazyImage";
 import imgNotFound from "../../assets/images/imgNotFound.png";
 import "./CartItem.css";
@@ -13,30 +14,32 @@ const CartItem = memo(function CartItem({
   const { changeQuantity, removeFromCart, loading } = useCart();
   const [newQuantity, setNewQuantity] = useState(quantity);
   const totalPrice = (price * quantity).toFixed(2);
+  const debouncedNewQuantity = useDebouncedValue(newQuantity, 1000);
 
   useEffect(() => {
-    setNewQuantity(quantity);
-  }, [quantity]);
+    if (debouncedNewQuantity === quantity) return;
+    changeQuantity(productId, debouncedNewQuantity);
+  }, [debouncedNewQuantity, quantity]);
 
   function increment() {
-    const newValue = quantity + 1;
-    if (newValue > maxAllowed) return;
-    changeQuantity(productId, newValue);
+    setNewQuantity((prev) => {
+      const newValue = prev + 1;
+      return Math.min(newValue, maxAllowed);
+    });
   }
 
   function decrement() {
-    const newValue = quantity - 1;
-    if (newValue < 1) return;
-    changeQuantity(productId, newValue);
+    setNewQuantity((prev) => Math.max(prev - 1, 1));
   }
 
   function handleInputChange(e) {
     let newValue = Number(e.target.value);
-    setNewQuantity(newValue);
-    if (newValue < 1 || newValue > maxAllowed || Number.isNaN(newValue)) {
-      return;
+    if (newValue < 1 || Number.isNaN(newValue)) {
+      newValue = 1;
+    } else if (newValue > maxAllowed) {
+      newValue = maxAllowed;
     }
-    changeQuantity(productId, newValue);
+    setNewQuantity(newValue);
   }
 
   return (
