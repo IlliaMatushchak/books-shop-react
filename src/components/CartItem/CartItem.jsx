@@ -1,4 +1,4 @@
-import { memo } from "react";
+import { memo, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../contexts/CartContext";
 import LazyImage from "../LazyImage/LazyImage";
@@ -8,10 +8,36 @@ import "./CartItem.css";
 const CartItem = memo(function CartItem({
   productId,
   quantity,
-  book: { price, title, image },
+  book: { price, title, image, amount: maxAllowed },
 }) {
   const { changeQuantity, removeFromCart, loading } = useCart();
+  const [newQuantity, setNewQuantity] = useState(quantity);
   const totalPrice = (price * quantity).toFixed(2);
+
+  useEffect(() => {
+    setNewQuantity(quantity);
+  }, [quantity]);
+
+  function increment() {
+    const newValue = quantity + 1;
+    if (newValue > maxAllowed) return;
+    changeQuantity(productId, newValue);
+  }
+
+  function decrement() {
+    const newValue = quantity - 1;
+    if (newValue < 1) return;
+    changeQuantity(productId, newValue);
+  }
+
+  function handleInputChange(e) {
+    let newValue = Number(e.target.value);
+    setNewQuantity(newValue);
+    if (newValue < 1 || newValue > maxAllowed || Number.isNaN(newValue)) {
+      return;
+    }
+    changeQuantity(productId, newValue);
+  }
 
   return (
     <div className="cart-item flex">
@@ -43,7 +69,7 @@ const CartItem = memo(function CartItem({
               type="button"
               aria-label="Decrease count of books"
               className="btn-minus btn-effect-3d btn-circle"
-              // onClick={decrement}
+              onClick={decrement}
               disabled={loading}
             >
               -
@@ -55,14 +81,14 @@ const CartItem = memo(function CartItem({
               step="1"
               min="1"
               max="1000"
-              value={quantity}
-              // onChange={handleInputChange}
+              value={newQuantity}
+              onChange={handleInputChange}
             />
             <button
               type="button"
               aria-label="Increase count of books"
               className="btn-plus btn-effect-3d btn-circle"
-              // onClick={increment}
+              onClick={increment}
               disabled={loading}
             >
               +
