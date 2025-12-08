@@ -2,6 +2,9 @@ import { memo, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../contexts/CartContext";
 import useDebouncedValue from "../../hooks/useDebouncedValue";
+import { useTimedMessages } from "../../hooks/useTimedMessages";
+import { validateOrderQuantity } from "../../utils/validation/valueValidation";
+import Message from "../Message/Message";
 import LazyImage from "../LazyImage/LazyImage";
 import imgNotFound from "../../assets/images/imgNotFound.png";
 import "./CartItem.css";
@@ -11,34 +14,52 @@ const CartItem = memo(function CartItem({
   quantity,
   book: { price, title, image, amount: maxAllowed },
 }) {
-  const { changeQuantity, removeFromCart, loading } = useCart();
+  const {
+    changeQuantity,
+    removeFromCart,
+    loading,
+    error: serverError,
+  } = useCart();
+  const serverErrorMsg = serverError?.message || "";
   const [newQuantity, setNewQuantity] = useState(quantity);
   const totalPrice = (price * quantity).toFixed(2);
   const debouncedNewQuantity = useDebouncedValue(newQuantity, 1000);
+  const { valid: isValid, error: localErrorMsg } = validateOrderQuantity(
+    debouncedNewQuantity,
+    maxAllowed
+  );
+  const { messages, type, showMessages, clearMessages } = useTimedMessages();
+
+  useEffect(() => {
+    if (!isValid) {
+      if (messages.error !== localErrorMsg)
+        showMessages({ error: localErrorMsg }, "error");
+      return;
+    }
+    if (serverErrorMsg) {
+      if (messages.error !== serverErrorMsg)
+        showMessages({ error: serverErrorMsg }, "error");
+      return;
+    }
+    clearMessages();
+  }, [isValid, localErrorMsg, serverErrorMsg]);
 
   useEffect(() => {
     if (debouncedNewQuantity === quantity) return;
+    if (!isValid) return;
     changeQuantity(productId, debouncedNewQuantity);
-  }, [debouncedNewQuantity, quantity]);
+  }, [debouncedNewQuantity, quantity, isValid]);
 
   function increment() {
-    setNewQuantity((prev) => {
-      const newValue = prev + 1;
-      return Math.min(newValue, maxAllowed);
-    });
+    setNewQuantity((prev) => prev + 1);
   }
 
   function decrement() {
-    setNewQuantity((prev) => Math.max(prev - 1, 1));
+    setNewQuantity((prev) => prev - 1);
   }
 
   function handleInputChange(e) {
     let newValue = Number(e.target.value);
-    if (newValue < 1 || Number.isNaN(newValue)) {
-      newValue = 1;
-    } else if (newValue > maxAllowed) {
-      newValue = maxAllowed;
-    }
     setNewQuantity(newValue);
   }
 
@@ -55,6 +76,7 @@ const CartItem = memo(function CartItem({
         <div>
           <Link to={`/specific-book/${productId}`}>{title}</Link>
         </div>
+        {messages?.error && <Message message={messages.error} type={type} />}
         <div className="price-quantity-container flex">
           <div className="price-block">
             <p>
@@ -78,13 +100,15 @@ const CartItem = memo(function CartItem({
               -
             </button>
             <input
-              className="input-quantity"
+              className={
+                isValid ? "input-quantity" : "input-quantity invalid-field"
+              }
               type="number"
               required
               step="1"
               min="1"
               max="1000"
-              value={newQuantity}
+              value={newQuantity === 0 ? "" : newQuantity}
               onChange={handleInputChange}
             />
             <button
