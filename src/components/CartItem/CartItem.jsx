@@ -5,6 +5,7 @@ import useDebouncedValue from "../../hooks/useDebouncedValue";
 import { useTimedMessages } from "../../hooks/useTimedMessages";
 import { validateOrderQuantity } from "../../utils/validation/valueValidation";
 import Message from "../Message/Message";
+import Loader from "../Loader/Loader";
 import LazyImage from "../LazyImage/LazyImage";
 import imgNotFound from "../../assets/images/imgNotFound.png";
 import "./CartItem.css";
@@ -135,6 +136,7 @@ const CartItem = memo(function CartItem({
       >
         &times;
       </button>
+      {loading && <Loader className="cart-item-loader" type="small" />}
     </div>
   );
 });

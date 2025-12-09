@@ -82,6 +82,14 @@
   background: none;
 }
 
+.cart-item .cart-item-loader {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(0.2rem);
+  z-index: 9999;
+}
+
 @media screen and (max-width: 600px) {
   .cart-item .price-quantity-container {
     flex-direction: column;
