@@ -29,6 +29,7 @@ function CartProvider({ children }) {
 
   const loadCart = useCallback(async () => {
     try {
+      setError(null);
       setLoading(true);
       const data = await CartService.get();
       setCart(data);
@@ -42,6 +43,7 @@ function CartProvider({ children }) {
 
   const mergeWithRemoteCart = useCallback(async (localCart) => {
     try {
+      setError(null);
       setLoading(true);
       const data = await CartService.merge(localCart);
       setCart(data);
@@ -76,6 +78,7 @@ function CartProvider({ children }) {
     async (productId, quantity, book) => {
       if (isLoggedIn) {
         try {
+          setError(null);
           setLoading(true);
           const data = await CartService.add(productId, quantity);
           setCart(data);
@@ -111,6 +114,7 @@ function CartProvider({ children }) {
     async (productId, quantity) => {
       if (isLoggedIn) {
         try {
+          setError(null);
           setLoading(true);
           const data = await CartService.update(productId, quantity);
           setCart(data);
@@ -136,6 +140,7 @@ function CartProvider({ children }) {
     async (productId) => {
       if (isLoggedIn) {
         try {
+          setError(null);
           setLoading(true);
           const data = await CartService.remove(productId);
           setCart(data);
@@ -157,6 +162,7 @@ function CartProvider({ children }) {
   const clearCart = useCallback(async () => {
     if (isLoggedIn) {
       try {
+        setError(null);
         setLoading(true);
         const data = await CartService.clear();
         setCart(data);
