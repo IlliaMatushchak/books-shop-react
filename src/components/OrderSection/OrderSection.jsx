@@ -7,40 +7,41 @@ import "./OrderSection.css";
 
 function OrderSection({ book }) {
   const { price, amount, id: bookId } = book;
-  const { cart, addToCart, loading } = useCart();
+  const { cart, addToCart, loading, error: serverError } = useCart();
+  const serverErrorMsg = serverError?.message || "";
   const item = cart.find((el) => el.productId === bookId);
   const isInCart = !!item;
   const countInCart = item?.quantity || 0;
   const maxAllowed = amount - countInCart;
   const [totalCount, setTotalCount] = useState(1);
   const { messages, type, showMessages, clearMessages } = useTimedMessages();
-  const { valid, error } = validateOrderQuantity(totalCount, maxAllowed);
-  const isValid = valid;
+  const { valid: isValid, error: localErrorMsg } = validateOrderQuantity(
+    totalCount,
+    maxAllowed
+  );
+  const errorMsg = localErrorMsg || serverErrorMsg;
+  const hasError = !!errorMsg;
 
   useEffect(() => {
-    if (isValid) {
-      clearMessages();
+    if (hasError && messages?.error !== errorMsg) {
+      showMessages({ error: errorMsg }, "error", 8000);
     } else {
-      showMessages({ error }, "error");
+      clearMessages();
     }
-  }, [isValid, error]);
+  }, [hasError, errorMsg]);
 
   function increment() {
-    const newValue = totalCount + 1;
-    setTotalCount(newValue);
+    setTotalCount((prev) => prev + 1);
   }
 
   function decrement() {
-    if (totalCount <= 1) return;
-    const newValue = totalCount - 1;
-    setTotalCount(newValue);
+    setTotalCount((prev) => Math.max(prev - 1, 1));
   }
 
   function handleInputChange(e) {
     let value = Number(e.target.value);
-    // e.target.value = value; // fix problem with 0 before value
-    if (value < 1 || Number.isNaN(value)) {
-      value = 1;
+    if (value < 0 || Number.isNaN(value)) {
+      value = 0;
     }
     setTotalCount(value);
   }
@@ -78,7 +79,7 @@ function OrderSection({ book }) {
           step="1"
           min="1"
           max={maxAllowed}
-          value={totalCount}
+          value={totalCount === 0 ? "" : totalCount}
           onChange={handleInputChange}
         />
         <button
