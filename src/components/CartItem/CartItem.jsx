@@ -30,20 +30,16 @@ const CartItem = memo(function CartItem({
     maxAllowed
   );
   const { messages, type, showMessages, clearMessages } = useTimedMessages();
+  const errorMsg = localErrorMsg || serverErrorMsg;
+  const hasError = !!errorMsg;
 
   useEffect(() => {
-    if (!isValid) {
-      if (messages.error !== localErrorMsg)
-        showMessages({ error: localErrorMsg }, "error");
-      return;
+    if (hasError && messages?.error !== errorMsg) {
+      showMessages({ error: errorMsg }, "error", 8000);
+    } else {
+      clearMessages();
     }
-    if (serverErrorMsg) {
-      if (messages.error !== serverErrorMsg)
-        showMessages({ error: serverErrorMsg }, "error");
-      return;
-    }
-    clearMessages();
-  }, [isValid, localErrorMsg, serverErrorMsg]);
+  }, [hasError, errorMsg]);
 
   useEffect(() => {
     if (debouncedNewQuantity === quantity) return;
