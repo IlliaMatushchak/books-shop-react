@@ -14,6 +14,7 @@ function OrderSection({ book }) {
   const countInCart = item?.quantity || 0;
   const maxAllowed = amount - countInCart;
   const [totalCount, setTotalCount] = useState(1);
+  const totalPrice = (price * totalCount).toFixed(2);
   const { messages, type, showMessages, clearMessages } = useTimedMessages();
   const { valid: isValid, error: localErrorMsg } = validateOrderQuantity(
     totalCount,
@@ -54,57 +55,55 @@ function OrderSection({ book }) {
 
   return (
     <section className="order-section fancy-background">
-      <div>
-        <p className="price-paragr">Price, $</p>
-        <p className="price">{price}</p>
+      <div className="order-info-list">
+        <div className="order-info-item">
+          <span className="item-lable">Price:</span>
+          <span className="item-value">{price}$</span>
+        </div>
+        <div className="order-info-item">
+          <label className="item-lable" htmlFor="count">
+            Count:
+          </label>
+          <div className="item-value">
+            <button
+              type="button"
+              aria-label="Decrease count of books"
+              className="btn-minus btn-effect-3d btn-circle"
+              onClick={decrement}
+            >
+              -
+            </button>
+            <input
+              name="count"
+              className={isValid ? "count" : "count invalid-field"}
+              id="count"
+              type="number"
+              required
+              step="1"
+              min="1"
+              max={maxAllowed}
+              value={totalCount === 0 ? "" : totalCount}
+              onChange={handleInputChange}
+            />
+            <button
+              type="button"
+              aria-label="Increase count of books"
+              className="btn-plus btn-effect-3d btn-circle"
+              onClick={increment}
+            >
+              +
+            </button>
+          </div>
+        </div>
+        <div className="order-info-item">
+          <span className="item-lable">Total price:</span>
+          <span className="item-value">{totalPrice}$</span>
+        </div>
       </div>
-      <div>
-        <label className="count-label" htmlFor="count">
-          Count
-        </label>
-        <button
-          type="button"
-          aria-label="Increase count of books"
-          className="btn-plus btn-effect-3d btn-circle"
-          onClick={increment}
-        >
-          +
-        </button>
-        <input
-          name="count"
-          className={isValid ? "count" : "count invalid-field"}
-          id="count"
-          type="number"
-          required
-          step="1"
-          min="1"
-          max={maxAllowed}
-          value={totalCount === 0 ? "" : totalCount}
-          onChange={handleInputChange}
-        />
-        <button
-          type="button"
-          aria-label="Decrease count of books"
-          className="btn-minus btn-effect-3d btn-circle"
-          onClick={decrement}
-        >
-          -
-        </button>
-      </div>
-      <div>
-        <p className="total-price-paragr">Total price</p>
-        <p className="total-price">
-          {isValid ? (
-            (price * totalCount).toFixed(2)
-          ) : (
-            <span className="invalid-text">Error</span>
-          )}
-        </p>
-      </div>
-      {messages?.error && <Message message={messages.error} type={type} />}
       {isInCart && (
         <Message message={`Already in cart: ${countInCart}`} type="success" />
       )}
+      {messages?.error && <Message message={messages.error} type={type} />}
       <button
         type="button"
         className="add-button btn-effect-press"

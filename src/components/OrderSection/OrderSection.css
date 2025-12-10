@@ -9,30 +9,17 @@
     flex-shrink: 0;
 }
 
-.order-section div {
+.order-section .order-info-item {
     height: 3rem;
+    line-height: 3rem;
 }
 
-.order-section div p {
-    margin: 0;
-}
-
-.order-section .price-paragr,
-.order-section .count-label,
-.order-section .total-price-paragr {
+.order-section .item-lable {
     float: left;
-    line-height: 3rem;
 }
 
-.order-section .price,
-.order-section .count,
-.order-section .total-price {
+.order-section .item-value {
     float: right;
-}
-
-.order-section .price,
-.order-section .total-price {
-    line-height: 3rem;
 }
 
 .order-section .count {
@@ -41,15 +28,15 @@
     appearance: textfield;
     width: 3rem;
     height: 2rem;
-    margin: 0.5rem 0;
+    margin: 0 0.5rem;
 }
 
 .order-section .count:focus {
     transform: none;
 }
 
-.count::-webkit-outer-spin-button,
-.count::-webkit-inner-spin-button {
+.order-section .count::-webkit-outer-spin-button,
+.order-section .count::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
@@ -58,19 +45,4 @@
     margin: 1rem 0 0;
     clear: both;
     float: right;
-}
-
-.order-section .btn-plus,
-.order-section .btn-minus {
-    float: right;
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.order-section .btn-plus {
-    margin-left: 0.6rem;
-}
-
-.order-section .btn-minus {
-    margin-right: 0.6rem;
 }
