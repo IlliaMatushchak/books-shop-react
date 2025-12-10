@@ -3,6 +3,7 @@ import { useCart } from "../../contexts/CartContext";
 import { validateOrderQuantity } from "../../utils/validation/valueValidation";
 import { useTimedMessages } from "../../hooks/useTimedMessages";
 import Message from "../Message/Message";
+import Loader from "../Loader/Loader";
 import "./OrderSection.css";
 
 function OrderSection({ book }) {
@@ -112,6 +113,7 @@ function OrderSection({ book }) {
       >
         Add to cart
       </button>
+      {loading && <Loader className="cart-item-loader" type="small" />}
     </section>
   );
 }

@@ -7,6 +7,7 @@
     width: 100%;
     user-select: none;
     flex-shrink: 0;
+    position: relative;
 }
 
 .order-section .order-info-item {
@@ -46,3 +47,12 @@
     clear: both;
     float: right;
 }
+
+.order-section .cart-item-loader {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(0.2rem);
+    z-index: 9999;
+    border-radius: 0.6rem;
+  }
