@@ -72,9 +72,7 @@ function App() {
                         path="shop"
                         element={
                           <ErrorBoundary fallback={<ErrorFallback />}>
-                            <PrivateRoute allowedRoles={["user", "admin"]}>
-                              <Shop />
-                            </PrivateRoute>
+                            <Shop />
                           </ErrorBoundary>
                         }
                       />
@@ -82,9 +80,7 @@ function App() {
                         path="specific-book/:bookID"
                         element={
                           <ErrorBoundary fallback={<ErrorFallback />}>
-                            <PrivateRoute allowedRoles={["user", "admin"]}>
-                              <SpecificBook />
-                            </PrivateRoute>
+                            <SpecificBook />
                           </ErrorBoundary>
                         }
                       />
@@ -92,9 +88,7 @@ function App() {
                         path="cart"
                         element={
                           <ErrorBoundary fallback={<ErrorFallback />}>
-                            <PrivateRoute allowedRoles={["user", "admin"]}>
-                              <Cart />
-                            </PrivateRoute>
+                            <Cart />
                           </ErrorBoundary>
                         }
                       />
