@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useTimedMessages } from "../../../hooks/useTimedMessages";
 import { AuthService } from "../../../services/authService";
 import Message from "../../../components/Message/Message";
+import Loader from "../../../components/Loader/Loader";
 import { validateRegistrationForm } from "../../../utils/validation/formValidation";
 import "./Registration.css";
 
@@ -14,6 +15,7 @@ function Registration() {
     phoneNumber: "",
     gender: "MALE",
   });
+  const [loading, setLoading] = useState(false);
   const { messages, type, showMessages, clearMessages } = useTimedMessages();
 
   const handleChange = (e) => {
@@ -32,6 +34,7 @@ function Registration() {
     }
 
     try {
+      setLoading(true);
       const data = await AuthService.register(form);
       showMessages(
         { success: data.message || "Successful registration!" },
@@ -48,6 +51,8 @@ function Registration() {
       });
     } catch (error) {
       showMessages({ error: error.message }, "error", 8000);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -135,10 +140,11 @@ function Registration() {
           <button
             type="submit"
             className="btn-effect-3d"
-            // disabled={!validateForm(form)}
+            disabled={loading}
           >
             Register
           </button>
+          {loading && <Loader type="local" />}
         </form>
       </div>
     </>

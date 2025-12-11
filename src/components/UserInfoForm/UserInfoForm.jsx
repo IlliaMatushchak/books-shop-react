@@ -171,6 +171,7 @@ function UserInfoForm() {
           </button>
         </>
       )}
+      {loading && <Loader type="local" />}
     </form>
   );
 }

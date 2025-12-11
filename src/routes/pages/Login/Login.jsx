@@ -2,12 +2,14 @@ import { useState } from "react";
 import { useTimedMessages } from "../../../hooks/useTimedMessages";
 import { useAuth } from "../../../contexts/AuthContext";
 import Message from "../../../components/Message/Message";
+import Loader from "../../../components/Loader/Loader";
 import { validateLoginForm } from "../../../utils/validation/formValidation";
 import "./Login.css";
 
 function Login() {
   const { login } = useAuth();
   const [form, setForm] = useState({ username: "", password: "" });
+  const [loading, setLoading] = useState(false);
   const { messages, type, showMessages, clearMessages } = useTimedMessages();
 
   const handleChange = (e) => {
@@ -26,6 +28,7 @@ function Login() {
     }
 
     try {
+      setLoading(true);
       await login(form);
       setForm({
         username: "",
@@ -33,6 +36,8 @@ function Login() {
       });
     } catch (error) {
       showMessages({ error: error.message }, "error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -76,10 +81,11 @@ function Login() {
           <button
             type="submit"
             className="btn-effect-3d"
-            // disabled={!validateForm(form)}
+            disabled={loading}
           >
             Login
           </button>
+          {loading && <Loader type="global" />}
         </form>
       </div>
     </>

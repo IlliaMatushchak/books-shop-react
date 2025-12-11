@@ -3,6 +3,7 @@ import { useTimedMessages } from "../../hooks/useTimedMessages";
 import { ProfileService } from "../../services/profileService";
 import { validatePasswordForm } from "../../utils/validation/formValidation";
 import Message from "../Message/Message";
+import Loader from "../Loader/Loader";
 
 function PasswordForm() {
   const [passwordData, setPasswordData] = useState({
@@ -87,6 +88,7 @@ function PasswordForm() {
       <button type="submit" disabled={loading}>
         Change
       </button>
+      {loading && <Loader type="local" />}
     </form>
   );
 }

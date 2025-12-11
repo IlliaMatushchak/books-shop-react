@@ -3,6 +3,7 @@
   padding: 1rem;
   max-width: 18rem;
   text-align: center;
+  position: relative;
 }
 
 .register-container form :first-child {
