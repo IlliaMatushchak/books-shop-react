@@ -1,10 +1,15 @@
 .book-section .img-container {
     margin: 1rem;
+    width: 12rem;
+    height: 16rem;
+    flex-shrink: 0;
 }
 
 .book-section .book-image {
     transition: transform 1s ease-in-out;
-    width: 16rem;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .book-section .book-image:hover {
@@ -50,11 +55,8 @@
     }
 
     .book-section .img-container {
-        width: 70%;
-    }
-
-    .book-section .book-image {
-        width: 100%;
+        width: 14rem;
+        height: 18rem;
     }
 
     .book-section .book-image:hover {
@@ -64,10 +66,6 @@
 }
 
 @media screen and (max-width: 420px) {
-
-    .book-section .img-container {
-        width: 100%;
-    }
 
     .book-section .book-image:hover {
         transform: none;

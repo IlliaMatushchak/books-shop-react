@@ -11,8 +11,17 @@
   border-bottom: 0.07rem solid black;
 }
 
-.cart-item .book-image {
+.cart-item .img-container {
+  display: block;
   width: 10rem;
+  height: 13rem;
+  flex-shrink: 0;
+}
+
+.cart-item .book-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .cart-item .item-info {

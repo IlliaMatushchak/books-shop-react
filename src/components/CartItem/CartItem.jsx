@@ -62,7 +62,7 @@ const CartItem = memo(function CartItem({
 
   return (
     <div className="cart-item flex">
-      <Link to={`/specific-book/${productId}`}>
+      <Link to={`/specific-book/${productId}`} className="img-container">
         <LazyImage
           className="book-image"
           src={image || imgNotFound}

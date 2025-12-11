@@ -1,5 +1,5 @@
 .book-card {
-    max-width: 19rem;
+    width: 19rem;
     padding: 1rem;
     transition: box-shadow 0.5s, transform 0.5s;
 }
@@ -35,7 +35,7 @@
     margin: 0.3rem 0;
 }
 
-.book-card div.flex {
+.book-card .card-footer {
     justify-content: space-between;
     align-items: center;
     margin-top: 1.25rem;
