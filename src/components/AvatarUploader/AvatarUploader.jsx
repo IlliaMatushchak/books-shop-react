@@ -144,7 +144,7 @@ function AvatarUploader({ className = "", size = "16rem" }) {
             </div>
           )}
         </div>
-        {messages?.error && <Message message={messages.error} type={type} />}
+        {messages?.error && <Message className="message" message={messages.error} type={type} />}
       </div>
       <input
         type="file"

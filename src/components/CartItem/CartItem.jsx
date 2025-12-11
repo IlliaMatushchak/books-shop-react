@@ -73,7 +73,7 @@ const CartItem = memo(function CartItem({
         <div>
           <Link to={`/specific-book/${productId}`}>{title}</Link>
         </div>
-        {messages?.error && <Message message={messages.error} type={type} />}
+        {messages?.error && <Message className="message" message={messages.error} type={type} />}
         <div className="price-quantity-container flex">
           <div className="price-block">
             <p>

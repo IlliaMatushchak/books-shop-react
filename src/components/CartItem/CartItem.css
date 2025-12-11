@@ -91,6 +91,10 @@
   background: none;
 }
 
+.cart-item .message{
+ margin: auto;
+}
+
 .cart-item .cart-item-loader {
   position: absolute;
   inset: 0;

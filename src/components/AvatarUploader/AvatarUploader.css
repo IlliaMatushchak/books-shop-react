@@ -5,8 +5,8 @@
   overflow: hidden;
 }
 
-.avatar-img-container + * {
-  margin-top: 1rem;
+.avatar-img-container + .message {
+  margin: 1rem auto 0;
 }
 
 .avatar-img-container:focus-visible {
