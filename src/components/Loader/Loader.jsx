@@ -13,6 +13,13 @@ export default function Loader({ className = "", type = "" }) {
         </div>
       );
       break;
+    case "local":
+      loader = (
+        <div className={"local " + containerClassName}>
+          <div className="spinner"></div>
+        </div>
+      );
+      break;
     case "named":
       loader = (
         <div className={containerClassName}>

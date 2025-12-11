@@ -3,10 +3,15 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
+    gap: 1rem;
 }
 
-.global {
-    position: fixed;
+.spiner-container h2 {
+    margin: 0;
+}
+
+.global,
+.local {
     /* inset: 0; */
     top: 0;
     right: 0;
@@ -15,6 +20,15 @@
     background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(0.2rem);
     z-index: 9999;
+}
+
+.global {
+    position: fixed;
+}
+
+.local {
+    position: absolute;
+    border-radius: inherit;
 }
 
 .global h2 {

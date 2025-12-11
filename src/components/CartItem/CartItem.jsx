@@ -132,7 +132,7 @@ const CartItem = memo(function CartItem({
       >
         &times;
       </button>
-      {loading && <Loader className="cart-item-loader" type="small" />}
+      {loading && <Loader type="local" />}
     </div>
   );
 });

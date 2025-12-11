@@ -113,7 +113,7 @@ function OrderSection({ book }) {
       >
         Add to cart
       </button>
-      {loading && <Loader className="cart-item-loader" type="small" />}
+      {loading && <Loader type="local" />}
     </section>
   );
 }
