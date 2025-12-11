@@ -22,6 +22,24 @@
 
 .header nav a {
     flex-shrink: 0;
+    padding: 0.1rem;
+}
+
+.header nav .active:not(.profile-link) {
+    background-color: rgb(255, 255, 0);
+    box-shadow: 0 0 0.5rem 0.2rem rgb(255, 255, 0);
+    border: 0.1rem solid black;
+    border-radius: 0.5rem;
+}
+
+.header nav .active.profile-link img {
+    background-color: rgb(255, 255, 0);
+    box-shadow: 0 0 0.5rem 0.2rem rgb(255, 255, 0);
+    border-radius: 50%
+}
+
+.header nav .active.profile-link span {
+    border-bottom: 0.1rem solid black;
 }
 
 .header .cart-link {
@@ -33,14 +51,15 @@
     position: absolute;
     bottom: 0;
     right: -0.5rem;
-    background-color: rgb(240, 240, 10, 0.8);
-    border: 0.07rem solid black;
+    background-color: rgb(240, 240, 10, 1);
+    border: 0.1rem solid black;
     border-radius: 1rem;
     padding: 0.1rem;
 }
 
 .header .profile-link {
-    line-height: 3.2rem;
+    display: flex;
+    align-items: center;
 }
 
 .header .user-name {
@@ -54,6 +73,9 @@
     height: 3.2rem;
     border-radius: 50%;
     object-fit: cover;
+    font-size: 0.6rem;
+    text-align: center;
+    line-height: 3.2rem;
 }
 
 @media screen and (max-width: 800px) {

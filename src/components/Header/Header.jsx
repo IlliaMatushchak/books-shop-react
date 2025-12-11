@@ -1,5 +1,5 @@
 import { memo } from "react";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useCart } from "../../contexts/CartContext";
 import { useAuth } from "../../contexts/AuthContext";
 import "./Header.css";
@@ -10,17 +10,24 @@ const Header = memo(function Header() {
   const { totalCount } = useCart();
   const { user, isLoggedIn, logout } = useAuth();
 
+  const getNavLinkFunc = (className) => {
+    return ({ isActive }) => (isActive ? `active ${className}` : className);
+  };
+
   return (
     <header className="header flex fancy-background">
       <h1>Books shop</h1>
       <nav className="flex">
-        <Link to="/shop" className="btn-effect-3d">
+        <NavLink to="/shop" className={getNavLinkFunc("btn-effect-3d")}>
           Shop
-        </Link>
-        <Link to="/cart" className="cart-link btn-effect-3d">
+        </NavLink>
+        <NavLink
+          to="/cart"
+          className={getNavLinkFunc("cart-link btn-effect-3d")}
+        >
           <img src={cartImg} alt="Cart" loading="lazy" />
           {totalCount ? <span>{totalCount}</span> : ""}
-        </Link>
+        </NavLink>
 
         {isLoggedIn ? (
           <>
@@ -34,7 +41,11 @@ const Header = memo(function Header() {
               Logout
             </Link>
 
-            <Link to={"/profile"} className="profile-link" title="Edit profile">
+            <NavLink
+              to={"/profile"}
+              className={getNavLinkFunc("profile-link")}
+              title="Edit profile"
+            >
               <img
                 className="user-avatar btn-effect-3d"
                 src={user?.avatar || avatarImg}
@@ -42,17 +53,17 @@ const Header = memo(function Header() {
                 loading="lazy"
               />
               <span className="user-name btn-effect-3d">{user?.username}</span>
-            </Link>
+            </NavLink>
           </>
         ) : (
           <>
-            <Link to="/" className="btn-effect-3d">
+            <NavLink to="/" className={getNavLinkFunc("btn-effect-3d")}>
               Login
-            </Link>
+            </NavLink>
 
-            <Link to="/register" className="btn-effect-3d">
+            <NavLink to="/register" className={getNavLinkFunc("btn-effect-3d")}>
               Register
-            </Link>
+            </NavLink>
           </>
         )}
       </nav>
