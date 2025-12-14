@@ -2,7 +2,7 @@ import { memo, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCart } from "../../contexts/CartContext";
 import useDebouncedValue from "../../hooks/useDebouncedValue";
-import { useTimedMessages } from "../../hooks/useTimedMessages";
+import { useTimedMessage } from "../../hooks/useTimedMessage";
 import { validateOrderQuantity } from "../../utils/validation/valueValidation";
 import Message from "../Message/Message";
 import Loader from "../Loader/Loader";
@@ -29,23 +29,23 @@ const CartItem = memo(function CartItem({
     debouncedNewQuantity,
     maxAllowed
   );
-  const { messages, type, showMessages, clearMessages } = useTimedMessages();
+  const { message, showMessage, clearMessage } = useTimedMessage(10000);
   const errorMsg = localErrorMsg || serverErrorMsg;
   const hasError = !!errorMsg;
 
   useEffect(() => {
-    if (hasError && messages?.error !== errorMsg) {
-      showMessages({ error: errorMsg }, "error", 8000);
+     if (hasError) {
+      showMessage(errorMsg, "error");
     } else {
-      clearMessages();
+      clearMessage();
     }
-  }, [hasError, errorMsg]);
+  }, [hasError, errorMsg, showMessage, clearMessage]);
 
   useEffect(() => {
     if (debouncedNewQuantity === quantity) return;
     if (!isValid) return;
     changeQuantity(productId, debouncedNewQuantity);
-  }, [debouncedNewQuantity, quantity, isValid]);
+  }, [debouncedNewQuantity, quantity, isValid, productId, changeQuantity]);
 
   function increment() {
     setNewQuantity((prev) => prev + 1);
@@ -73,7 +73,7 @@ const CartItem = memo(function CartItem({
         <div>
           <Link to={`/specific-book/${productId}`}>{title}</Link>
         </div>
-        {messages?.error && <Message className="message" message={messages.error} type={type} />}
+        {message?.text && <Message className="message" message={message.text} type={message.type} />}
         <div className="price-quantity-container flex">
           <div className="price-block">
             <p>

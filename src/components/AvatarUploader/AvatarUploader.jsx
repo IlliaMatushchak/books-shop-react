@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import { useTimedMessages } from "../../hooks/useTimedMessages";
+import { useTimedMessage } from "../../hooks/useTimedMessage";
 import { useAuth } from "../../contexts/AuthContext";
 import { ProfileService } from "../../services/profileService";
 import LazyImage from "../LazyImage/LazyImage";
@@ -24,7 +24,7 @@ function AvatarUploader({ className = "", size = "16rem" }) {
     updateAvatar,
     deleteAvatar,
   } = useAuth();
-  const { messages, type, showMessages, clearMessages } = useTimedMessages();
+  const { message, showMessage, clearMessage } = useTimedMessage(10000);
   const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
   const avatarImgContainerRef = useRef(null);
@@ -45,10 +45,10 @@ function AvatarUploader({ className = "", size = "16rem" }) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    clearMessages();
+    clearMessage();
     let { valid, error } = validateAvatar(file);
     if (!valid) {
-      showMessages({ error: error }, "error", 8000);
+      showMessage(error, "error");
       return;
     }
 
@@ -60,8 +60,7 @@ function AvatarUploader({ className = "", size = "16rem" }) {
       );
       if (isMounted.current) updateAvatar(updatedAvatar);
     } catch (err) {
-      if (isMounted.current)
-        showMessages({ error: err.message }, "error", 8000);
+      if (isMounted.current) showMessage(err.message, "error");
     } finally {
       if (isMounted.current) setLoading(false);
       if (isMounted.current) avatarImgContainerRef.current.blur();
@@ -69,14 +68,13 @@ function AvatarUploader({ className = "", size = "16rem" }) {
   };
 
   const handleImageRemove = async () => {
-    clearMessages();
+    clearMessage();
     try {
       setLoading(true);
       await ProfileService.deleteAvatar();
       if (isMounted.current) deleteAvatar();
     } catch (err) {
-      if (isMounted.current)
-        showMessages({ error: err.message }, "error", 8000);
+      if (isMounted.current) showMessage(err.message, "error");
     } finally {
       if (isMounted.current) setLoading(false);
     }
@@ -144,7 +142,7 @@ function AvatarUploader({ className = "", size = "16rem" }) {
             </div>
           )}
         </div>
-        {messages?.error && <Message className="message" message={messages.error} type={type} />}
+        {message?.text && <Message className="message" message={message.text} type={message.type} />}
       </div>
       <input
         type="file"

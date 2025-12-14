@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useCart } from "../../contexts/CartContext";
 import { validateOrderQuantity } from "../../utils/validation/valueValidation";
-import { useTimedMessages } from "../../hooks/useTimedMessages";
+import { useTimedMessage } from "../../hooks/useTimedMessage";
 import Message from "../Message/Message";
 import Loader from "../Loader/Loader";
 import "./OrderSection.css";
@@ -16,7 +16,7 @@ function OrderSection({ book }) {
   const maxAllowed = amount - countInCart;
   const [totalCount, setTotalCount] = useState(1);
   const totalPrice = (price * totalCount).toFixed(2);
-  const { messages, type, showMessages, clearMessages } = useTimedMessages();
+  const { message, showMessage, clearMessage } = useTimedMessage(10000);
   const { valid: isValid, error: localErrorMsg } = validateOrderQuantity(
     totalCount,
     maxAllowed
@@ -25,12 +25,12 @@ function OrderSection({ book }) {
   const hasError = !!errorMsg;
 
   useEffect(() => {
-    if (hasError && messages?.error !== errorMsg) {
-      showMessages({ error: errorMsg }, "error", 8000);
+    if (hasError) {
+      showMessage(errorMsg, "error");
     } else {
-      clearMessages();
+      clearMessage();
     }
-  }, [hasError, errorMsg]);
+  }, [hasError, errorMsg, showMessage, clearMessage]);
 
   function increment() {
     setTotalCount((prev) => prev + 1);
@@ -104,7 +104,7 @@ function OrderSection({ book }) {
       {isInCart && (
         <Message message={`Already in cart: ${countInCart}`} type="success" />
       )}
-      {messages?.error && <Message message={messages.error} type={type} />}
+      {message?.text && <Message message={message.text} type={message.type} />}
       <button
         type="button"
         className="add-button btn-effect-press"

@@ -1,41 +1,27 @@
-import { useState, useRef, useEffect } from "react";
+import { useCallback, useMemo } from "react";
+import { useTimedValue } from "./useTimedValue";
 
-export function useTimedMessages() {
-  const [state, setState] = useState({ messages: {}, type: null });
-  const timerRef = useRef(null);
-  const isMounted = useRef(true);
+export function useTimedMessages(delay) {
+  const initialValue = useMemo(() => ({ messages: {}, type: "" }), []);
+  const { value, showValue, clearValue } = useTimedValue(initialValue, delay);
 
-  useEffect(() => {
-    isMounted.current = true; // Fix bug in StrictMode
-    return () => {
-      isMounted.current = false;
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, []);
-
-  const showMessages = (messages = {}, type = "error", delay = null) => {
-    setState({ messages, type });
-
-    if (timerRef.current) clearTimeout(timerRef.current);
-
-    if (delay) {
-      timerRef.current = setTimeout(() => {
-        if (isMounted.current) setState({ messages: {}, type: null });
-        timerRef.current = null;
-      }, delay);
-    }
-  };
-
-  const clearMessages = () => {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    timerRef.current = null;
-    setState({ messages: {}, type: null });
-  };
+  const showMessages = useCallback(
+    (messages = {}, type = "", overrideDelay) => {
+      showValue(
+        (prev) =>
+          prev.type === type && prev.messages === messages
+            ? prev
+            : { messages, type },
+        overrideDelay
+      );
+    },
+    [showValue]
+  );
 
   return {
-    messages: state.messages,
-    type: state.type,
+    messages: value.messages,
+    type: value.type,
     showMessages,
-    clearMessages,
+    clearMessages: clearValue,
   };
 }
