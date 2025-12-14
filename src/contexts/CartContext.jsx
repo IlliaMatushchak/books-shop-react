@@ -27,11 +27,11 @@ function CartProvider({ children }) {
     );
   }, [cart]);
 
-  const loadCart = useCallback(async () => {
+  async function fetchCart(cb, ...params) {
     try {
       setError(null);
       setLoading(true);
-      const data = await CartService.get();
+      const data = await cb(...params);
       setCart(data);
     } catch (err) {
       setError(err);
@@ -39,6 +39,10 @@ function CartProvider({ children }) {
     } finally {
       setLoading(false);
     }
+  }
+
+  const loadCart = useCallback(async () => {
+    await fetchCart(CartService.get);
   }, []);
 
   const mergeWithRemoteCart = useCallback(async (localCart) => {
@@ -77,17 +81,7 @@ function CartProvider({ children }) {
   const addToCart = useCallback(
     async (productId, quantity, book) => {
       if (isLoggedIn) {
-        try {
-          setError(null);
-          setLoading(true);
-          const data = await CartService.add(productId, quantity);
-          setCart(data);
-        } catch (err) {
-          setError(err);
-          console.error("Cart error:", err);
-        } finally {
-          setLoading(false);
-        }
+        await fetchCart(CartService.add, productId, quantity);
       } else {
         setCart((prevCart) => {
           const updated = [...prevCart];
@@ -113,17 +107,7 @@ function CartProvider({ children }) {
   const changeQuantity = useCallback(
     async (productId, quantity) => {
       if (isLoggedIn) {
-        try {
-          setError(null);
-          setLoading(true);
-          const data = await CartService.update(productId, quantity);
-          setCart(data);
-        } catch (err) {
-          setError(err);
-          console.error("Cart error:", err);
-        } finally {
-          setLoading(false);
-        }
+        await fetchCart(CartService.update, productId, quantity);
       } else {
         setCart((prevCart) => {
           const updated = prevCart.map((item) => {
@@ -139,17 +123,7 @@ function CartProvider({ children }) {
   const removeFromCart = useCallback(
     async (productId) => {
       if (isLoggedIn) {
-        try {
-          setError(null);
-          setLoading(true);
-          const data = await CartService.remove(productId);
-          setCart(data);
-        } catch (err) {
-          setError(err);
-          console.error("Cart error:", err);
-        } finally {
-          setLoading(false);
-        }
+        await fetchCart(CartService.remove, productId);
       } else {
         setCart((prevCart) =>
           prevCart.filter((item) => item.productId !== productId)
@@ -161,17 +135,7 @@ function CartProvider({ children }) {
 
   const clearCart = useCallback(async () => {
     if (isLoggedIn) {
-      try {
-        setError(null);
-        setLoading(true);
-        const data = await CartService.clear();
-        setCart(data);
-      } catch (err) {
-        setError(err);
-        console.error("Cart error:", err);
-      } finally {
-        setLoading(false);
-      }
+      await fetchCart(CartService.clear);
     } else {
       setCart([]);
     }
