@@ -1,6 +1,5 @@
 import axios from "axios";
 import { LocalStorageService, LS_KEYS } from "../services/localStorage";
-import { AuthService } from "../services/authService";
 
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8080";
 
@@ -30,7 +29,6 @@ axiosInstance.interceptors.response.use(
     } else if (error.response?.status === 401) {
       message = getErrorMessage(error) || "Unauthorized access.";
       console.warn("Unauthorized! Maybe token expired.");
-      AuthService.logout();
     } else if (error.response?.status >= 500) {
       message = "Server error. Please try again later.";
       console.error("Server error:", error.response);
