@@ -27,38 +27,40 @@ function CartProvider({ children }) {
     );
   }, [cart]);
 
-  async function fetchCart(cb, ...params) {
-    try {
-      setError(null);
-      setLoading(true);
-      const data = await cb(...params);
-      setCart(data);
-    } catch (err) {
-      setError(err);
-      console.error("Cart error:", err);
-    } finally {
-      setLoading(false);
-    }
-  }
+  const fetchCart = useCallback(
+    async (requestFunc, args = [], onSuccessFunc) => {
+      if (!requestFunc) return;
+      if (args === undefined || args === null) args = [];
+      if (!Array.isArray(args)) throw new Error("args must be an array!");
 
-  const loadCart = useCallback(async () => {
-    await fetchCart(CartService.get);
-  }, []);
+      try {
+        setError(null);
+        setLoading(true);
+        const data = await requestFunc(...args);
+        setCart(data);
+        onSuccessFunc && onSuccessFunc(data);
+      } catch (err) {
+        setError(err);
+        console.error("Cart error:", err);
+      } finally {
+        setLoading(false);
+      }
+    },
+    []
+  );
 
-  const mergeWithRemoteCart = useCallback(async (localCart) => {
-    try {
-      setError(null);
-      setLoading(true);
-      const data = await CartService.merge(localCart);
-      setCart(data);
-      LocalStorageService.remove(LS_KEYS.CART);
-    } catch (err) {
-      setError(err);
-      console.error("Cart error:", err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const loadCart = useCallback(() => {
+    fetchCart(CartService.get);
+  }, [fetchCart]);
+
+  const mergeWithRemoteCart = useCallback(
+    (localCart) => {
+      fetchCart(CartService.merge, [localCart], () => {
+        LocalStorageService.remove(LS_KEYS.CART);
+      });
+    },
+    [fetchCart]
+  );
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -79,9 +81,9 @@ function CartProvider({ children }) {
   }, [cart, isLoggedIn]);
 
   const addToCart = useCallback(
-    async (productId, quantity, book) => {
+    (productId, quantity, book) => {
       if (isLoggedIn) {
-        await fetchCart(CartService.add, productId, quantity);
+        fetchCart(CartService.add, [productId, quantity]);
       } else {
         setCart((prevCart) => {
           const updated = [...prevCart];
@@ -101,13 +103,13 @@ function CartProvider({ children }) {
         });
       }
     },
-    [isLoggedIn]
+    [isLoggedIn, fetchCart]
   );
 
   const changeQuantity = useCallback(
-    async (productId, quantity) => {
+    (productId, quantity) => {
       if (isLoggedIn) {
-        await fetchCart(CartService.update, productId, quantity);
+        fetchCart(CartService.update, [productId, quantity]);
       } else {
         setCart((prevCart) => {
           const updated = prevCart.map((item) => {
@@ -117,29 +119,29 @@ function CartProvider({ children }) {
         });
       }
     },
-    [isLoggedIn]
+    [isLoggedIn, fetchCart]
   );
 
   const removeFromCart = useCallback(
-    async (productId) => {
+    (productId) => {
       if (isLoggedIn) {
-        await fetchCart(CartService.remove, productId);
+        fetchCart(CartService.remove, [productId]);
       } else {
         setCart((prevCart) =>
           prevCart.filter((item) => item.productId !== productId)
         );
       }
     },
-    [isLoggedIn]
+    [isLoggedIn, fetchCart]
   );
 
-  const clearCart = useCallback(async () => {
+  const clearCart = useCallback(() => {
     if (isLoggedIn) {
-      await fetchCart(CartService.clear);
+      fetchCart(CartService.clear);
     } else {
       setCart([]);
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn, fetchCart]);
 
   const value = useMemo(
     () => ({
