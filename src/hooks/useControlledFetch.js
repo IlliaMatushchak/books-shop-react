@@ -6,6 +6,7 @@ function useControlledFetch(initialState = null) {
   const [error, setError] = useState(null);
 
   const isMounted = useRef(true);
+  const lastFetchId = useRef(null); // для ігнорування застарілих запитів (стан гонки)
 
   useEffect(() => {
     isMounted.current = true; // Fix bug in StrictMode
@@ -19,22 +20,25 @@ function useControlledFetch(initialState = null) {
     if (args === undefined || args === null) args = [];
     if (!Array.isArray(args)) throw new Error("args must be an array!");
 
+    const fetchId = Symbol();
+    lastFetchId.current = fetchId;
+
     setError(null);
     setLoading(true);
 
     requestFunc(...args)
       .then((data) => {
-        if (isMounted.current) {
+        if (isMounted.current && lastFetchId.current === fetchId) {
           setData(data);
           onSuccessFunc && onSuccessFunc(data);
         }
       })
       .catch((error) => {
-        if (isMounted.current)
+        if (isMounted.current && lastFetchId.current === fetchId)
           setError(error);
       })
       .finally(() => {
-        if (isMounted.current)
+        if (isMounted.current && lastFetchId.current === fetchId)
           setLoading(false);
       });
   }, []);
