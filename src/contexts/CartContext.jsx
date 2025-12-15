@@ -1,22 +1,26 @@
 import {
   createContext,
   useContext,
-  useState,
   useMemo,
   useCallback,
   useEffect,
 } from "react";
 import { useAuth } from "./AuthContext";
+import useControlledFetch from "../hooks/useControlledFetch";
 import { CartService } from "../services/cartService";
 import { LocalStorageService, LS_KEYS } from "../services/localStorage";
 
 const CartContext = createContext(null);
 
 function CartProvider({ children }) {
-  const [cart, setCart] = useState(LocalStorageService.get(LS_KEYS.CART) || []);
+  const {
+    data: cart,
+    setData: setCart,
+    loading,
+    error,
+    fetchData: fetchCart,
+  } = useControlledFetch(LocalStorageService.get(LS_KEYS.CART) || []);
   const { isLoggedIn } = useAuth();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
   const { totalCount, totalPrice } = useMemo(() => {
     return cart.reduce(
       (acc, item) => ({
@@ -26,28 +30,6 @@ function CartProvider({ children }) {
       { totalCount: 0, totalPrice: 0 }
     );
   }, [cart]);
-
-  const fetchCart = useCallback(
-    async (requestFunc, args = [], onSuccessFunc) => {
-      if (!requestFunc) return;
-      if (args === undefined || args === null) args = [];
-      if (!Array.isArray(args)) throw new Error("args must be an array!");
-
-      try {
-        setError(null);
-        setLoading(true);
-        const data = await requestFunc(...args);
-        setCart(data);
-        onSuccessFunc && onSuccessFunc(data);
-      } catch (err) {
-        setError(err);
-        console.error("Cart error:", err);
-      } finally {
-        setLoading(false);
-      }
-    },
-    []
-  );
 
   const loadCart = useCallback(() => {
     fetchCart(CartService.get);
