@@ -5,14 +5,12 @@ function useControlledFetch(initialState = null) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const isMounted = useRef(true);
-  const lastFetchId = useRef(null); // для ігнорування застарілих запитів (стан гонки)
+  const lastFetchId = useRef(0); // для ігнорування застарілих запитів (стан гонки)
   const abortControllerRef = useRef(null); // для відміни застарілих запитів
 
   useEffect(() => {
-    isMounted.current = true; // Fix bug in StrictMode
     return () => {
-      isMounted.current = false; // щоб уникнути setState на розмонтованому компоненті
+      lastFetchId.current = 0;
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
@@ -28,28 +26,29 @@ function useControlledFetch(initialState = null) {
     const controller = new AbortController();
     abortControllerRef.current = controller;
 
-    const fetchId = Symbol();
-    lastFetchId.current = fetchId;
+    const fetchId = ++lastFetchId.current;
 
     setError(null);
     setLoading(true);
 
     requestFunc(...args, { signal: controller.signal })
       .then((data) => {
-        if (isMounted.current && lastFetchId.current === fetchId) {
+        if (lastFetchId.current === fetchId) {
           setData(data);
           onSuccessFunc && onSuccessFunc(data);
         }
       })
       .catch((error) => {
-        if (error.original.name !== "CanceledError") {
-          if (isMounted.current && lastFetchId.current === fetchId)
-            setError(error);
-        }
+        const isCanceled =
+          error?.name === "AbortError" || //native fetch
+          error?.name === "CanceledError" || //axios
+          error?.code === "ERR_CANCELED" ||
+          error?.original?.name === "CanceledError";
+        if (isCanceled) return;
+        if (lastFetchId.current === fetchId) setError(error);
       })
       .finally(() => {
-        if (isMounted.current && lastFetchId.current === fetchId)
-          setLoading(false);
+        if (lastFetchId.current === fetchId) setLoading(false);
       });
   }, []);
 
