@@ -7,11 +7,15 @@ function useControlledFetch(initialState = null) {
 
   const isMounted = useRef(true);
   const lastFetchId = useRef(null); // для ігнорування застарілих запитів (стан гонки)
+  const abortControllerRef = useRef(null); // для відміни застарілих запитів
 
   useEffect(() => {
     isMounted.current = true; // Fix bug in StrictMode
     return () => {
       isMounted.current = false; // щоб уникнути setState на розмонтованому компоненті
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
     };
   }, []);
 
@@ -20,13 +24,17 @@ function useControlledFetch(initialState = null) {
     if (args === undefined || args === null) args = [];
     if (!Array.isArray(args)) throw new Error("args must be an array!");
 
+    if (abortControllerRef.current) abortControllerRef.current.abort();
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
     const fetchId = Symbol();
     lastFetchId.current = fetchId;
 
     setError(null);
     setLoading(true);
 
-    requestFunc(...args)
+    requestFunc(...args, { signal: controller.signal })
       .then((data) => {
         if (isMounted.current && lastFetchId.current === fetchId) {
           setData(data);
@@ -34,8 +42,10 @@ function useControlledFetch(initialState = null) {
         }
       })
       .catch((error) => {
-        if (isMounted.current && lastFetchId.current === fetchId)
-          setError(error);
+        if (error.original.name !== "CanceledError") {
+          if (isMounted.current && lastFetchId.current === fetchId)
+            setError(error);
+        }
       })
       .finally(() => {
         if (isMounted.current && lastFetchId.current === fetchId)
