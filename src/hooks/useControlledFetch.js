@@ -1,12 +1,26 @@
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 
-function useControlledFetch(initialState = null) {
-  const [data, setData] = useState(initialState);
+function useControlledFetch({
+  requestFn,
+  args = [],
+  auto = false,
+  initialData = null,
+  onSuccess,
+} = {}) {
+  if (args === undefined || args === null) args = [];
+  if (!Array.isArray(args)) throw new Error("args must be an array");
+
+  const [data, setData] = useState(initialData);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const lastFetchId = useRef(0); // для ігнорування застарілих запитів (стан гонки)
   const abortControllerRef = useRef(null); // для відміни застарілих запитів
+
+  const argsRef = useRef(null);
+  const onSuccessRef = useRef(null);
+  onSuccessRef.current = onSuccess;
+  argsRef.current = args;
 
   useEffect(() => {
     return () => {
@@ -17,42 +31,66 @@ function useControlledFetch(initialState = null) {
     };
   }, []);
 
-  const fetchData = useCallback((requestFunc, args = [], onSuccessFunc) => {
-    if (!requestFunc) return;
-    if (args === undefined || args === null) args = [];
-    if (!Array.isArray(args)) throw new Error("args must be an array!");
+  const execute = useCallback(
+    ({
+      requestFn: overrideRequestFn,
+      args: overrideArgs,
+      onSuccess: overrideOnSuccess,
+    } = {}) => {
+      const finalRequestFn = overrideRequestFn ?? requestFn;
+      const finalArgs = overrideArgs ?? argsRef.current;
+      const finalOnSuccess = overrideOnSuccess ?? onSuccessRef.current;
 
-    if (abortControllerRef.current) abortControllerRef.current.abort();
-    const controller = new AbortController();
-    abortControllerRef.current = controller;
+      if (typeof finalRequestFn !== "function") return;
+      if (!Array.isArray(finalArgs))
+        throw new Error("overrideArgs must be an array!");
 
-    const fetchId = ++lastFetchId.current;
+      if (abortControllerRef.current) abortControllerRef.current.abort();
+      const controller = new AbortController();
+      abortControllerRef.current = controller;
 
-    setError(null);
-    setLoading(true);
+      const fetchId = ++lastFetchId.current;
 
-    requestFunc(...args, { signal: controller.signal })
-      .then((data) => {
-        if (lastFetchId.current === fetchId) {
-          setData(data);
-          onSuccessFunc && onSuccessFunc(data);
-        }
-      })
-      .catch((error) => {
-        const isCanceled =
-          error?.name === "AbortError" || //native fetch
-          error?.name === "CanceledError" || //axios
-          error?.code === "ERR_CANCELED" ||
-          error?.original?.name === "CanceledError";
-        if (isCanceled) return;
-        if (lastFetchId.current === fetchId) setError(error);
-      })
-      .finally(() => {
-        if (lastFetchId.current === fetchId) setLoading(false);
-      });
-  }, []);
+      setError(null);
+      setLoading(true);
 
-  return { data, setData, loading, error, fetchData };
+      finalRequestFn(...finalArgs, { signal: controller.signal })
+        .then((result) => {
+          if (lastFetchId.current !== fetchId) return;
+          setData(result);
+          typeof finalOnSuccess === "function" && finalOnSuccess(result);
+        })
+        .catch((error) => {
+          const isCanceled =
+            error?.name === "AbortError" || //native fetch
+            error?.name === "CanceledError" || //axios
+            error?.code === "ERR_CANCELED" ||
+            error?.original?.name === "CanceledError";
+          if (isCanceled) return;
+          if (lastFetchId.current !== fetchId) return;
+          setError(error);
+        })
+        .finally(() => {
+          if (lastFetchId.current === fetchId) setLoading(false);
+        });
+    },
+    [requestFn]
+  );
+
+  // auto mode
+  useEffect(() => {
+    if (!auto) return;
+    execute();
+  }, [auto, execute]);
+
+  return {
+    data,
+    setData,
+    loading,
+    error,
+    fetch: execute,
+    refetch: execute,
+  };
 }
 
 export default useControlledFetch;
