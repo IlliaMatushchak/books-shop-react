@@ -18,8 +18,10 @@ function CartProvider({ children }) {
     setData: setCart,
     loading,
     error,
-    fetchData: fetchCart,
-  } = useControlledFetch(LocalStorageService.get(LS_KEYS.CART) || []);
+    fetch: fetchCart,
+  } = useControlledFetch({
+    initialData: LocalStorageService.get(LS_KEYS.CART) || [],
+  });
   const { isLoggedIn } = useAuth();
   const { totalCount, totalPrice } = useMemo(() => {
     return cart.reduce(
@@ -32,13 +34,17 @@ function CartProvider({ children }) {
   }, [cart]);
 
   const loadCart = useCallback(() => {
-    fetchCart(CartService.get);
+    fetchCart({ requestFn: CartService.get });
   }, [fetchCart]);
 
   const mergeWithRemoteCart = useCallback(
     (localCart) => {
-      fetchCart(CartService.merge, [localCart], () => {
-        LocalStorageService.remove(LS_KEYS.CART);
+      fetchCart({
+        requestFn: CartService.merge,
+        args: [localCart],
+        onSuccess: () => {
+          LocalStorageService.remove(LS_KEYS.CART);
+        },
       });
     },
     [fetchCart]
@@ -65,7 +71,7 @@ function CartProvider({ children }) {
   const addToCart = useCallback(
     (productId, quantity, book) => {
       if (isLoggedIn) {
-        fetchCart(CartService.add, [productId, quantity]);
+        fetchCart({ requestFn: CartService.add, args: [productId, quantity] });
       } else {
         setCart((prevCart) => {
           const updated = [...prevCart];
@@ -85,13 +91,16 @@ function CartProvider({ children }) {
         });
       }
     },
-    [isLoggedIn, fetchCart]
+    [isLoggedIn, fetchCart, setCart]
   );
 
   const changeQuantity = useCallback(
     (productId, quantity) => {
       if (isLoggedIn) {
-        fetchCart(CartService.update, [productId, quantity]);
+        fetchCart({
+          requestFn: CartService.update,
+          args: [productId, quantity],
+        });
       } else {
         setCart((prevCart) => {
           const updated = prevCart.map((item) => {
@@ -101,29 +110,29 @@ function CartProvider({ children }) {
         });
       }
     },
-    [isLoggedIn, fetchCart]
+    [isLoggedIn, fetchCart, setCart]
   );
 
   const removeFromCart = useCallback(
     (productId) => {
       if (isLoggedIn) {
-        fetchCart(CartService.remove, [productId]);
+        fetchCart({ requestFn: CartService.remove, args: [productId] });
       } else {
         setCart((prevCart) =>
           prevCart.filter((item) => item.productId !== productId)
         );
       }
     },
-    [isLoggedIn, fetchCart]
+    [isLoggedIn, fetchCart, setCart]
   );
 
   const clearCart = useCallback(() => {
     if (isLoggedIn) {
-      fetchCart(CartService.clear);
+      fetchCart({ requestFn: CartService.clear });
     } else {
       setCart([]);
     }
-  }, [isLoggedIn, fetchCart]);
+  }, [isLoggedIn, fetchCart, setCart]);
 
   const value = useMemo(
     () => ({
