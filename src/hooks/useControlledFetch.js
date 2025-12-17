@@ -6,6 +6,7 @@ function useControlledFetch({
   auto = false,
   initialData = null,
   onSuccess,
+  onError,
 } = {}) {
   if (args === undefined || args === null) args = [];
   if (!Array.isArray(args)) throw new Error("args must be an array");
@@ -19,7 +20,9 @@ function useControlledFetch({
 
   const argsRef = useRef(null);
   const onSuccessRef = useRef(null);
+  const onErrorRef = useRef(null);
   onSuccessRef.current = onSuccess;
+  onErrorRef.current = onError;
   argsRef.current = args;
 
   useEffect(() => {
@@ -36,10 +39,12 @@ function useControlledFetch({
       requestFn: overrideRequestFn,
       args: overrideArgs,
       onSuccess: overrideOnSuccess,
+      onError: overrideOnError,
     } = {}) => {
       const finalRequestFn = overrideRequestFn ?? requestFn;
       const finalArgs = overrideArgs ?? argsRef.current;
       const finalOnSuccess = overrideOnSuccess ?? onSuccessRef.current;
+      const finalOnError = overrideOnError ?? onErrorRef.current;
 
       if (typeof finalRequestFn !== "function") return;
       if (!Array.isArray(finalArgs))
@@ -69,6 +74,7 @@ function useControlledFetch({
           if (isCanceled) return;
           if (lastFetchId.current !== fetchId) return;
           setError(error);
+          typeof finalOnError === "function" && finalOnError(error);
         })
         .finally(() => {
           if (lastFetchId.current === fetchId) setLoading(false);
