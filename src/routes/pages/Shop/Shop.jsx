@@ -1,5 +1,5 @@
-import React, { useState, useMemo, useEffect } from "react";
-import useFetch from "../../../hooks/useFetch";
+import { useState, useMemo } from "react";
+import useControlledFetch from "../../../hooks/useControlledFetch";
 import useDebouncedValue from "../../../hooks/useDebouncedValue";
 import { BookService } from "../../../services/bookService";
 
@@ -40,7 +40,12 @@ function Shop() {
   const [searchValue, setSearchValue] = useState("");
   const [priceRange, setPriceRange] = useState("[0, 9999]");
   const debouncedSearchValue = useDebouncedValue(searchValue, 500);
-  const { data: books, loading, error, refetch } = useFetch(BookService.getAll);
+  const {
+    data: books,
+    loading,
+    error,
+    refetch,
+  } = useControlledFetch({ requestFn: BookService.getAll, auto: true });
 
   // console.time("filter");
   const filteredBooks = useMemo(() => {
