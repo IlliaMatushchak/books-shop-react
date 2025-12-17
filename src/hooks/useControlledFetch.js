@@ -17,6 +17,7 @@ function useControlledFetch({
 
   const lastFetchId = useRef(0); // для ігнорування застарілих запитів (стан гонки)
   const abortControllerRef = useRef(null); // для відміни застарілих запитів
+  const hasSuccess = useRef(false);
 
   const argsRef = useRef(null);
   const onSuccessRef = useRef(null);
@@ -56,6 +57,7 @@ function useControlledFetch({
 
       const fetchId = ++lastFetchId.current;
 
+      hasSuccess.current = false;
       setError(null);
       setLoading(true);
 
@@ -64,6 +66,7 @@ function useControlledFetch({
           if (lastFetchId.current !== fetchId) return;
           setData(result);
           typeof finalOnSuccess === "function" && finalOnSuccess(result);
+          hasSuccess.current = true;
         })
         .catch((error) => {
           const isCanceled =
@@ -89,13 +92,36 @@ function useControlledFetch({
     execute();
   }, [auto, execute]);
 
+  const cancel = useCallback(() => {
+    if (abortControllerRef.current) abortControllerRef.current.abort();
+    abortControllerRef.current = null;
+  }, []);
+
+  const reset = useCallback(() => {
+    cancel();
+    hasSuccess.current = false;
+    setData(initialData);
+    setError(null);
+    setLoading(false);
+  }, [initialData, cancel]);
+
+  const status = useMemo(() => {
+    if (loading) return "loading";
+    if (error) return "error";
+    if (hasSuccess.current) return "success";
+    return "idle";
+  }, [loading, error]);
+
   return {
     data,
     setData,
     loading,
     error,
+    status,
     fetch: execute,
     refetch: execute,
+    cancel,
+    reset,
   };
 }
 
