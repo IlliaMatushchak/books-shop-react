@@ -13,12 +13,14 @@ function AvatarProvider({ children }) {
 
   const updateAvatarState = useCallback(
     (newAvatar) => {
-      if (!user) return;
-      const updatedUser = { ...user, avatar: newAvatar };
-      setUser(updatedUser);
-      LocalStorageService.set(LS_KEYS.USER, updatedUser);
+      setUser((prevUser) => {
+        if (!prevUser) return prevUser;
+        const updatedUser = { ...prevUser, avatar: newAvatar };
+        LocalStorageService.set(LS_KEYS.USER, updatedUser);
+        return updatedUser;
+      });
     },
-    [user, setUser]
+    [setUser]
   );
 
   const updateAvatar = useCallback(
