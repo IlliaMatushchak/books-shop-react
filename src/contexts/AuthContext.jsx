@@ -34,30 +34,15 @@ function AuthProvider({ children }) {
     LocalStorageService.set(LS_KEYS.USER, { id, username, role, avatar });
   };
 
-  const updateAvatar = (newAvatarUrl) => {
-    if (!user) return;
-    const updatedUser = { ...user, avatar: newAvatarUrl };
-    setUser(updatedUser);
-    LocalStorageService.set(LS_KEYS.USER, updatedUser);
-  };
-
-  const deleteAvatar = () => {
-    if (!user) return;
-    const updatedUser = { ...user, avatar: null };
-    setUser(updatedUser);
-    LocalStorageService.set(LS_KEYS.USER, updatedUser);
-  };
-
   const value = useMemo(
     () => ({
       user,
+      setUser,
       token,
       isLoggedIn: isAuthenticated,
       login,
       logout,
       updateUser,
-      updateAvatar,
-      deleteAvatar,
     }),
     [user, token, isAuthenticated]
   );
