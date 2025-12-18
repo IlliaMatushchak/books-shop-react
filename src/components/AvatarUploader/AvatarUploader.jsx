@@ -1,7 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useTimedMessage } from "../../hooks/useTimedMessage";
-import { useAuth } from "../../contexts/AuthContext";
-import { ProfileService } from "../../services/profileService";
+import { useAvatar } from "../../contexts/AvatarContext";
 import LazyImage from "../LazyImage/LazyImage";
 import Loader from "../Loader/Loader";
 import Message from "../Message/Message";
@@ -19,23 +18,14 @@ function toBase64(file) {
 }
 
 function AvatarUploader({ className = "", size = "16rem" }) {
-  const {
-    user: { avatar },
-    updateAvatar,
-    deleteAvatar,
-  } = useAuth();
+  const { avatar, loading, error, updateAvatar, deleteAvatar } = useAvatar();
   const { message, showMessage, clearMessage } = useTimedMessage(10000);
-  const [loading, setLoading] = useState(false);
   const fileInputRef = useRef(null);
   const avatarImgContainerRef = useRef(null);
-  const isMounted = useRef(true);
 
   useEffect(() => {
-    isMounted.current = true; // Fix bug in StrictMode
-    return () => {
-      isMounted.current = false;
-    };
-  }, []);
+    if (error) showMessage(error.message, "error");
+  }, [error, showMessage]);
 
   const handleImageClick = () => {
     if (!loading) fileInputRef.current.click();
@@ -52,32 +42,14 @@ function AvatarUploader({ className = "", size = "16rem" }) {
       return;
     }
 
-    try {
-      setLoading(true);
-      const base64 = await toBase64(file);
-      const { avatar: updatedAvatar } = await ProfileService.updateAvatar(
-        base64
-      );
-      if (isMounted.current) updateAvatar(updatedAvatar);
-    } catch (err) {
-      if (isMounted.current) showMessage(err.message, "error");
-    } finally {
-      if (isMounted.current) setLoading(false);
-      if (isMounted.current) avatarImgContainerRef.current.blur();
-    }
+    const base64 = await toBase64(file);
+    updateAvatar(base64);
+    avatarImgContainerRef.current.blur();
   };
 
-  const handleImageRemove = async () => {
+  const handleImageRemove = () => {
     clearMessage();
-    try {
-      setLoading(true);
-      await ProfileService.deleteAvatar();
-      if (isMounted.current) deleteAvatar();
-    } catch (err) {
-      if (isMounted.current) showMessage(err.message, "error");
-    } finally {
-      if (isMounted.current) setLoading(false);
-    }
+    deleteAvatar();
   };
 
   const handleImageKeyDown = (e) => {
@@ -142,7 +114,13 @@ function AvatarUploader({ className = "", size = "16rem" }) {
             </div>
           )}
         </div>
-        {message?.text && <Message className="message" message={message.text} type={message.type} />}
+        {message?.text && (
+          <Message
+            className="message"
+            message={message.text}
+            type={message.type}
+          />
+        )}
       </div>
       <input
         type="file"
