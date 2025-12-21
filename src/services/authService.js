@@ -1,15 +1,13 @@
 import { loginUserApi, registerUserApi } from "../api/authApi";
 
 export const AuthService = {
-  async register(userData) {
-    const response = await registerUserApi(userData);
-
+  async register(userData, signal) {
+    const response = await registerUserApi(userData, signal);
     return response.data;
   },
 
-  async login(credentials) {
-    const response = await loginUserApi(credentials);
-
+  async login(credentials, signal) {
+    const response = await loginUserApi(credentials, signal);
     return response.data;
   },
 };

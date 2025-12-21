@@ -7,33 +7,28 @@ import {
 } from "../api/profileApi";
 
 export const ProfileService = {
-  async getProfile() {
-    const response = await getUserProfileApi();
-
+  async getProfile(signal) {
+    const response = await getUserProfileApi(signal);
     return response.data;
   },
 
-  async updateProfile(userData) {
-    const response = await updateUserProfileApi(userData);
-
+  async updateProfile(userData, signal) {
+    const response = await updateUserProfileApi(userData, signal);
     return response.data;
   },
 
-  async changePassword(passwordData) {
-    const response = await changeUserPasswordApi(passwordData);
-
+  async changePassword(passwordData, signal) {
+    const response = await changeUserPasswordApi(passwordData, signal);
     return response.data;
   },
 
-  async updateAvatar(avatar) {
-    const response = await updateUserAvatarApi(avatar);
-
+  async updateAvatar(avatar, signal) {
+    const response = await updateUserAvatarApi(avatar, signal);
     return response.data;
   },
 
-  async deleteAvatar() {
-    const response = await deleteUserAvatarApi();
-
+  async deleteAvatar(signal) {
+    const response = await deleteUserAvatarApi(signal);
     return response.data;
   },
 };

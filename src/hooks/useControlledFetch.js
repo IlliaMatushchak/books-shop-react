@@ -61,7 +61,7 @@ function useControlledFetch({
       setError(null);
       setLoading(true);
 
-      finalRequestFn(...finalArgs, { signal: controller.signal })
+      finalRequestFn(...finalArgs, controller.signal)
         .then((result) => {
           if (lastFetchId.current !== fetchId) return;
           setData(result);

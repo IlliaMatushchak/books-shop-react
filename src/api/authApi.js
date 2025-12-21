@@ -2,10 +2,10 @@ import axiosInstance from "./axiosInstance";
 
 const API_URL = "/auth";
 
-export const registerUserApi = (userData) => {
-  return axiosInstance.post(API_URL + "/register", userData);
+export const registerUserApi = (userData, signal) => {
+  return axiosInstance.post(API_URL + "/register", userData, { signal });
 };
 
-export const loginUserApi = (credentials) => {
-  return axiosInstance.post(API_URL + "/login", credentials);
+export const loginUserApi = (credentials, signal) => {
+  return axiosInstance.post(API_URL + "/login", credentials, { signal });
 };
