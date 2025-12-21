@@ -1,59 +1,56 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTimedMessages } from "../../../hooks/useTimedMessages";
+import useControlledFetch from "../../../hooks/useControlledFetch";
 import { AuthService } from "../../../services/authService";
 import Message from "../../../components/Message/Message";
 import Loader from "../../../components/Loader/Loader";
 import { validateRegistrationForm } from "../../../utils/validation/formValidation";
 import "./Registration.css";
 
+const initialForm = {
+  username: "",
+  password: "",
+  role: "USER",
+  email: "",
+  phoneNumber: "",
+  gender: "MALE",
+};
+
 function Registration() {
-  const [form, setForm] = useState({
-    username: "",
-    password: "",
-    role: "USER",
-    email: "",
-    phoneNumber: "",
-    gender: "MALE",
-  });
-  const [loading, setLoading] = useState(false);
-  const { messages, type, showMessages, clearMessages } = useTimedMessages();
+  const [form, setForm] = useState(initialForm);
+  const { loading, error, fetch: registrationFetch } = useControlledFetch();
+  const { messages, type, showMessages, clearMessages } = useTimedMessages(8000);
+
+  useEffect(() => {
+    if (error) showMessages({ error: error.message }, "error");
+  }, [error, showMessages]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     clearMessages();
-    let { valid, errors } = validateRegistrationForm(form);
+    const { valid, errors } = validateRegistrationForm(form);
 
     if (!valid) {
-      showMessages(errors, "error", 8000);
+      showMessages(errors, "error");
       return;
     }
 
-    try {
-      setLoading(true);
-      const data = await AuthService.register(form);
-      showMessages(
-        { success: data.message || "Successful registration!" },
-        "success",
-        8000
-      );
-      setForm({
-        username: "",
-        password: "",
-        role: "USER",
-        email: "",
-        phoneNumber: "",
-        gender: "MALE",
-      });
-    } catch (error) {
-      showMessages({ error: error.message }, "error", 8000);
-    } finally {
-      setLoading(false);
-    }
+    registrationFetch({
+      requestFn: AuthService.register,
+      args: [form],
+      onSuccess: (data) => {
+        showMessages(
+          { success: data.message || "Successful registration!" },
+          "success"
+        );
+        setForm(initialForm);
+      },
+    });
   };
 
   return (
@@ -79,6 +76,8 @@ function Registration() {
             value={form.username}
             onChange={handleChange}
             required
+            disabled={loading}
+            autoComplete="username"
           />
           {messages?.username && (
             <Message message={messages.username} type={type} />
@@ -93,6 +92,8 @@ function Registration() {
             value={form.email}
             onChange={handleChange}
             required
+            disabled={loading}
+            autoComplete="email"
           />
           {messages?.email && <Message message={messages.email} type={type} />}
 
@@ -105,6 +106,8 @@ function Registration() {
             value={form.password}
             onChange={handleChange}
             required
+            disabled={loading}
+            autoComplete="new-password"
           />
           {messages?.password && (
             <Message message={messages.password} type={type} />
@@ -119,6 +122,7 @@ function Registration() {
             value={form.phoneNumber}
             onChange={handleChange}
             required
+            disabled={loading}
           />
           {messages?.phoneNumber && (
             <Message message={messages.phoneNumber} type={type} />
@@ -130,6 +134,7 @@ function Registration() {
             name="gender"
             value={form.gender}
             onChange={handleChange}
+            disabled={loading}
           >
             <option value="MALE">Male</option>
             <option value="FEMALE">Female</option>

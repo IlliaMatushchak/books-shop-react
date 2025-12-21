@@ -1,50 +1,56 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTimedMessages } from "../../hooks/useTimedMessages";
+import useControlledFetch from "../../hooks/useControlledFetch";
 import { ProfileService } from "../../services/profileService";
 import { validatePasswordForm } from "../../utils/validation/formValidation";
 import Message from "../Message/Message";
 import Loader from "../Loader/Loader";
 
+const initialPasswordData = {
+  oldPassword: "",
+  newPassword: "",
+  confirm: "",
+};
+
 function PasswordForm() {
-  const [passwordData, setPasswordData] = useState({
-    oldPassword: "",
-    newPassword: "",
-    confirm: "",
-  });
-  const [loading, setLoading] = useState(false);
-  const { messages, type, showMessages, clearMessages } = useTimedMessages();
+  const [passwordData, setPasswordData] = useState(initialPasswordData);
+  const { messages, type, showMessages, clearMessages } = useTimedMessages(8000);
+  const { loading, error, fetch: passwordFetch } = useControlledFetch();
+
+  useEffect(() => {
+    if (error) showMessages({ error: error.message }, "error");
+  }, [error, showMessages]);
 
   const handleChangePassword = (e) => {
     const { name, value } = e.target;
     setPasswordData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handlePasswordChange = async (e) => {
-    e.preventDefault(e);
+  const handlePasswordChange = (e) => {
+    e.preventDefault();
     clearMessages();
-    let { valid, errors } = validatePasswordForm(passwordData);
+    const { valid, errors } = validatePasswordForm(passwordData);
 
     if (!valid) {
-      showMessages(errors, "error", 8000);
+      showMessages(errors, "error");
       return;
     }
-    try {
-      setLoading(true);
-      const data = await ProfileService.changePassword({
-        oldPassword: passwordData.oldPassword,
-        newPassword: passwordData.newPassword,
-      });
-      showMessages(
-        { success: data.message || "Password changed!" },
-        "success",
-        8000
-      );
-      setPasswordData({ oldPassword: "", newPassword: "", confirm: "" });
-    } catch (error) {
-      showMessages({ error: error.message }, "error", 8000);
-    } finally {
-      setLoading(false);
-    }
+    passwordFetch({
+      requestFn: ProfileService.changePassword,
+      args: [
+        {
+          oldPassword: passwordData.oldPassword,
+          newPassword: passwordData.newPassword,
+        },
+      ],
+      onSuccess: (data) => {
+        showMessages(
+          { success: data.message || "Password changed!" },
+          "success"
+        );
+        setPasswordData(initialPasswordData);
+      },
+    });
   };
 
   return (
@@ -63,6 +69,7 @@ function PasswordForm() {
         value={passwordData.oldPassword}
         onChange={handleChangePassword}
         required
+        disabled={loading}
       />
       <input
         type="password"
@@ -71,6 +78,7 @@ function PasswordForm() {
         value={passwordData.newPassword}
         onChange={handleChangePassword}
         required
+        disabled={loading}
       />
       {messages?.newPassword && (
         <Message message={messages.newPassword} type={type} />
@@ -82,6 +90,7 @@ function PasswordForm() {
         value={passwordData.confirm}
         onChange={handleChangePassword}
         required
+        disabled={loading}
       />
       {messages?.confirm && <Message message={messages.confirm} type={type} />}
       <hr />

@@ -1,44 +1,48 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTimedMessages } from "../../../hooks/useTimedMessages";
 import { useAuth } from "../../../contexts/AuthContext";
+import useControlledFetch from "../../../hooks/useControlledFetch";
+import { AuthService } from "../../../services/authService";
 import Message from "../../../components/Message/Message";
 import Loader from "../../../components/Loader/Loader";
 import { validateLoginForm } from "../../../utils/validation/formValidation";
 import "./Login.css";
 
+const initialForm = { username: "", password: "" };
+
 function Login() {
   const { login } = useAuth();
-  const [form, setForm] = useState({ username: "", password: "" });
-  const [loading, setLoading] = useState(false);
-  const { messages, type, showMessages, clearMessages } = useTimedMessages();
+  const [form, setForm] = useState(initialForm);
+  const { loading, error, fetch: loginFetch } = useControlledFetch();
+  const { messages, type, showMessages, clearMessages } = useTimedMessages(8000);
+
+  useEffect(() => {
+    if (error) showMessages({ error: error.message }, "error");
+  }, [error, showMessages]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     clearMessages();
-    let { valid, errors } = validateLoginForm(form);
+    const { valid, errors } = validateLoginForm(form);
 
     if (!valid) {
       showMessages(errors, "error");
       return;
     }
 
-    try {
-      setLoading(true);
-      await login(form);
-      setForm({
-        username: "",
-        password: "",
-      });
-    } catch (error) {
-      showMessages({ error: error.message }, "error");
-    } finally {
-      setLoading(false);
-    }
+    loginFetch({
+      requestFn: AuthService.login,
+      args: [form],
+      onSuccess: (userData) => {
+        login(userData);
+        setForm(initialForm);
+      },
+    });
   };
 
   return (
@@ -59,6 +63,8 @@ function Login() {
             value={form.username}
             onChange={handleChange}
             required
+            disabled={loading}
+            autoComplete="username"
           />
           {messages?.username && (
             <Message message={messages.username} type={type} />
@@ -73,6 +79,8 @@ function Login() {
             value={form.password}
             onChange={handleChange}
             required
+            disabled={loading}
+            autoComplete="current-password"
           />
           {messages?.password && (
             <Message message={messages.password} type={type} />
@@ -85,8 +93,8 @@ function Login() {
           >
             Login
           </button>
-          {loading && <Loader type="global" />}
         </form>
+        {loading && <Loader type="global" />}
       </div>
     </>
   );

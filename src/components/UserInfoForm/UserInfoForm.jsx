@@ -2,72 +2,72 @@ import { useState, useEffect } from "react";
 import { useTimedMessages } from "../../hooks/useTimedMessages";
 import { ProfileService } from "../../services/profileService";
 import { useAuth } from "../../contexts/AuthContext";
+import useControlledFetch from "../../hooks/useControlledFetch";
 import Loader from "../../components/Loader/Loader";
 import Message from "../Message/Message";
 import { validateUserInfoForm } from "../../utils/validation/formValidation";
 
+const initialForm = {
+  username: "",
+  role: "",
+  email: "",
+  phoneNumber: "",
+  gender: "MALE",
+};
+
 function UserInfoForm() {
   const { updateUser } = useAuth();
-  const [profile, setProfile] = useState(null);
-  const [form, setForm] = useState({
-    username: "",
-    role: "",
-    email: "",
-    phoneNumber: "",
-    gender: "MALE",
-  });
+  const [form, setForm] = useState(initialForm);
   const [editing, setEditing] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const { messages, type, showMessages, clearMessages } = useTimedMessages();
+  const { messages, type, showMessages, clearMessages } = useTimedMessages(8000);
+  const {
+    data: profile,
+    loading,
+    error,
+    fetch: fetchProfile,
+  } = useControlledFetch({
+    requestFn: ProfileService.getProfile,
+    onSuccess: (profile) => {
+      setForm(profile);
+    },
+    auto: true,
+  });
+
+  useEffect(() => {
+    if (error) showMessages({ error: error.message }, "error");
+  }, [error, showMessages]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  useEffect(() => {
-    async function loadProfile() {
-      try {
-        setLoading(true);
-        const data = await ProfileService.getProfile();
-        setProfile(data);
-        setForm(data);
-      } catch (error) {
-        showMessages({ error: error.message }, "error");
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadProfile();
-  }, []);
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     clearMessages();
-    let { valid, errors } = validateUserInfoForm(form);
+    const { valid, errors } = validateUserInfoForm(form);
 
     if (!valid) {
-      showMessages(errors, "error", 8000);
+      showMessages(errors, "error");
       return;
     }
 
-    try {
-      setLoading(true);
-      const { email, phoneNumber, gender } = form;
-      const data = await ProfileService.updateProfile({
-        email,
-        phoneNumber,
-        gender,
-      });
-      setProfile(data);
-      updateUser(data);
-      setEditing(false);
-      showMessages({ success: "Profile updated!" }, "success", 8000);
-    } catch (error) {
-      showMessages({ error: error.message }, "error", 8000);
-    } finally {
-      setLoading(false);
-    }
+    const { email, phoneNumber, gender } = form;
+    fetchProfile({
+      requestFn: ProfileService.updateProfile,
+      args: [
+        {
+          email,
+          phoneNumber,
+          gender,
+        },
+      ],
+      onSuccess: (newProfile) => {
+        updateUser(newProfile);
+        setEditing(false);
+        showMessages({ success: "Profile updated!" }, "success");
+      },
+    });
   };
 
   if (loading && !profile)
@@ -101,7 +101,7 @@ function UserInfoForm() {
         value={form?.email || ""}
         onChange={handleChange}
         required
-        disabled={!editing}
+        disabled={!editing || loading}
       />
       {messages?.email && <Message message={messages.email} type={type} />}
 
@@ -114,7 +114,7 @@ function UserInfoForm() {
         value={form?.phoneNumber || ""}
         onChange={handleChange}
         required
-        disabled={!editing}
+        disabled={!editing || loading}
       />
       {messages?.phoneNumber && (
         <Message message={messages.phoneNumber} type={type} />
@@ -126,7 +126,7 @@ function UserInfoForm() {
         name="gender"
         value={form?.gender || ""}
         onChange={handleChange}
-        disabled={!editing}
+        disabled={!editing || loading}
       >
         <option value="MALE">Male</option>
         <option value="FEMALE">Female</option>
