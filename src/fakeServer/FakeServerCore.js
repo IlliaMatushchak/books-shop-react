@@ -193,4 +193,78 @@ export function installFakeServerAxios() {
     saveDb(db);
     return [200, removed];
   });
+
+  // ==================== PROFILE ====================
+
+  mock.onGet("/api/profile").reply((config) => {
+    const db = loadDb();
+    const user = requireAuth(config, db);
+    if (Array.isArray(user)) return user;
+
+    return [200, { ...user, password: undefined }];
+  });
+
+  mock.onPut("/api/profile").reply((config) => {
+    const db = loadDb();
+    const user = requireAuth(config, db);
+    if (Array.isArray(user)) return user;
+
+    const updates = JSON.parse(config.data || "{}");
+
+    ["id", "username", "role", "password", "cart", "avatar"].forEach(
+      (k) => delete updates[k]
+    );
+
+    const idx = db.users.findIndex((u) => u.id === user.id);
+    db.users[idx] = { ...db.users[idx], ...updates };
+    saveDb(db);
+
+    return [200, { ...db.users[idx], password: undefined }];
+  });
+
+  mock.onPut("/api/profile/password").reply((config) => {
+    const db = loadDb();
+    const user = requireAuth(config, db);
+    if (Array.isArray(user)) return user;
+
+    const { oldPassword, newPassword } = JSON.parse(config.data || "{}");
+
+    if (!oldPassword || !newPassword) {
+      return [400, { message: "All fields must be filled in" }];
+    }
+
+    if (user.password !== oldPassword) {
+      return [400, { message: "Old password is incorrect" }];
+    }
+
+    user.password = newPassword;
+    saveDb(db);
+
+    return [200, { message: "Password changed successfully" }];
+  });
+
+  mock.onPut("/api/profile/avatar").reply((config) => {
+    const db = loadDb();
+    const user = requireAuth(config, db);
+    if (Array.isArray(user)) return user;
+
+    const { avatar } = JSON.parse(config.data || "{}");
+    if (!avatar) return [400, { message: "Avatar is required" }];
+
+    user.avatar = avatar;
+    saveDb(db);
+
+    return [200, { avatar }];
+  });
+
+  mock.onDelete("/api/profile/avatar").reply((config) => {
+    const db = loadDb();
+    const user = requireAuth(config, db);
+    if (Array.isArray(user)) return user;
+
+    user.avatar = null;
+    saveDb(db);
+
+    return [200, { ...user, password: undefined }];
+  });
 }
