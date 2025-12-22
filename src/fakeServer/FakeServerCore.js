@@ -42,6 +42,34 @@ export function installFakeServerAxios() {
 
   const makeToken = (user) => `fake-jwt.${btoa(`${user.id}:${user.username}`)}`;
 
+  const getUserFromAuth = (config, db) => {
+    const auth = config.headers?.Authorization || config.headers?.authorization;
+    if (!auth?.startsWith("Bearer ")) return null;
+
+    try {
+      const token = auth.replace("Bearer ", "");
+      if (!token.startsWith("fake-jwt.")) return null;
+      const [, payload] = token.split(".");
+      const [, username] = atob(payload).split(":");
+      return db.users.find((u) => u.username === username) || null;
+    } catch {
+      return null;
+    }
+  };
+
+  const requireAuth = (config, db) => {
+    const user = getUserFromAuth(config, db);
+    if (!user) return [401, { message: "Unauthorized" }];
+    return user;
+  };
+
+  const requireAdmin = (user) => {
+    if (user.role !== "ADMIN") {
+      return [403, { message: "Forbidden" }];
+    }
+    return null;
+  };
+
   // ==================== AUTH ====================
 
   mock.onPost("/api/auth/register").reply((config) => {
@@ -98,5 +126,71 @@ export function installFakeServerAxios() {
         user: { ...user, password: undefined },
       },
     ];
+  });
+
+  // ==================== BOOKS ====================
+
+  mock.onGet("/api/books").reply(() => {
+    const db = loadDb();
+    return [200, db.books];
+  });
+
+  mock.onGet(/\/api\/books\/\d+/).reply((config) => {
+    const db = loadDb();
+    const id = Number(config.url.split("/").pop());
+    const book = db.books.find((b) => b.id === id);
+    if (!book) return [404, { message: "Not found" }];
+    return [200, book];
+  });
+
+  mock.onPost("/api/books").reply((config) => {
+    const db = loadDb();
+    const user = requireAuth(config, db);
+    if (Array.isArray(user)) return user;
+
+    const forbidden = requireAdmin(user);
+    if (forbidden) return forbidden;
+
+    const body = JSON.parse(config.data || "{}");
+    const newBook = { id: db.nextBookId++, ...body };
+    db.books.push(newBook);
+    saveDb(db);
+    return [201, newBook];
+  });
+
+  mock.onPut(/\/api\/books\/\d+/).reply((config) => {
+    const db = loadDb();
+    const user = requireAuth(config, db);
+    if (Array.isArray(user)) return user;
+
+    const forbidden = requireAdmin(user);
+    if (forbidden) return forbidden;
+
+    const id = Number(config.url.split("/").pop());
+    const body = JSON.parse(config.data || "{}");
+
+    const idx = db.books.findIndex((b) => b.id === id);
+    if (idx === -1) return [404, { message: "Not found" }];
+
+    db.books[idx] = { ...db.books[idx], ...body };
+    saveDb(db);
+    return [200, db.books[idx]];
+  });
+
+  mock.onDelete(/\/api\/books\/\d+/).reply((config) => {
+    const db = loadDb();
+    const user = requireAuth(config, db);
+    if (Array.isArray(user)) return user;
+
+    const forbidden = requireAdmin(user);
+    if (forbidden) return forbidden;
+
+    const id = Number(config.url.split("/").pop());
+    const idx = db.books.findIndex((b) => b.id === id);
+    if (idx === -1) return [404, { message: "Not found" }];
+
+    const removed = db.books.splice(idx, 1)[0];
+    saveDb(db);
+    return [200, removed];
   });
 }
