@@ -3,6 +3,13 @@ import AxiosMockAdapter from "axios-mock-adapter";
 import books from "../data/books.json";
 import users from "../data/users.json";
 
+const API = {
+  AUTH: "/api/auth",
+  BOOKS: "/api/books",
+  PROFILE: "/api/profile",
+  CART: "/api/cart",
+};
+
 export function installFakeServerAxios() {
   if (window.__FAKE_AXIOS_SERVER__) return;
   window.__FAKE_AXIOS_SERVER__ = true;
@@ -50,38 +57,25 @@ export function installFakeServerAxios() {
       const token = auth.replace("Bearer ", "");
       if (!token.startsWith("fake-jwt.")) return null;
       const [, payload] = token.split(".");
-      const [, username] = atob(payload).split(":");
-      return db.users.find((u) => u.username === username) || null;
+      const [id] = atob(payload).split(":");
+      return db.users.find((u) => u.id === Number(id)) || null;
     } catch {
       return null;
     }
   };
 
-  const requireAuth = (config, db) => {
-    const user = getUserFromAuth(config, db);
-    if (!user) return [401, { message: "Unauthorized" }];
-    return user;
-  };
-
-  const requireAdmin = (user) => {
-    if (user.role !== "ADMIN") {
-      return [403, { message: "Forbidden" }];
-    }
-    return null;
-  };
-
   const buildFullCart = (user, db) =>
-    user.cart.map((item) => {
-      const book = db.books.find((b) => b.id === item.productId);
-      return {
-        ...item,
-        book: book ? { ...book } : null,
-      };
-    });
+    user.cart
+      .map((item) => {
+        const book = db.books.find((b) => b.id === item.productId);
+        if (!book) return null;
+        return { ...item, book: { ...book } };
+      })
+      .filter((item) => !!item);
 
   // ==================== AUTH ====================
 
-  mock.onPost("/api/auth/register").reply((config) => {
+  mock.onPost(API.AUTH + "/register").reply((config) => {
     const db = loadDb();
     const body = JSON.parse(config.data || "{}");
 
@@ -118,7 +112,7 @@ export function installFakeServerAxios() {
     ];
   });
 
-  mock.onPost("/api/auth/login").reply((config) => {
+  mock.onPost(API.AUTH + "/login").reply((config) => {
     const db = loadDb();
     const body = JSON.parse(config.data || "{}");
 
@@ -139,7 +133,7 @@ export function installFakeServerAxios() {
 
   // ==================== BOOKS ====================
 
-  mock.onGet("/api/books").reply(() => {
+  mock.onGet(API.BOOKS).reply(() => {
     const db = loadDb();
     return [200, db.books];
   });
@@ -152,15 +146,21 @@ export function installFakeServerAxios() {
     return [200, book];
   });
 
-  mock.onPost("/api/books").reply((config) => {
+  mock.onPost(API.BOOKS).reply((config) => {
     const db = loadDb();
-    const user = requireAuth(config, db);
-    if (Array.isArray(user)) return user;
+    const user = getUserFromAuth(config, db);
+    if (!user) return [401, { message: "Unauthorized" }];
 
-    const forbidden = requireAdmin(user);
-    if (forbidden) return forbidden;
+    if (user.role !== "ADMIN") {
+      return [403, { message: "Forbidden" }];
+    }
 
     const body = JSON.parse(config.data || "{}");
+
+    if (!body.title || !body.price) {
+      return [400, { message: "Invalid book data" }];
+    }
+    
     const newBook = { id: db.nextBookId++, ...body };
     db.books.push(newBook);
     saveDb(db);
@@ -169,11 +169,12 @@ export function installFakeServerAxios() {
 
   mock.onPut(/\/api\/books\/\d+/).reply((config) => {
     const db = loadDb();
-    const user = requireAuth(config, db);
-    if (Array.isArray(user)) return user;
+    const user = getUserFromAuth(config, db);
+    if (!user) return [401, { message: "Unauthorized" }];
 
-    const forbidden = requireAdmin(user);
-    if (forbidden) return forbidden;
+    if (user.role !== "ADMIN") {
+      return [403, { message: "Forbidden" }];
+    }
 
     const id = Number(config.url.split("/").pop());
     const body = JSON.parse(config.data || "{}");
@@ -188,15 +189,20 @@ export function installFakeServerAxios() {
 
   mock.onDelete(/\/api\/books\/\d+/).reply((config) => {
     const db = loadDb();
-    const user = requireAuth(config, db);
-    if (Array.isArray(user)) return user;
+    const user = getUserFromAuth(config, db);
+    if (!user) return [401, { message: "Unauthorized" }];
 
-    const forbidden = requireAdmin(user);
-    if (forbidden) return forbidden;
+    if (user.role !== "ADMIN") {
+      return [403, { message: "Forbidden" }];
+    }
 
     const id = Number(config.url.split("/").pop());
     const idx = db.books.findIndex((b) => b.id === id);
     if (idx === -1) return [404, { message: "Not found" }];
+
+    db.users.forEach((u) => {
+      u.cart = u.cart.filter((i) => i.productId !== id);
+    });
 
     const removed = db.books.splice(idx, 1)[0];
     saveDb(db);
@@ -205,18 +211,18 @@ export function installFakeServerAxios() {
 
   // ==================== PROFILE ====================
 
-  mock.onGet("/api/profile").reply((config) => {
+  mock.onGet(API.PROFILE).reply((config) => {
     const db = loadDb();
-    const user = requireAuth(config, db);
-    if (Array.isArray(user)) return user;
+    const user = getUserFromAuth(config, db);
+    if (!user) return [401, { message: "Unauthorized" }];
 
     return [200, { ...user, password: undefined }];
   });
 
-  mock.onPut("/api/profile").reply((config) => {
+  mock.onPut(API.PROFILE).reply((config) => {
     const db = loadDb();
-    const user = requireAuth(config, db);
-    if (Array.isArray(user)) return user;
+    const user = getUserFromAuth(config, db);
+    if (!user) return [401, { message: "Unauthorized" }];
 
     const updates = JSON.parse(config.data || "{}");
 
@@ -225,16 +231,17 @@ export function installFakeServerAxios() {
     );
 
     const idx = db.users.findIndex((u) => u.id === user.id);
+    if (idx === -1) return [404, { message: "User not found" }];
     db.users[idx] = { ...db.users[idx], ...updates };
     saveDb(db);
 
     return [200, { ...db.users[idx], password: undefined }];
   });
 
-  mock.onPut("/api/profile/password").reply((config) => {
+  mock.onPut(API.PROFILE + "/password").reply((config) => {
     const db = loadDb();
-    const user = requireAuth(config, db);
-    if (Array.isArray(user)) return user;
+    const user = getUserFromAuth(config, db);
+    if (!user) return [401, { message: "Unauthorized" }];
 
     const { oldPassword, newPassword } = JSON.parse(config.data || "{}");
 
@@ -252,10 +259,10 @@ export function installFakeServerAxios() {
     return [200, { message: "Password changed successfully" }];
   });
 
-  mock.onPut("/api/profile/avatar").reply((config) => {
+  mock.onPut(API.PROFILE + "/avatar").reply((config) => {
     const db = loadDb();
-    const user = requireAuth(config, db);
-    if (Array.isArray(user)) return user;
+    const user = getUserFromAuth(config, db);
+    if (!user) return [401, { message: "Unauthorized" }];
 
     const { avatar } = JSON.parse(config.data || "{}");
     if (!avatar) return [400, { message: "Avatar is required" }];
@@ -266,10 +273,10 @@ export function installFakeServerAxios() {
     return [200, { avatar }];
   });
 
-  mock.onDelete("/api/profile/avatar").reply((config) => {
+  mock.onDelete(API.PROFILE + "/avatar").reply((config) => {
     const db = loadDb();
-    const user = requireAuth(config, db);
-    if (Array.isArray(user)) return user;
+    const user = getUserFromAuth(config, db);
+    if (!user) return [401, { message: "Unauthorized" }];
 
     user.avatar = null;
     saveDb(db);
@@ -279,18 +286,18 @@ export function installFakeServerAxios() {
 
   // ==================== CART ====================
 
-  mock.onGet("/api/cart").reply((config) => {
+  mock.onGet(API.CART).reply((config) => {
     const db = loadDb();
-    const user = requireAuth(config, db);
-    if (Array.isArray(user)) return user;
+    const user = getUserFromAuth(config, db);
+    if (!user) return [401, { message: "Unauthorized" }];
 
     return [200, buildFullCart(user, db)];
   });
 
-  mock.onPost("/api/cart").reply((config) => {
+  mock.onPost(API.CART).reply((config) => {
     const db = loadDb();
-    const user = requireAuth(config, db);
-    if (Array.isArray(user)) return user;
+    const user = getUserFromAuth(config, db);
+    if (!user) return [401, { message: "Unauthorized" }];
 
     const { productId, quantity = 1 } = JSON.parse(config.data || "{}");
     if (quantity <= 0) {
@@ -321,8 +328,8 @@ export function installFakeServerAxios() {
 
   mock.onPut(/\/api\/cart\/\d+/).reply((config) => {
     const db = loadDb();
-    const user = requireAuth(config, db);
-    if (Array.isArray(user)) return user;
+    const user = getUserFromAuth(config, db);
+    if (!user) return [401, { message: "Unauthorized" }];
 
     const productId = Number(config.url.split("/").pop());
     const { quantity } = JSON.parse(config.data || "{}");
@@ -347,8 +354,8 @@ export function installFakeServerAxios() {
 
   mock.onDelete(/\/api\/cart\/\d+/).reply((config) => {
     const db = loadDb();
-    const user = requireAuth(config, db);
-    if (Array.isArray(user)) return user;
+    const user = getUserFromAuth(config, db);
+    if (!user) return [401, { message: "Unauthorized" }];
 
     const productId = Number(config.url.split("/").pop());
     user.cart = user.cart.filter((i) => i.productId !== productId);
@@ -357,10 +364,10 @@ export function installFakeServerAxios() {
     return [200, buildFullCart(user, db)];
   });
 
-  mock.onDelete("/api/cart").reply((config) => {
+  mock.onDelete(API.CART).reply((config) => {
     const db = loadDb();
-    const user = requireAuth(config, db);
-    if (Array.isArray(user)) return user;
+    const user = getUserFromAuth(config, db);
+    if (!user) return [401, { message: "Unauthorized" }];
 
     user.cart = [];
     saveDb(db);
@@ -368,10 +375,10 @@ export function installFakeServerAxios() {
     return [200, []];
   });
 
-  mock.onPost("/api/cart/merge").reply((config) => {
+  mock.onPost(API.CART + "/merge").reply((config) => {
     const db = loadDb();
-    const user = requireAuth(config, db);
-    if (Array.isArray(user)) return user;
+    const user = getUserFromAuth(config, db);
+    if (!user) return [401, { message: "Unauthorized" }];
 
     const { localCart = [] } = JSON.parse(config.data || "{}");
 
