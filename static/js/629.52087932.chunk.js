@@ -1,2 +1,0 @@
-"use strict";(self.webpackChunkbooks_shop=self.webpackChunkbooks_shop||[]).push([[629],{629:(e,s,n)=>{n.r(s),n.d(s,{default:()=>a});n(43);var o=n(721),r=n(579);const a=function(){return(0,r.jsxs)("div",{className:"error-info-container fancy-background",children:[(0,r.jsx)("h1",{children:"This page does not exist!"}),(0,r.jsx)("p",{children:"Try to choose another page or return back"}),(0,r.jsx)(o.N_,{to:"/",className:"a-like-btn btn-effect-press",children:"Main page"})]})}}}]);
-//# sourceMappingURL=629.52087932.chunk.js.map
