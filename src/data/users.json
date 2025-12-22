@@ -1,0 +1,26 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "12345A",
+      "role": "ADMIN",
+      "email": "admin@example.com",
+      "phoneNumber": "+380971234567",
+      "gender": "MALE",
+      "avatar": null,
+      "cart": []
+    },
+    {
+      "id": 2,
+      "username": "user",
+      "password": "12345U",
+      "role": "USER",
+      "email": "user@example.com",
+      "phoneNumber": "+380681234567",
+      "gender": "MALE",
+      "avatar": null,
+      "cart": []
+    }
+  ]
+}
