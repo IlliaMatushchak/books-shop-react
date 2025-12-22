@@ -4,7 +4,7 @@ import { LocalStorageService, LS_KEYS } from "../services/localStorage";
 const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8080";
 
 const axiosInstance = axios.create({
-  baseURL: `/api`,
+  baseURL: process.env.PUBLIC_URL || "",
   headers: {
     "Content-Type": "application/json",
   },

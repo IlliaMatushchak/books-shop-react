@@ -1,6 +1,6 @@
 import axiosInstance from "./axiosInstance";
 
-const API_URL = "/cart";
+const API_URL = "/api/cart";
 
 export const getUserCartApi = (signal) => {
   return axiosInstance.get(API_URL, { signal });

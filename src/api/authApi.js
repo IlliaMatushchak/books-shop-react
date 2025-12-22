@@ -1,6 +1,6 @@
 import axiosInstance from "./axiosInstance";
 
-const API_URL = "/auth";
+const API_URL = "/api/auth";
 
 export const registerUserApi = (userData, signal) => {
   return axiosInstance.post(API_URL + "/register", userData, { signal });

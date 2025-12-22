@@ -1,6 +1,6 @@
 import axiosInstance from "./axiosInstance";
 
-const API_URL = "/profile";
+const API_URL = "/api/profile";
 
 export const getUserProfileApi = (signal) => {
   return axiosInstance.get(API_URL, { signal });

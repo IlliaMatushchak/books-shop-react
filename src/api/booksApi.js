@@ -1,6 +1,6 @@
 import axiosInstance from "./axiosInstance";
 
-const API_URL = "/books";
+const API_URL = "/api/books";
 
 export const getAllBooksApi = (signal) => {
   return axiosInstance.get(API_URL, { signal });
