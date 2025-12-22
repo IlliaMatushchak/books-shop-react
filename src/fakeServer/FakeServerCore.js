@@ -39,4 +39,64 @@ export function installFakeServerAxios() {
   };
 
   createDb();
+
+  const makeToken = (user) => `fake-jwt.${btoa(`${user.id}:${user.username}`)}`;
+
+  // ==================== AUTH ====================
+
+  mock.onPost("/api/auth/register").reply((config) => {
+    const db = loadDb();
+    const body = JSON.parse(config.data || "{}");
+
+    if (!body.username || !body.password) {
+      return [400, { message: "Username and password are required" }];
+    }
+
+    const exists = db.users.find(
+      (u) => u.username === body.username || u.email === body.email
+    );
+    if (exists) return [400, { message: "User already exists" }];
+
+    const newUser = {
+      id: db.nextUserId++,
+      username: body.username,
+      password: body.password,
+      email: body.email,
+      phoneNumber: body.phoneNumber || "",
+      gender: body.gender || "UNSPECIFIED",
+      role: "USER",
+      avatar: null,
+      cart: [],
+    };
+
+    db.users.push(newUser);
+    saveDb(db);
+
+    return [
+      201,
+      {
+        message: "User registered successfully",
+        user: { ...newUser, password: undefined },
+      },
+    ];
+  });
+
+  mock.onPost("/api/auth/login").reply((config) => {
+    const db = loadDb();
+    const body = JSON.parse(config.data || "{}");
+
+    const user = db.users.find(
+      (u) => u.username === body.username && u.password === body.password
+    );
+
+    if (!user) return [401, { message: "Invalid credentials" }];
+
+    return [
+      200,
+      {
+        token: makeToken(user),
+        user: { ...user, password: undefined },
+      },
+    ];
+  });
 }
