@@ -70,6 +70,15 @@ export function installFakeServerAxios() {
     return null;
   };
 
+  const buildFullCart = (user, db) =>
+    user.cart.map((item) => {
+      const book = db.books.find((b) => b.id === item.productId);
+      return {
+        ...item,
+        book: book ? { ...book } : null,
+      };
+    });
+
   // ==================== AUTH ====================
 
   mock.onPost("/api/auth/register").reply((config) => {
@@ -266,5 +275,118 @@ export function installFakeServerAxios() {
     saveDb(db);
 
     return [200, { ...user, password: undefined }];
+  });
+
+  // ==================== CART ====================
+
+  mock.onGet("/api/cart").reply((config) => {
+    const db = loadDb();
+    const user = requireAuth(config, db);
+    if (Array.isArray(user)) return user;
+
+    return [200, buildFullCart(user, db)];
+  });
+
+  mock.onPost("/api/cart").reply((config) => {
+    const db = loadDb();
+    const user = requireAuth(config, db);
+    if (Array.isArray(user)) return user;
+
+    const { productId, quantity = 1 } = JSON.parse(config.data || "{}");
+    if (quantity <= 0) {
+      return [400, { message: "Quantity must be positive" }];
+    }
+
+    const book = db.books.find((b) => b.id === productId);
+    if (!book) return [404, { message: "Book not found" }];
+
+    const idx = user.cart.findIndex((c) => c.productId === productId);
+
+    if (idx === -1) {
+      if (quantity > book.amount) {
+        return [409, { message: `Only ${book.amount} left in stock` }];
+      }
+      user.cart.push({ productId, quantity });
+    } else {
+      const nextQty = user.cart[idx].quantity + quantity;
+      if (nextQty > book.amount) {
+        return [409, { message: `Only ${book.amount} left in stock` }];
+      }
+      user.cart[idx].quantity = nextQty;
+    }
+
+    saveDb(db);
+    return [200, buildFullCart(user, db)];
+  });
+
+  mock.onPut(/\/api\/cart\/\d+/).reply((config) => {
+    const db = loadDb();
+    const user = requireAuth(config, db);
+    if (Array.isArray(user)) return user;
+
+    const productId = Number(config.url.split("/").pop());
+    const { quantity } = JSON.parse(config.data || "{}");
+
+    const book = db.books.find((b) => b.id === productId);
+    if (!book) return [404, { message: "Book not found" }];
+
+    const idx = user.cart.findIndex((c) => c.productId === productId);
+    if (idx === -1) return [404, { message: "Item not found" }];
+
+    if (quantity <= 0) {
+      user.cart.splice(idx, 1);
+    } else if (quantity > book.amount) {
+      return [409, { message: `Only ${book.amount} left in stock` }];
+    } else {
+      user.cart[idx].quantity = quantity;
+    }
+
+    saveDb(db);
+    return [200, buildFullCart(user, db)];
+  });
+
+  mock.onDelete(/\/api\/cart\/\d+/).reply((config) => {
+    const db = loadDb();
+    const user = requireAuth(config, db);
+    if (Array.isArray(user)) return user;
+
+    const productId = Number(config.url.split("/").pop());
+    user.cart = user.cart.filter((i) => i.productId !== productId);
+
+    saveDb(db);
+    return [200, buildFullCart(user, db)];
+  });
+
+  mock.onDelete("/api/cart").reply((config) => {
+    const db = loadDb();
+    const user = requireAuth(config, db);
+    if (Array.isArray(user)) return user;
+
+    user.cart = [];
+    saveDb(db);
+
+    return [200, []];
+  });
+
+  mock.onPost("/api/cart/merge").reply((config) => {
+    const db = loadDb();
+    const user = requireAuth(config, db);
+    if (Array.isArray(user)) return user;
+
+    const { localCart = [] } = JSON.parse(config.data || "{}");
+
+    localCart.forEach(({ productId, quantity }) => {
+      const book = db.books.find((b) => b.id === productId);
+      if (!book || quantity <= 0) return;
+
+      const qty = Math.min(quantity, book.amount);
+      const found = user.cart.find((x) => x.productId === productId);
+
+      if (found) found.quantity = qty;
+      else user.cart.push({ productId, quantity: qty });
+    });
+
+    saveDb(db);
+    return [200, buildFullCart(user, db)];
   });
 }
