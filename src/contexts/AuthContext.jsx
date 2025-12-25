@@ -12,7 +12,7 @@ const AuthContext = createContext(null);
 function AuthProvider({ children }) {
   const [user, setUser] = useState(() => LocalStorageService.get(LS_KEYS.USER));
   const [token, setToken] = useState(() =>
-    LocalStorageService.get(LS_KEYS.TOKEN)
+    LocalStorageService.getRaw(LS_KEYS.TOKEN)
   );
   const isLoggedIn = !!token && !!user;
 
