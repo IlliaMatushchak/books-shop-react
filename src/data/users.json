@@ -9,7 +9,9 @@
       "phoneNumber": "+380971234567",
       "gender": "MALE",
       "avatar": null,
-      "cart": []
+      "cart": [],
+      "refreshToken": null,
+      "refreshTokenExpiresAt": null
     },
     {
       "id": 2,
@@ -20,7 +22,9 @@
       "phoneNumber": "+380681234567",
       "gender": "MALE",
       "avatar": null,
-      "cart": []
+      "cart": [],
+      "refreshToken": null,
+      "refreshTokenExpiresAt": null
     }
   ]
 }

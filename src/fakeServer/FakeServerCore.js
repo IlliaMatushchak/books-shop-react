@@ -47,7 +47,13 @@ export function installFakeServerAxios() {
 
   createDb();
 
-  const makeToken = (user) => `fake-jwt.${btoa(`${user.id}:${user.username}`)}`;
+  const ACCESS_TTL = 15 * 60 * 1000; // 15min
+  const REFRESH_TTL = 7 * 24 * 60 * 60 * 1000; // 7days
+
+  const makeAccessToken = (user) =>
+    `access.${btoa(`${user.id}:${Date.now() + ACCESS_TTL}`)}`;
+
+  const makeRefreshToken = () => `refresh.${crypto.randomUUID()}`;
 
   const getUserFromAuth = (config, db) => {
     const auth = config.headers?.Authorization || config.headers?.authorization;
@@ -55,9 +61,10 @@ export function installFakeServerAxios() {
 
     try {
       const token = auth.replace("Bearer ", "");
-      if (!token.startsWith("fake-jwt.")) return null;
+      if (!token.startsWith("access.")) return null;
       const [, payload] = token.split(".");
-      const [id] = atob(payload).split(":");
+      const [id, expiresAt] = atob(payload).split(":");
+      if (Date.now() > Number(expiresAt)) return null;
       return db.users.find((u) => u.id === Number(id)) || null;
     } catch {
       return null;
@@ -122,11 +129,64 @@ export function installFakeServerAxios() {
 
     if (!user) return [401, { message: "Invalid credentials" }];
 
+    const accessToken = makeAccessToken(user);
+    const refreshToken = makeRefreshToken();
+    user.refreshToken = refreshToken;
+    user.refreshTokenExpiresAt = Date.now() + REFRESH_TTL;
+
+    saveDb(db);
+
     return [
       200,
       {
-        token: makeToken(user),
-        user: { ...user, password: undefined },
+        token: { accessToken, refreshToken },
+        user: {
+          ...user,
+          password: undefined,
+          refreshToken: undefined,
+          refreshTokenExpiresAt: undefined,
+        },
+      },
+    ];
+  });
+
+  mock.onPost(API.AUTH + "/logout").reply((config) => {
+    const db = loadDb();
+    const { refreshToken } = JSON.parse(config.data || "{}");
+
+    const user = db.users.find((u) => u.refreshToken === refreshToken);
+    if (user) {
+      user.refreshToken = null;
+      user.refreshTokenExpiresAt = null;
+      saveDb(db);
+    }
+
+    return [204];
+  });
+
+  mock.onPost(API.AUTH + "/refresh").reply((config) => {
+    const db = loadDb();
+    const { refreshToken } = JSON.parse(config.data || "{}");
+
+    const user = db.users.find(
+      (u) =>
+        u.refreshToken === refreshToken && u.refreshTokenExpiresAt > Date.now()
+    );
+
+    if (!user) return [401, { message: "Invalid refresh token" }];
+
+    const newAccessToken = makeAccessToken(user);
+    const newRefreshToken = makeRefreshToken();
+
+    user.refreshToken = newRefreshToken;
+    user.refreshTokenExpiresAt = Date.now() + REFRESH_TTL;
+    saveDb(db);
+
+    return [
+      200,
+      {
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
       },
     ];
   });
@@ -160,7 +220,7 @@ export function installFakeServerAxios() {
     if (!body.title || !body.price) {
       return [400, { message: "Invalid book data" }];
     }
-    
+
     const newBook = { id: db.nextBookId++, ...body };
     db.books.push(newBook);
     saveDb(db);
