@@ -1,5 +1,6 @@
 const LS_KEYS = {
-  TOKEN: "token",
+  ACCESS_TOKEN: "accessToken",
+  REFRESH_TOKEN: "refreshToken",
   USER: "user",
   CART: "cart",
   AVATAR: "avatar",

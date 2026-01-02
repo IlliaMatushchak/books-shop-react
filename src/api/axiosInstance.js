@@ -8,27 +8,48 @@ const axiosInstance = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: false,
 });
 
 axiosInstance.interceptors.request.use((config) => {
-  const token = LocalStorageService.getRaw(LS_KEYS.TOKEN);
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  const accessToken = LocalStorageService.getRaw(LS_KEYS.ACCESS_TOKEN);
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`;
   }
   return config;
 });
 
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) => {
+  async (error) => {
     let message;
+    let originalRequest = error.config;
 
-    if (!error.response) {
+   if (!error.response) {
       message = "Network error. Please check your connection.";
       console.error("Network/connection error:", error);
     } else if (error.response?.status === 401) {
-      message = getErrorMessage(error) || "Unauthorized access.";
-      console.warn("Unauthorized! Maybe token expired.");
+      try {
+        if (!originalRequest) throw error;
+        if (error.config.url.includes("/auth/refresh")) {
+          throw new Error("Invalid or expired refresh token");
+        }
+        if (originalRequest._retry) {
+          throw new Error("Retry failed");
+        }
+        originalRequest._retry = true;
+
+        const accessToken = await getNewAccessToken();
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+
+        return axiosInstance(originalRequest); // retry original request
+      } catch (error) {
+        message =
+          error.message || getErrorMessage(error) || "Unauthorized access";
+        console.warn(`Unauthorized! ${message}`);
+        LocalStorageService.removeAll();
+        window.location.replace("/login");
+      }
     } else if (error.response?.status >= 500) {
       message = "Server error. Please try again later.";
       console.error("Server error:", error.response);
@@ -45,6 +66,21 @@ axiosInstance.interceptors.response.use(
     });
   }
 );
+
+async function getNewAccessToken() {
+  const refreshToken = LocalStorageService.getRaw(LS_KEYS.REFRESH_TOKEN);
+  if (!refreshToken) throw new Error("No refresh token");
+
+  const { data } = await axiosInstance.post(`/api/auth/refresh`, {
+    refreshToken,
+  });
+  const { accessToken, refreshToken: newRefreshToken } = data;
+
+  LocalStorageService.set(LS_KEYS.ACCESS_TOKEN, accessToken);
+  LocalStorageService.set(LS_KEYS.REFRESH_TOKEN, newRefreshToken);
+
+  return accessToken;
+}
 
 function getErrorMessage(error) {
   return (
