@@ -9,3 +9,7 @@ export const registerUserApi = (userData, signal) => {
 export const loginUserApi = (credentials, signal) => {
   return axiosInstance.post(API_URL + "/login", credentials, { signal });
 };
+
+export const logoutUserApi = (refreshToken, signal) => {
+  return axiosInstance.post(API_URL + "/logout", { refreshToken }, { signal });
+};

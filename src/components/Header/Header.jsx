@@ -2,6 +2,9 @@ import { memo } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useCart } from "../../contexts/CartContext";
 import { useAuth } from "../../contexts/AuthContext";
+import useControlledFetch from "../../hooks/useControlledFetch";
+import { AuthService } from "../../services/authService";
+import Loader from "../Loader/Loader";
 import "./Header.css";
 import cartImg from "../../assets/images/cart.svg";
 import avatarImg from "../../assets/images/avatar.png";
@@ -9,12 +12,26 @@ import avatarImg from "../../assets/images/avatar.png";
 const Header = memo(function Header() {
   const { totalCount } = useCart();
   const { user, isLoggedIn, logout } = useAuth();
+  const { loading, fetch: logoutFetch } = useControlledFetch();
 
   const getNavLinkFunc = (className) => {
     return ({ isActive }) => (isActive ? `active ${className}` : className);
   };
 
+  const handleLogout = () => {
+    logoutFetch({
+      requestFn: AuthService.logout,
+      onSuccess: () => {
+        logout();
+      },
+      onError: () => {
+        logout();
+      },
+    });
+  };
+
   return (
+    <>
     <header className="header flex fancy-background">
       <h1>Books shop</h1>
       <nav className="flex">
@@ -31,13 +48,7 @@ const Header = memo(function Header() {
 
         {isLoggedIn ? (
           <>
-            <Link
-              to="/"
-              className="btn-effect-3d"
-              onClick={() => {
-                logout();
-              }}
-            >
+            <Link to="/" className="btn-effect-3d" onClick={handleLogout}>
               Logout
             </Link>
 
@@ -68,6 +79,8 @@ const Header = memo(function Header() {
         )}
       </nav>
     </header>
+    {loading && <Loader type="global" />}
+    </>
   );
 });
 
