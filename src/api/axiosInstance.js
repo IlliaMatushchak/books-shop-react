@@ -1,13 +1,15 @@
 import axios from "axios";
 import { LocalStorageService, LS_KEYS } from "../services/localStorage";
 
-const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8080";
+// const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8080";
+const API_BASE = process.env.PUBLIC_URL || ""; // for github pages
 
 const axiosInstance = axios.create({
-  baseURL: process.env.PUBLIC_URL || "",
+  baseURL: API_BASE,
   headers: {
     "Content-Type": "application/json",
   },
+  timeout: 10000,
   withCredentials: false,
 });
 
@@ -25,9 +27,15 @@ axiosInstance.interceptors.response.use(
     let message;
     let originalRequest = error.config;
 
-   if (!error.response) {
+    if (error?.name === "CanceledError") {
+      message = "Request canceled!";
+      console.warn("Request canceled!");
+    } else if (!error.response) {
       message = "Network error. Please check your connection.";
       console.error("Network/connection error:", error);
+    } else if (error.config.url.includes("/auth/login")) {
+      message = getErrorMessage(error) || "Login failed";
+      console.warn("Login error:", message);
     } else if (error.response?.status === 401) {
       try {
         if (!originalRequest) throw error;
@@ -52,10 +60,10 @@ axiosInstance.interceptors.response.use(
       }
     } else if (error.response?.status >= 500) {
       message = "Server error. Please try again later.";
-      console.error("Server error:", error.response);
+      console.error("Server error:", error);
     } else {
       message = getErrorMessage(error) || "An error occurred.";
-      console.error("Axios error:", message);
+      console.error("Axios error:", error);
     }
 
     return Promise.reject({
