@@ -1,10 +1,6 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useMemo,
-  useCallback,
-} from "react";
+import { createContext, useContext, useMemo, useCallback } from "react";
+import useControlledFetch from "../hooks/useControlledFetch";
+import { AuthService } from "../services/authService";
 import { LocalStorageService, LS_KEYS } from "../services/localStorage";
 
 const AuthContext = createContext(null);
@@ -20,57 +16,85 @@ const updateToken = (token = null) => {
 };
 
 function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => LocalStorageService.get(LS_KEYS.USER));
+  const {
+    data: user,
+    setData: setUser,
+    loading,
+    error,
+    fetch: AuthFetch,
+  } = useControlledFetch({
+    initialData: LocalStorageService.get(LS_KEYS.USER) || null,
+  });
   const isLoggedIn = !!user;
 
-  const updateUser = useCallback((newUser = null) => {
-    if (newUser === null) {
-      LocalStorageService.remove(LS_KEYS.USER);
-      setUser(null);
-      return;
-    }
-    if (typeof newUser === "object") {
-      const { id, username, role, avatar } = newUser;
-      setUser({ id, username, role, avatar });
-      LocalStorageService.set(LS_KEYS.USER, { id, username, role, avatar });
-      return;
-    }
-    console.error("updateUser: invalid argument", newUser);
-  }, []);
+  const updateUser = useCallback(
+    (newUser = null) => {
+      if (newUser === null) {
+        LocalStorageService.remove(LS_KEYS.USER);
+        setUser(null);
+        return;
+      }
+      if (typeof newUser === "object") {
+        const { id, username, role, avatar } = newUser;
+        setUser({ id, username, role, avatar });
+        LocalStorageService.set(LS_KEYS.USER, { id, username, role, avatar });
+        return;
+      }
+      console.error("updateUser: invalid argument", newUser);
+    },
+    [setUser]
+  );
 
-  const updateAvatar = useCallback((newAvatar) => {
-    setUser((prevUser) => {
-      if (!prevUser) return prevUser;
-      const updatedUser = { ...prevUser, avatar: newAvatar };
-      LocalStorageService.set(LS_KEYS.USER, updatedUser);
-      return updatedUser;
-    });
-  }, []);
+  const updateAvatar = useCallback(
+    (newAvatar) => {
+      setUser((prevUser) => {
+        if (!prevUser) return prevUser;
+        const updatedUser = { ...prevUser, avatar: newAvatar };
+        LocalStorageService.set(LS_KEYS.USER, updatedUser);
+        return updatedUser;
+      });
+    },
+    [setUser]
+  );
 
   const login = useCallback(
-    (userData) => {
-      const { token, user } = userData;
-      updateToken(token);
-      updateUser(user);
+    (formData) => {
+      AuthFetch({
+        requestFn: AuthService.login,
+        args: [formData],
+        onSuccess: ({ token, user }) => {
+          updateToken(token);
+          updateUser(user);
+        },
+      });
     },
-    [updateUser]
+    [updateUser, AuthFetch]
   );
 
   const logout = useCallback(() => {
+    const refreshToken = LocalStorageService.getRaw(LS_KEYS.REFRESH_TOKEN);
+    if (refreshToken) {
+      AuthFetch({
+        requestFn: AuthService.logout,
+        args: [refreshToken],
+      });
+    }
     updateToken(null);
     updateUser(null);
-  }, [updateUser]);
+  }, [updateUser, AuthFetch]);
 
   const value = useMemo(
     () => ({
       user,
       isLoggedIn,
+      loading,
+      error,
       login,
       logout,
       updateUser,
       updateAvatar,
     }),
-    [user, isLoggedIn, login, logout, updateUser, updateAvatar]
+    [user, isLoggedIn, loading, error, login, logout, updateUser, updateAvatar]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

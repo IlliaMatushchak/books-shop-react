@@ -1,5 +1,4 @@
 import { loginUserApi, registerUserApi, logoutUserApi } from "../api/authApi";
-import { LocalStorageService, LS_KEYS } from "./localStorage";
 
 export const AuthService = {
   async register(userData, signal) {
@@ -16,8 +15,7 @@ export const AuthService = {
     return response.data;
   },
 
-  async logout(signal) {
-    const refreshToken = LocalStorageService.getRaw(LS_KEYS.REFRESH_TOKEN);
-    if (refreshToken) await logoutUserApi(refreshToken, signal);
+  async logout(refreshToken, signal) {
+    await logoutUserApi(refreshToken, signal);
   },
 };

@@ -2,8 +2,6 @@ import { memo } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useCart } from "../../contexts/CartContext";
 import { useAuth } from "../../contexts/AuthContext";
-import useControlledFetch from "../../hooks/useControlledFetch";
-import { AuthService } from "../../services/authService";
 import Loader from "../Loader/Loader";
 import "./Header.css";
 import cartImg from "../../assets/images/cart.svg";
@@ -11,23 +9,10 @@ import avatarImg from "../../assets/images/avatar.png";
 
 const Header = memo(function Header() {
   const { totalCount } = useCart();
-  const { user, isLoggedIn, logout } = useAuth();
-  const { loading, fetch: logoutFetch } = useControlledFetch();
+  const { user, isLoggedIn, logout, loading } = useAuth();
 
   const getNavLinkFunc = (className) => {
     return ({ isActive }) => (isActive ? `active ${className}` : className);
-  };
-
-  const handleLogout = () => {
-    logoutFetch({
-      requestFn: AuthService.logout,
-      onSuccess: () => {
-        logout();
-      },
-      onError: () => {
-        logout();
-      },
-    });
   };
 
   return (
@@ -48,7 +33,7 @@ const Header = memo(function Header() {
 
         {isLoggedIn ? (
           <>
-            <Link to="/" className="btn-effect-3d" onClick={handleLogout}>
+            <Link to="/" className="btn-effect-3d" onClick={logout}>
               Logout
             </Link>
 

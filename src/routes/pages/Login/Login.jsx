@@ -1,8 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTimedMessages } from "../../../hooks/useTimedMessages";
 import { useAuth } from "../../../contexts/AuthContext";
-import useControlledFetch from "../../../hooks/useControlledFetch";
-import { AuthService } from "../../../services/authService";
 import Message from "../../../components/Message/Message";
 import Loader from "../../../components/Loader/Loader";
 import { validateLoginForm } from "../../../utils/validation/formValidation";
@@ -11,9 +9,8 @@ import "./Login.css";
 const initialForm = { username: "", password: "" };
 
 function Login() {
-  const { login } = useAuth();
+  const { login, loading, error } = useAuth();
   const [form, setForm] = useState(initialForm);
-  const { loading, error, fetch: loginFetch } = useControlledFetch();
   const { messages, type, showMessages, clearMessages } = useTimedMessages(8000);
 
   useEffect(() => {
@@ -35,14 +32,7 @@ function Login() {
       return;
     }
 
-    loginFetch({
-      requestFn: AuthService.login,
-      args: [form],
-      onSuccess: (userData) => {
-        login(userData);
-        setForm(initialForm);
-      },
-    });
+    login(form);
   };
 
   return (
