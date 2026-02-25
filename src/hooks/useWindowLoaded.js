@@ -5,7 +5,6 @@ export default function useWindowLoaded() {
 
   useEffect(() => {
     function handleLoad() {
-      console.log("Window loaded");
       setLoaded(true);
     }
 

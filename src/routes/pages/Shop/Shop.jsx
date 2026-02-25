@@ -26,7 +26,6 @@ const filterBooksByName = (books, name) => {
   if (!books || !books.length) {
     return [];
   }
-  console.log("Filtering");
   let filteredBooks = books.filter(({ title }) => {
     return title.toLowerCase().includes(name.toLowerCase());
   });
@@ -35,8 +34,6 @@ const filterBooksByName = (books, name) => {
 };
 
 function Shop() {
-  console.log("Shop render");
-
   const [searchValue, setSearchValue] = useState("");
   const [priceRange, setPriceRange] = useState("[0, 9999]");
   const debouncedSearchValue = useDebouncedValue(searchValue, 500);
@@ -49,10 +46,7 @@ function Shop() {
 
   // console.time("filter");
   const filteredBooks = useMemo(() => {
-    return filterBooksByName(
-      filterBooksByPriceRange(books, priceRange),
-      debouncedSearchValue
-    );
+    return filterBooksByName(filterBooksByPriceRange(books, priceRange), debouncedSearchValue);
   }, [priceRange, debouncedSearchValue, books]);
   // console.timeEnd("filter");
 

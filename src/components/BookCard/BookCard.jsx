@@ -5,27 +5,18 @@ import "./BookCard.css";
 import LazyImage from "../LazyImage/LazyImage";
 
 const BookCard = memo(function BookCard({ image, title, author, price, id }) {
-  console.log(`Render card ${id}`);
-
   return (
     <>
       <div className="book-card fancy-background">
         <div className="img-container">
-          <LazyImage
-            className="book-img"
-            src={image || imgNotFound}
-            alt="Book image"
-          />
+          <LazyImage className="book-img" src={image || imgNotFound} alt="Book image" />
         </div>
 
         <h2>{title}</h2>
         <p>{author}</p>
         <div className="flex card-footer">
           <p>Price: {price}</p>
-          <Link
-            to={`/specific-book/${id}`}
-            className="a-like-btn btn-effect-press"
-          >
+          <Link to={`/specific-book/${id}`} className="a-like-btn btn-effect-press">
             View
           </Link>
         </div>

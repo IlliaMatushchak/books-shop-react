@@ -2,7 +2,6 @@ import React, { memo } from "react";
 import "./Footer.css";
 
 const Footer = memo(function Footer() {
-  console.log("Footer render");
   return (
     <footer className="fancy-background">
       <a href="https://github.com/IlliaMatushchak" target="_blank" rel="noopener noreferrer author">

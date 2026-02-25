@@ -3,7 +3,6 @@ import "./BooksList.css";
 import BookCard from "../../components/BookCard/BookCard";
 
 const BooksList = memo(function BooksList({ books }) {
-  console.log("BookList render");
   return (
     <section className="book-list flex">
       {books.map((book) => {

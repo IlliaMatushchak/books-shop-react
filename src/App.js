@@ -15,32 +15,17 @@ import PublicRoute from "./components/PublicRoute/PublicRoute";
 import ErrorBoundary from "./containers/ErrorBoundary/ErrorBoundary";
 import ErrorFallback from "./components/ErrorFallback/ErrorFallback";
 
-const Registration = lazy(() =>
-  import("./routes/pages/Registration/Registration")
-);
+const Registration = lazy(() => import("./routes/pages/Registration/Registration"));
 const Login = lazy(() => import("./routes/pages/Login/Login"));
 const Profile = lazy(() => import("./routes/pages/Profile/Profile"));
-const SignIn = lazy(() => import("./routes/pages/SignIn/SignIn"));
 const Shop = lazy(() => import("./routes/pages/Shop/Shop"));
-const SpecificBook = lazy(() =>
-  import("./routes/pages/SpecificBook/SpecificBook")
-);
+const SpecificBook = lazy(() => import("./routes/pages/SpecificBook/SpecificBook"));
 const Cart = lazy(() => import("./routes/pages/Cart/Cart"));
 const NotFound = lazy(() => import("./routes/pages/NotFound/NotFound"));
 
 function App() {
-  console.log("App render");
-  // const [value, setvalue] = useState(false);
-
   return (
     <>
-      {/* <input
-        type="checkbox"
-        value={value}
-        onChange={() => {
-          setvalue((prev) => !prev);
-        }}
-      /> */}
       <BackgroundImg />
       <AuthProvider>
         <CartProvider>
@@ -116,9 +101,3 @@ function App() {
 }
 
 export default App;
-
-// function delayForLazy(promise) {
-//   return new Promise((resolve) => {
-//     setTimeout(resolve, 3000);
-//   }).then(() => promise);
-// }

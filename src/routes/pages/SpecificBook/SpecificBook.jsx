@@ -9,8 +9,6 @@ import Loader from "../../../components/Loader/Loader";
 import ErrorFallback from "../../../components/ErrorFallback/ErrorFallback";
 
 function SpecificBook() {
-  console.log("Book-page render");
-
   const { bookID } = useParams();
   const {
     data: specificBook,
