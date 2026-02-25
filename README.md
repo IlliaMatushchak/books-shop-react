@@ -1,4 +1,4 @@
-# Books Shop — React Online Bookstore
+# Books Shop
 
 A single-page online bookstore application built with **React**. This project is a personal pet-project created to demonstrate practical frontend development skills, modern React architecture, and preparation for real backend integration.
 
@@ -6,29 +6,25 @@ The application simulates a real e-commerce flow for browsing and purchasing boo
 
 ---
 
-## 🔗 Live Demo
+## Live Demo
 
-👉 https://illiamatushchak.github.io/books-shop-react/#/shop
-
-## 💻 Source Code
-
-👉 https://github.com/IlliaMatushchak/books-shop-react
+https://illiamatushchak.github.io/books-shop-react/#/shop
 
 ---
 
-## ✨ Features
+## Features
 
-- 📚 Browse a catalog of books with dynamic rendering
-- 🔍 Search and filter books
-- 🛒 Simulated cart functionality
-- 👤 User authentication flow (mocked)
-- 📄 Multiple pages with client-side routing
-- 📱 Responsive design for mobile and desktop
-- 🔄 Simulated backend communication using a mock REST API
+- Browse a catalog of books with dynamic rendering
+- Search and filter books
+- Simulated cart functionality
+- User authentication flow (mocked)
+- Multiple pages with client-side routing
+- Responsive design for mobile and desktop
+- Simulated backend communication using a mock REST API
 
 ---
 
-## 🧠 Project Highlights
+## Project Highlights
 
 - **Component-based architecture** using React functional components
 - **Client-side routing** implemented with React Router
@@ -40,7 +36,7 @@ The application simulates a real e-commerce flow for browsing and purchasing boo
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ### Frontend
 - React
@@ -56,7 +52,7 @@ The application simulates a real e-commerce flow for browsing and purchasing boo
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 ```text
 src/
@@ -71,7 +67,7 @@ src/
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -100,7 +96,7 @@ http://localhost:3000
 
 ---
 
-## 🎯 Purpose of the Project
+## Purpose of the Project
 
 This project was created to:
 
@@ -111,17 +107,16 @@ This project was created to:
 
 ---
 
-## 📈 Possible Improvements
+## Possible Improvements
 
 - Integration with a real backend (Spring Boot / Node.js)
 - Global state management (Redux)
-- Authentication with JWT
 - Unit and integration testing
 - Improved accessibility (a11y)
 
 ---
 
-## 👤 Author
+## Author
 
 **Illia Matushchak**  
 Junior Frontend React Developer
@@ -131,7 +126,7 @@ Junior Frontend React Developer
 
 ---
 
-## 📄 License
+## License
 
 This project is for educational and portfolio purposes.
 
