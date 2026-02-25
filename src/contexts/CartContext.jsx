@@ -8,7 +8,7 @@ import {
 import { useAuth } from "./AuthContext";
 import useControlledFetch from "../hooks/useControlledFetch";
 import { CartService } from "../services/cartService";
-import { LocalStorageService, LS_KEYS } from "../services/localStorage";
+import { LocalStorageService, LS_KEYS } from "../utils/storage/localStorage";
 
 const CartContext = createContext(null);
 

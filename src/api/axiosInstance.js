@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LocalStorageService, LS_KEYS } from "../services/localStorage";
+import { LocalStorageService, LS_KEYS } from "../utils/storage/localStorage";
 
 // const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8080";
 const API_BASE = process.env.PUBLIC_URL || ""; // for github pages

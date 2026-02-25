@@ -1,7 +1,7 @@
 import axiosInstance from "../api/axiosInstance";
 import AxiosMockAdapter from "axios-mock-adapter";
-import books from "../data/books.json";
-import users from "../data/users.json";
+import books from "./data/books.json";
+import users from "./data/users.json";
 
 const API = {
   AUTH: "/api/auth",

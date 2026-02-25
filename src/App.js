@@ -1,7 +1,7 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 
-import "./App.css";
+import "./assets/styles/global.css";
 import "./assets/styles/button.css";
 
 import Layout from "./routes/layouts/MainLayout";

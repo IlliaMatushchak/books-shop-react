@@ -1,7 +1,7 @@
 import { createContext, useContext, useMemo, useCallback } from "react";
 import useControlledFetch from "../hooks/useControlledFetch";
 import { AuthService } from "../services/authService";
-import { LocalStorageService, LS_KEYS } from "../services/localStorage";
+import { LocalStorageService, LS_KEYS } from "../utils/storage/localStorage";
 
 const AuthContext = createContext(null);
 
