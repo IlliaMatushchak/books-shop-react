@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { ROUTES } from "../../constants/routes";
 import { useCart } from "../../contexts/CartContext";
 import { useAuth } from "../../contexts/AuthContext";
 import Loader from "../Loader/Loader";
@@ -17,54 +18,51 @@ const Header = memo(function Header() {
 
   return (
     <>
-    <header className="header flex fancy-background">
-      <h1>Books shop</h1>
-      <nav className="flex">
-        <NavLink to="/shop" className={getNavLinkFunc("btn-effect-3d")}>
-          Shop
-        </NavLink>
-        <NavLink
-          to="/cart"
-          className={getNavLinkFunc("cart-link btn-effect-3d")}
-        >
-          <img src={cartImg} alt="Cart" loading="lazy" />
-          {totalCount ? <span>{totalCount}</span> : ""}
-        </NavLink>
+      <header className="header flex fancy-background">
+        <h1>Books shop</h1>
+        <nav className="flex">
+          <NavLink to={ROUTES.SHOP} className={getNavLinkFunc("btn-effect-3d")}>
+            Shop
+          </NavLink>
+          <NavLink to={ROUTES.CART} className={getNavLinkFunc("cart-link btn-effect-3d")}>
+            <img src={cartImg} alt="Cart" loading="lazy" />
+            {totalCount ? <span>{totalCount}</span> : ""}
+          </NavLink>
 
-        {isLoggedIn ? (
-          <>
-            <Link to="/" className="btn-effect-3d" onClick={logout}>
-              Logout
-            </Link>
+          {isLoggedIn ? (
+            <>
+              <Link to={ROUTES.HOME} className="btn-effect-3d" onClick={logout}>
+                Logout
+              </Link>
 
-            <NavLink
-              to={"/profile"}
-              className={getNavLinkFunc("profile-link")}
-              title="Edit profile"
-            >
-              <img
-                className="user-avatar btn-effect-3d"
-                src={user?.avatar || avatarImg}
-                alt="Avatar"
-                loading="lazy"
-              />
-              <span className="user-name btn-effect-3d">{user?.username}</span>
-            </NavLink>
-          </>
-        ) : (
-          <>
-            <NavLink to="/" className={getNavLinkFunc("btn-effect-3d")}>
-              Login
-            </NavLink>
+              <NavLink
+                to={ROUTES.PROFILE}
+                className={getNavLinkFunc("profile-link")}
+                title="Edit profile"
+              >
+                <img
+                  className="user-avatar btn-effect-3d"
+                  src={user?.avatar || avatarImg}
+                  alt="Avatar"
+                  loading="lazy"
+                />
+                <span className="user-name btn-effect-3d">{user?.username}</span>
+              </NavLink>
+            </>
+          ) : (
+            <>
+              <NavLink to={ROUTES.HOME} className={getNavLinkFunc("btn-effect-3d")}>
+                Login
+              </NavLink>
 
-            <NavLink to="/register" className={getNavLinkFunc("btn-effect-3d")}>
-              Register
-            </NavLink>
-          </>
-        )}
-      </nav>
-    </header>
-    {loading && <Loader type="global" />}
+              <NavLink to={ROUTES.REGISTER} className={getNavLinkFunc("btn-effect-3d")}>
+                Register
+              </NavLink>
+            </>
+          )}
+        </nav>
+      </header>
+      {loading && <Loader type="global" />}
     </>
   );
 });

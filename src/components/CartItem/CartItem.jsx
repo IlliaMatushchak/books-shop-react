@@ -1,5 +1,6 @@
 import { memo, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { ROUTES } from "../../constants/routes";
 import { useCart } from "../../contexts/CartContext";
 import useDebouncedValue from "../../hooks/useDebouncedValue";
 import { useTimedMessage } from "../../hooks/useTimedMessage";
@@ -15,26 +16,21 @@ const CartItem = memo(function CartItem({
   quantity,
   book: { price, title, image, amount: maxAllowed },
 }) {
-  const {
-    changeQuantity,
-    removeFromCart,
-    loading,
-    error: serverError,
-  } = useCart();
+  const { changeQuantity, removeFromCart, loading, error: serverError } = useCart();
   const serverErrorMsg = serverError?.message || "";
   const [newQuantity, setNewQuantity] = useState(quantity);
   const totalPrice = (price * quantity).toFixed(2);
   const debouncedNewQuantity = useDebouncedValue(newQuantity, 1000);
   const { valid: isValid, error: localErrorMsg } = validateOrderQuantity(
     debouncedNewQuantity,
-    maxAllowed
+    maxAllowed,
   );
   const { message, showMessage, clearMessage } = useTimedMessage(10000);
   const errorMsg = localErrorMsg || serverErrorMsg;
   const hasError = !!errorMsg;
 
   useEffect(() => {
-     if (hasError) {
+    if (hasError) {
       showMessage(errorMsg, "error");
     } else {
       clearMessage();
@@ -62,18 +58,16 @@ const CartItem = memo(function CartItem({
 
   return (
     <div className="cart-item flex">
-      <Link to={`/specific-book/${productId}`} className="img-container">
-        <LazyImage
-          className="book-image"
-          src={image || imgNotFound}
-          alt="Book image"
-        />
+      <Link to={`${ROUTES.PRODUCT}/${productId}`} className="img-container">
+        <LazyImage className="book-image" src={image || imgNotFound} alt="Book image" />
       </Link>
       <div className="item-info flex">
         <div>
-          <Link to={`/specific-book/${productId}`}>{title}</Link>
+          <Link to={`${ROUTES.PRODUCT}/${productId}`}>{title}</Link>
         </div>
-        {message?.text && <Message className="message" message={message.text} type={message.type} />}
+        {message?.text && (
+          <Message className="message" message={message.text} type={message.type} />
+        )}
         <div className="price-quantity-container flex">
           <div className="price-block">
             <p>
@@ -97,9 +91,7 @@ const CartItem = memo(function CartItem({
               -
             </button>
             <input
-              className={
-                isValid ? "input-quantity" : "input-quantity invalid-field"
-              }
+              className={isValid ? "input-quantity" : "input-quantity invalid-field"}
               type="number"
               required
               step="1"

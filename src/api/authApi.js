@@ -1,15 +1,14 @@
 import axiosInstance from "./axiosInstance";
-
-const API_URL = "/api/auth";
+import { API_URL } from "../constants/api";
 
 export const registerUserApi = (userData, signal) => {
-  return axiosInstance.post(API_URL + "/register", userData, { signal });
+  return axiosInstance.post(API_URL.AUTH.REGISTER, userData, { signal });
 };
 
 export const loginUserApi = (credentials, signal) => {
-  return axiosInstance.post(API_URL + "/login", credentials, { signal });
+  return axiosInstance.post(API_URL.AUTH.LOGIN, credentials, { signal });
 };
 
 export const logoutUserApi = (refreshToken, signal) => {
-  return axiosInstance.post(API_URL + "/logout", { refreshToken }, { signal });
+  return axiosInstance.post(API_URL.AUTH.LOGOUT, { refreshToken }, { signal });
 };

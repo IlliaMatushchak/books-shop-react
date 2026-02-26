@@ -1,10 +1,4 @@
-const LS_KEYS = {
-  ACCESS_TOKEN: "accessToken",
-  REFRESH_TOKEN: "refreshToken",
-  USER: "user",
-  CART: "cart",
-  AVATAR: "avatar",
-};
+import { LS_KEYS } from "../../constants/storageKeys";
 
 class LocalStorageService {
   static get(key) {

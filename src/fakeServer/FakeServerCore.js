@@ -2,13 +2,7 @@ import axiosInstance from "../api/axiosInstance";
 import AxiosMockAdapter from "axios-mock-adapter";
 import books from "./data/books.json";
 import users from "./data/users.json";
-
-const API = {
-  AUTH: "/api/auth",
-  BOOKS: "/api/books",
-  PROFILE: "/api/profile",
-  CART: "/api/cart",
-};
+import { API_URL } from "../constants/api";
 
 export function installFakeServerAxios() {
   if (window.__FAKE_AXIOS_SERVER__) return;
@@ -50,8 +44,7 @@ export function installFakeServerAxios() {
   const ACCESS_TTL = 15 * 60 * 1000; // 15min
   const REFRESH_TTL = 7 * 24 * 60 * 60 * 1000; // 7days
 
-  const makeAccessToken = (user) =>
-    `access.${btoa(`${user.id}:${Date.now() + ACCESS_TTL}`)}`;
+  const makeAccessToken = (user) => `access.${btoa(`${user.id}:${Date.now() + ACCESS_TTL}`)}`;
 
   const makeRefreshToken = () => `refresh.${crypto.randomUUID()}`;
 
@@ -82,7 +75,7 @@ export function installFakeServerAxios() {
 
   // ==================== AUTH ====================
 
-  mock.onPost(API.AUTH + "/register").reply((config) => {
+  mock.onPost(API_URL.AUTH.REGISTER).reply((config) => {
     const db = loadDb();
     const body = JSON.parse(config.data || "{}");
 
@@ -90,9 +83,7 @@ export function installFakeServerAxios() {
       return [400, { message: "Username and password are required" }];
     }
 
-    const exists = db.users.find(
-      (u) => u.username === body.username || u.email === body.email
-    );
+    const exists = db.users.find((u) => u.username === body.username || u.email === body.email);
     if (exists) return [400, { message: "User already exists" }];
 
     const newUser = {
@@ -119,13 +110,11 @@ export function installFakeServerAxios() {
     ];
   });
 
-  mock.onPost(API.AUTH + "/login").reply((config) => {
+  mock.onPost(API_URL.AUTH.LOGIN).reply((config) => {
     const db = loadDb();
     const body = JSON.parse(config.data || "{}");
 
-    const user = db.users.find(
-      (u) => u.username === body.username && u.password === body.password
-    );
+    const user = db.users.find((u) => u.username === body.username && u.password === body.password);
 
     if (!user) return [401, { message: "Invalid credentials" }];
 
@@ -150,7 +139,7 @@ export function installFakeServerAxios() {
     ];
   });
 
-  mock.onPost(API.AUTH + "/logout").reply((config) => {
+  mock.onPost(API_URL.AUTH.LOGOUT).reply((config) => {
     const db = loadDb();
     const { refreshToken } = JSON.parse(config.data || "{}");
 
@@ -164,13 +153,12 @@ export function installFakeServerAxios() {
     return [204];
   });
 
-  mock.onPost(API.AUTH + "/refresh").reply((config) => {
+  mock.onPost(API_URL.AUTH.REFRESH).reply((config) => {
     const db = loadDb();
     const { refreshToken } = JSON.parse(config.data || "{}");
 
     const user = db.users.find(
-      (u) =>
-        u.refreshToken === refreshToken && u.refreshTokenExpiresAt > Date.now()
+      (u) => u.refreshToken === refreshToken && u.refreshTokenExpiresAt > Date.now(),
     );
 
     if (!user) return [401, { message: "Invalid refresh token" }];
@@ -193,12 +181,12 @@ export function installFakeServerAxios() {
 
   // ==================== BOOKS ====================
 
-  mock.onGet(API.BOOKS).reply(() => {
+  mock.onGet(API_URL.PRODUCTS).reply(() => {
     const db = loadDb();
     return [200, db.books];
   });
 
-  mock.onGet(/\/api\/books\/\d+/).reply((config) => {
+  mock.onGet(new RegExp(`${API_URL.PRODUCTS}/\\d+`)).reply((config) => {
     const db = loadDb();
     const id = Number(config.url.split("/").pop());
     const book = db.books.find((b) => b.id === id);
@@ -206,7 +194,7 @@ export function installFakeServerAxios() {
     return [200, book];
   });
 
-  mock.onPost(API.BOOKS).reply((config) => {
+  mock.onPost(API_URL.PRODUCTS).reply((config) => {
     const db = loadDb();
     const user = getUserFromAuth(config, db);
     if (!user) return [401, { message: "Unauthorized" }];
@@ -227,7 +215,7 @@ export function installFakeServerAxios() {
     return [201, newBook];
   });
 
-  mock.onPut(/\/api\/books\/\d+/).reply((config) => {
+  mock.onPut(new RegExp(`${API_URL.PRODUCTS}/\\d+`)).reply((config) => {
     const db = loadDb();
     const user = getUserFromAuth(config, db);
     if (!user) return [401, { message: "Unauthorized" }];
@@ -247,7 +235,7 @@ export function installFakeServerAxios() {
     return [200, db.books[idx]];
   });
 
-  mock.onDelete(/\/api\/books\/\d+/).reply((config) => {
+  mock.onDelete(new RegExp(`${API_URL.PRODUCTS}/\\d+`)).reply((config) => {
     const db = loadDb();
     const user = getUserFromAuth(config, db);
     if (!user) return [401, { message: "Unauthorized" }];
@@ -271,7 +259,7 @@ export function installFakeServerAxios() {
 
   // ==================== PROFILE ====================
 
-  mock.onGet(API.PROFILE).reply((config) => {
+  mock.onGet(API_URL.PROFILE.ROOT).reply((config) => {
     const db = loadDb();
     const user = getUserFromAuth(config, db);
     if (!user) return [401, { message: "Unauthorized" }];
@@ -279,16 +267,14 @@ export function installFakeServerAxios() {
     return [200, { ...user, password: undefined }];
   });
 
-  mock.onPut(API.PROFILE).reply((config) => {
+  mock.onPut(API_URL.PROFILE.ROOT).reply((config) => {
     const db = loadDb();
     const user = getUserFromAuth(config, db);
     if (!user) return [401, { message: "Unauthorized" }];
 
     const updates = JSON.parse(config.data || "{}");
 
-    ["id", "username", "role", "password", "cart", "avatar"].forEach(
-      (k) => delete updates[k]
-    );
+    ["id", "username", "role", "password", "cart", "avatar"].forEach((k) => delete updates[k]);
 
     const idx = db.users.findIndex((u) => u.id === user.id);
     if (idx === -1) return [404, { message: "User not found" }];
@@ -298,7 +284,7 @@ export function installFakeServerAxios() {
     return [200, { ...db.users[idx], password: undefined }];
   });
 
-  mock.onPut(API.PROFILE + "/password").reply((config) => {
+  mock.onPut(API_URL.PROFILE.PASSWORD).reply((config) => {
     const db = loadDb();
     const user = getUserFromAuth(config, db);
     if (!user) return [401, { message: "Unauthorized" }];
@@ -319,7 +305,7 @@ export function installFakeServerAxios() {
     return [200, { message: "Password changed successfully" }];
   });
 
-  mock.onPut(API.PROFILE + "/avatar").reply((config) => {
+  mock.onPut(API_URL.PROFILE.AVATAR).reply((config) => {
     const db = loadDb();
     const user = getUserFromAuth(config, db);
     if (!user) return [401, { message: "Unauthorized" }];
@@ -333,7 +319,7 @@ export function installFakeServerAxios() {
     return [200, { avatar }];
   });
 
-  mock.onDelete(API.PROFILE + "/avatar").reply((config) => {
+  mock.onDelete(API_URL.PROFILE.AVATAR).reply((config) => {
     const db = loadDb();
     const user = getUserFromAuth(config, db);
     if (!user) return [401, { message: "Unauthorized" }];
@@ -346,7 +332,7 @@ export function installFakeServerAxios() {
 
   // ==================== CART ====================
 
-  mock.onGet(API.CART).reply((config) => {
+  mock.onGet(API_URL.CART.ROOT).reply((config) => {
     const db = loadDb();
     const user = getUserFromAuth(config, db);
     if (!user) return [401, { message: "Unauthorized" }];
@@ -354,7 +340,7 @@ export function installFakeServerAxios() {
     return [200, buildFullCart(user, db)];
   });
 
-  mock.onPost(API.CART).reply((config) => {
+  mock.onPost(API_URL.CART.ROOT).reply((config) => {
     const db = loadDb();
     const user = getUserFromAuth(config, db);
     if (!user) return [401, { message: "Unauthorized" }];
@@ -386,7 +372,7 @@ export function installFakeServerAxios() {
     return [200, buildFullCart(user, db)];
   });
 
-  mock.onPut(/\/api\/cart\/\d+/).reply((config) => {
+  mock.onPut(new RegExp(`${API_URL.CART.ROOT}/\\d+`)).reply((config) => {
     const db = loadDb();
     const user = getUserFromAuth(config, db);
     if (!user) return [401, { message: "Unauthorized" }];
@@ -412,7 +398,7 @@ export function installFakeServerAxios() {
     return [200, buildFullCart(user, db)];
   });
 
-  mock.onDelete(/\/api\/cart\/\d+/).reply((config) => {
+  mock.onDelete(new RegExp(`${API_URL.CART.ROOT}/\\d+`)).reply((config) => {
     const db = loadDb();
     const user = getUserFromAuth(config, db);
     if (!user) return [401, { message: "Unauthorized" }];
@@ -424,7 +410,7 @@ export function installFakeServerAxios() {
     return [200, buildFullCart(user, db)];
   });
 
-  mock.onDelete(API.CART).reply((config) => {
+  mock.onDelete(API_URL.CART.ROOT).reply((config) => {
     const db = loadDb();
     const user = getUserFromAuth(config, db);
     if (!user) return [401, { message: "Unauthorized" }];
@@ -435,7 +421,7 @@ export function installFakeServerAxios() {
     return [200, []];
   });
 
-  mock.onPost(API.CART + "/merge").reply((config) => {
+  mock.onPost(API_URL.CART.MERGE).reply((config) => {
     const db = loadDb();
     const user = getUserFromAuth(config, db);
     if (!user) return [401, { message: "Unauthorized" }];

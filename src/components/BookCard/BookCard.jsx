@@ -1,5 +1,6 @@
 import { memo } from "react";
 import { Link } from "react-router-dom";
+import { ROUTES } from "../../constants/routes";
 import imgNotFound from "../../assets/images/imgNotFound.png";
 import "./BookCard.css";
 import LazyImage from "../LazyImage/LazyImage";
@@ -16,7 +17,7 @@ const BookCard = memo(function BookCard({ image, title, author, price, id }) {
         <p>{author}</p>
         <div className="flex card-footer">
           <p>Price: {price}</p>
-          <Link to={`/specific-book/${id}`} className="a-like-btn btn-effect-press">
+          <Link to={`${ROUTES.PRODUCT}/${id}`} className="a-like-btn btn-effect-press">
             View
           </Link>
         </div>

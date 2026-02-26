@@ -1,11 +1,10 @@
 import axios from "axios";
 import { LocalStorageService, LS_KEYS } from "../utils/storage/localStorage";
-
-// const API_BASE = process.env.REACT_APP_API_BASE || "http://localhost:8080";
-const API_BASE = process.env.PUBLIC_URL || ""; // for github pages
+import { ROUTES } from "../constants/routes";
+import { BASE_URL, API_URL, AUTH_ENDPOINTS, BASE_ENDPOINTS } from "../constants/api";
 
 const axiosInstance = axios.create({
-  baseURL: API_BASE,
+  baseURL: BASE_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -33,13 +32,13 @@ axiosInstance.interceptors.response.use(
     } else if (!error.response) {
       message = "Network error. Please check your connection.";
       console.error("Network/connection error:", error);
-    } else if (error.config.url.includes("/auth/login")) {
+    } else if (error.config.url.includes(BASE_ENDPOINTS.AUTH + AUTH_ENDPOINTS.LOGIN)) {
       message = getErrorMessage(error) || "Login failed";
       console.warn("Login error:", message);
     } else if (error.response?.status === 401) {
       try {
         if (!originalRequest) throw error;
-        if (error.config.url.includes("/auth/refresh")) {
+        if (error.config.url.includes(BASE_ENDPOINTS.AUTH + AUTH_ENDPOINTS.REFRESH)) {
           throw new Error("Invalid or expired refresh token");
         }
         if (originalRequest._retry) {
@@ -52,11 +51,10 @@ axiosInstance.interceptors.response.use(
 
         return axiosInstance(originalRequest); // retry original request
       } catch (error) {
-        message =
-          error.message || getErrorMessage(error) || "Unauthorized access";
+        message = error.message || getErrorMessage(error) || "Unauthorized access";
         console.warn(`Unauthorized! ${message}`);
         LocalStorageService.removeAll();
-        window.location.replace("/login");
+        window.location.replace(ROUTES.HOME);
       }
     } else if (error.response?.status >= 500) {
       message = "Server error. Please try again later.";
@@ -72,14 +70,14 @@ axiosInstance.interceptors.response.use(
       data: error.response?.data,
       original: error,
     });
-  }
+  },
 );
 
 async function getNewAccessToken() {
   const refreshToken = LocalStorageService.getRaw(LS_KEYS.REFRESH_TOKEN);
   if (!refreshToken) throw new Error("No refresh token");
 
-  const { data } = await axiosInstance.post(`/api/auth/refresh`, {
+  const { data } = await axiosInstance.post(API_URL.AUTH.REFRESH, {
     refreshToken,
   });
   const { accessToken, refreshToken: newRefreshToken } = data;
@@ -91,11 +89,7 @@ async function getNewAccessToken() {
 }
 
 function getErrorMessage(error) {
-  return (
-    error.response?.data?.error ||
-    error.response?.data?.message ||
-    error.message
-  );
+  return error.response?.data?.error || error.response?.data?.message || error.message;
 }
 
 export default axiosInstance;

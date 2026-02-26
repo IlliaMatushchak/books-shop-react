@@ -4,6 +4,9 @@ import { Suspense, lazy } from "react";
 import "./assets/styles/global.css";
 import "./assets/styles/button.css";
 
+import { ROLES } from "./constants/roles";
+import { ROUTE_NAMES, ROUTES } from "./constants/routes";
+
 import Layout from "./routes/layouts/MainLayout";
 import BackgroundImg from "./components/BackgroundImg/BackgroundImg";
 import { CartProvider } from "./contexts/CartContext";
@@ -34,7 +37,7 @@ function App() {
               <Router>
                 <Suspense fallback={<Loader type="global" />}>
                   <Routes>
-                    <Route path="/" element={<Layout />}>
+                    <Route path={ROUTES.HOME} element={<Layout />}>
                       <Route
                         index
                         element={
@@ -44,7 +47,7 @@ function App() {
                         }
                       />
                       <Route
-                        path="register"
+                        path={ROUTE_NAMES.REGISTER}
                         element={
                           <ErrorBoundary fallback={<ErrorFallback />}>
                             <PublicRoute>
@@ -54,7 +57,7 @@ function App() {
                         }
                       />
                       <Route
-                        path="shop"
+                        path={ROUTE_NAMES.SHOP}
                         element={
                           <ErrorBoundary fallback={<ErrorFallback />}>
                             <Shop />
@@ -62,7 +65,7 @@ function App() {
                         }
                       />
                       <Route
-                        path="specific-book/:bookID"
+                        path={ROUTE_NAMES.PRODUCT + "/:bookID"}
                         element={
                           <ErrorBoundary fallback={<ErrorFallback />}>
                             <SpecificBook />
@@ -70,7 +73,7 @@ function App() {
                         }
                       />
                       <Route
-                        path="cart"
+                        path={ROUTE_NAMES.CART}
                         element={
                           <ErrorBoundary fallback={<ErrorFallback />}>
                             <Cart />
@@ -78,10 +81,10 @@ function App() {
                         }
                       />
                       <Route
-                        path="profile"
+                        path={ROUTE_NAMES.PROFILE}
                         element={
                           <ErrorBoundary fallback={<ErrorFallback />}>
-                            <PrivateRoute allowedRoles={["user", "admin"]}>
+                            <PrivateRoute allowedRoles={[ROLES.USER, ROLES.ADMIN]}>
                               <Profile />
                             </PrivateRoute>
                           </ErrorBoundary>
