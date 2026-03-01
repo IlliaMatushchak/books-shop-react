@@ -8,29 +8,20 @@ import SearchSection from "../../../components/SearchSection/SearchSection";
 import Loader from "../../../components/Loader/Loader";
 import ErrorFallback from "../../../components/ErrorFallback/ErrorFallback";
 
-const filterBooksByPriceRange = (books, range) => {
-  if (!books || !books.length) {
-    return [];
-  }
-  let priceRange = JSON.parse(range);
-  let filteredBooks = books.filter(({ price }) => {
-    let minPrice = priceRange[0],
-      maxPrice = priceRange[1];
-    return price > minPrice && price < maxPrice;
-  });
-
-  return filteredBooks;
+const createPriceFilter = (priceRange = []) => {
+  const [minPrice, maxPrice] = priceRange;
+  return (book) => book.price >= minPrice && book.price <= maxPrice;
 };
 
-const filterBooksByName = (books, name) => {
-  if (!books || !books.length) {
-    return [];
-  }
-  let filteredBooks = books.filter(({ title }) => {
-    return title.toLowerCase().includes(name.toLowerCase());
-  });
+const createNameFilter = (searchValue = "") => {
+  const normalizedName = searchValue.trim().toLowerCase();
+  if (!normalizedName) return () => true;
 
-  return filteredBooks;
+  return (book) => book.title.toLowerCase().includes(normalizedName);
+};
+
+const applyFilters = (books = [], filters = []) => {
+  return books.filter((book) => filters.every((filter) => filter(book)));
 };
 
 function Shop() {
@@ -42,11 +33,16 @@ function Shop() {
     loading,
     error,
     refetch,
-  } = useControlledFetch({ requestFn: BookService.getAll, auto: true });
+  } = useControlledFetch({ requestFn: BookService.getAll, initialData: [], auto: true });
 
   // console.time("filter");
   const filteredBooks = useMemo(() => {
-    return filterBooksByName(filterBooksByPriceRange(books, priceRange), debouncedSearchValue);
+    const filters = [
+      createNameFilter(debouncedSearchValue),
+      createPriceFilter(JSON.parse(priceRange)),
+    ];
+
+    return applyFilters(books, filters);
   }, [priceRange, debouncedSearchValue, books]);
   // console.timeEnd("filter");
 
