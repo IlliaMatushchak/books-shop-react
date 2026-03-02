@@ -8,8 +8,7 @@ import SearchSection from "../../../components/SearchSection/SearchSection";
 import Loader from "../../../components/Loader/Loader";
 import ErrorFallback from "../../../components/ErrorFallback/ErrorFallback";
 
-const createPriceFilter = (priceRange = []) => {
-  const [minPrice, maxPrice] = priceRange;
+const createPriceFilter = ([minPrice = 0, maxPrice = Infinity] = []) => {
   return (book) => book.price >= minPrice && book.price <= maxPrice;
 };
 
@@ -20,14 +19,21 @@ const createNameFilter = (searchValue = "") => {
   return (book) => book.title.toLowerCase().includes(normalizedName);
 };
 
+const buildFilters = ({ searchValue, priceRange }) => [
+  createNameFilter(searchValue),
+  createPriceFilter(priceRange),
+];
+
 const applyFilters = (books = [], filters = []) => {
   return books.filter((book) => filters.every((filter) => filter(book)));
 };
 
 function Shop() {
-  const [searchValue, setSearchValue] = useState("");
-  const [priceRange, setPriceRange] = useState("[0, 9999]");
-  const debouncedSearchValue = useDebouncedValue(searchValue, 500);
+  const [filtersConfig, setFiltersConfig] = useState({
+    searchValue: "",
+    priceRange: [0, 9999],
+  });
+  const debouncedFiltersConfig = useDebouncedValue(filtersConfig, 500);
   const {
     data: books,
     loading,
@@ -37,13 +43,8 @@ function Shop() {
 
   // console.time("filter");
   const filteredBooks = useMemo(() => {
-    const filters = [
-      createNameFilter(debouncedSearchValue),
-      createPriceFilter(JSON.parse(priceRange)),
-    ];
-
-    return applyFilters(books, filters);
-  }, [priceRange, debouncedSearchValue, books]);
+    return applyFilters(books, buildFilters(debouncedFiltersConfig));
+  }, [books, debouncedFiltersConfig]);
   // console.timeEnd("filter");
 
   if (loading) {
@@ -55,14 +56,7 @@ function Shop() {
 
   return (
     <>
-      <SearchSection
-        filterValues={{
-          searchValue,
-          setSearchValue,
-          priceRange,
-          setPriceRange,
-        }}
-      />
+      <SearchSection filtersConfig={filtersConfig} setFiltersConfig={setFiltersConfig} />
       <BookList books={filteredBooks} />
     </>
   );
