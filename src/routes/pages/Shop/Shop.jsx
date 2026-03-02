@@ -1,7 +1,6 @@
 import { useState } from "react";
 import useControlledFetch from "../../../hooks/useControlledFetch";
-import useBooksFilters from "../../../hooks/useBooksFilters";
-import useBooksSort from "../../../hooks/useBooksSort";
+import useProcessedBooks from "../../../hooks/useProcessedBooks";
 import { BookService } from "../../../services/bookService";
 
 import BookList from "../../../containers/BooksList/BooksList";
@@ -22,8 +21,7 @@ function Shop() {
     error,
     refetch,
   } = useControlledFetch({ requestFn: BookService.getAll, initialData: [], auto: true });
-  const filteredBooks = useBooksFilters(books, filtersConfig);
-  const sortedBooks = useBooksSort(filteredBooks, sortType);
+  const processedBooks = useProcessedBooks(books, filtersConfig, sortType);
 
   if (loading) {
     return <Loader type="named" />;
@@ -42,10 +40,10 @@ function Shop() {
       />
       {books.length === 0 ? (
         <Message message="No books found!" type="global" />
-      ) : filteredBooks.length === 0 ? (
+      ) : processedBooks.length === 0 ? (
         <Message message="There are no books matching your filters!" type="global" />
       ) : (
-        <BookList books={sortedBooks} />
+        <BookList books={processedBooks} />
       )}
     </>
   );
