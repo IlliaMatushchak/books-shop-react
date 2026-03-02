@@ -1,6 +1,6 @@
 import "./SearchSection.css";
 
-function SearchSection({ filtersConfig, setFiltersConfig }) {
+function SearchSection({ filtersConfig, setFiltersConfig, sortType, setSortType }) {
   return (
     <section className="search-section flex fancy-background">
       <input
@@ -29,6 +29,24 @@ function SearchSection({ filtersConfig, setFiltersConfig }) {
         <option value="0-15">{"0$ < price < 15$"}</option>
         <option value="15-30">{"15$ < price < 30$"}</option>
         <option value="30-9999">{"price 30$ +"}</option>
+      </select>
+
+      <select
+        title="Sort by"
+        name="sortType"
+        className="sort-selector"
+        value={sortType}
+        onChange={(e) => {
+          setSortType(e.target.value);
+        }}
+      >
+        <option value="" disabled>
+          Sort by:
+        </option>
+        <option value="default">Default</option>
+        <option value="name">Name</option>
+        <option value="lowPrice">Lowest price</option>
+        <option value="highPrice">Highest price</option>
       </select>
     </section>
   );

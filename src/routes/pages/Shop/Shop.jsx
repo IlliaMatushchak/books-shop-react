@@ -1,6 +1,7 @@
 import { useState } from "react";
 import useControlledFetch from "../../../hooks/useControlledFetch";
 import useBooksFilters from "../../../hooks/useBooksFilters";
+import useBooksSort from "../../../hooks/useBooksSort";
 import { BookService } from "../../../services/bookService";
 
 import BookList from "../../../containers/BooksList/BooksList";
@@ -14,6 +15,7 @@ function Shop() {
     searchValue: "",
     priceRange: [0, 9999],
   });
+  const [sortType, setSortType] = useState("");
   const {
     data: books,
     loading,
@@ -21,6 +23,7 @@ function Shop() {
     refetch,
   } = useControlledFetch({ requestFn: BookService.getAll, initialData: [], auto: true });
   const filteredBooks = useBooksFilters(books, filtersConfig);
+  const sortedBooks = useBooksSort(filteredBooks, sortType);
 
   if (loading) {
     return <Loader type="named" />;
@@ -31,13 +34,18 @@ function Shop() {
 
   return (
     <>
-      <SearchSection filtersConfig={filtersConfig} setFiltersConfig={setFiltersConfig} />
+      <SearchSection
+        filtersConfig={filtersConfig}
+        setFiltersConfig={setFiltersConfig}
+        sortType={sortType}
+        setSortType={setSortType}
+      />
       {books.length === 0 ? (
         <Message message="No books found!" type="global" />
       ) : filteredBooks.length === 0 ? (
         <Message message="There are no books matching your filters!" type="global" />
       ) : (
-        <BookList books={filteredBooks} />
+        <BookList books={sortedBooks} />
       )}
     </>
   );
