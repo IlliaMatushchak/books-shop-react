@@ -22,3 +22,9 @@
 .message-info {
   background-color: rgba(44, 44, 177, 0.7);
 }
+
+.message-global {
+  color: rgb(180, 50, 40);
+  font-size: 2rem;
+  text-shadow: 0.1rem 0.1rem 0.2rem black;
+}

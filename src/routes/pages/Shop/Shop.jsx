@@ -7,6 +7,7 @@ import BookList from "../../../containers/BooksList/BooksList";
 import SearchSection from "../../../components/SearchSection/SearchSection";
 import Loader from "../../../components/Loader/Loader";
 import ErrorFallback from "../../../components/ErrorFallback/ErrorFallback";
+import Message from "../../../components/Message/Message";
 
 function Shop() {
   const [filtersConfig, setFiltersConfig] = useState({
@@ -31,7 +32,13 @@ function Shop() {
   return (
     <>
       <SearchSection filtersConfig={filtersConfig} setFiltersConfig={setFiltersConfig} />
-      <BookList books={filteredBooks} />
+      {books.length === 0 ? (
+        <Message message="No books found!" type="global" />
+      ) : filteredBooks.length === 0 ? (
+        <Message message="There are no books matching your filters!" type="global" />
+      ) : (
+        <BookList books={filteredBooks} />
+      )}
     </>
   );
 }
