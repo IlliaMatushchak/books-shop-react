@@ -1,11 +1,10 @@
-import { useState, useEffect, memo } from "react";
+import { memo } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
-import { useCart } from "../../contexts/CartContext";
 import { useAuth } from "../../contexts/AuthContext";
 import Loader from "../Loader/Loader";
+import CartIcon from "../CartIcon/CartIcon";
 import "./Header.css";
-import cartImg from "../../assets/images/cart.svg";
 import avatarImg from "../../assets/images/avatar.png";
 
 const getNavLinkFunc = (className) => {
@@ -13,16 +12,7 @@ const getNavLinkFunc = (className) => {
 };
 
 const Header = memo(function Header() {
-  const { totalCount } = useCart();
   const { user, isLoggedIn, logout, loading } = useAuth();
-  const [animateCart, setAnimateCart] = useState(false);
-
-  useEffect(() => {
-    if (totalCount === 0) return;
-    setAnimateCart(true);
-    const timer = setTimeout(() => setAnimateCart(false), 300);
-    return () => clearTimeout(timer);
-  }, [totalCount]);
 
   return (
     <>
@@ -32,14 +22,7 @@ const Header = memo(function Header() {
           <NavLink to={ROUTES.SHOP} className={getNavLinkFunc("btn-effect-3d")}>
             Shop
           </NavLink>
-          <NavLink
-            to={ROUTES.CART}
-            className={getNavLinkFunc(`cart-link btn-effect-3d ${animateCart ? "cart-jump" : ""}`)}
-          >
-            <img src={cartImg} alt="Cart" loading="lazy" />
-            {totalCount ? <span>{totalCount}</span> : ""}
-          </NavLink>
-
+          <CartIcon />
           {isLoggedIn ? (
             <>
               <Link to={ROUTES.HOME} className="btn-effect-3d" onClick={logout}>

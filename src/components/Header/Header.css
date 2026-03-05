@@ -42,40 +42,6 @@
     border-bottom: 0.1rem solid black;
 }
 
-.header .cart-link {
-    position: relative;
-    width: 3.2rem;
-}
-
-.header .cart-link span{
-    position: absolute;
-    bottom: 0;
-    right: -0.5rem;
-    background-color: rgb(240, 240, 10, 1);
-    border: 0.1rem solid black;
-    border-radius: 1rem;
-    padding: 0.1rem;
-}
-
-.header .cart-jump {
-  animation: jump 300ms ease-out;
-}
-
-@keyframes jump {
-  0% {
-    transform: scale(1);
-  }
-  25% {
-    transform: scale(0.8);
-  }
-  75% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
 .header .profile-link {
     display: flex;
     align-items: center;
