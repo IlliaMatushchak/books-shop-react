@@ -1,0 +1,30 @@
+.price-range-fieldset {
+  min-width: 12.5rem;
+  text-align: center;
+  border: 0.1rem solid black;
+  border-radius: 1rem;
+  margin: 0;
+}
+
+.price-range-fieldset input {
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+  width: 4rem;
+  height: 2rem;
+}
+
+.price-range-fieldset input:focus {
+  transform: none;
+}
+
+.price-range-fieldset input::-webkit-outer-spin-button,
+.price-range-fieldset input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.price-range-fieldset span {
+  margin: 0 0.5rem;
+  user-select: none;
+}

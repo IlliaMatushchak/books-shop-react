@@ -2,7 +2,9 @@ import { useMemo } from "react";
 import useDebouncedValue from "./useDebouncedValue";
 
 const createPriceFilter = ([minPrice = 0, maxPrice = Infinity] = []) => {
-  return (book) => book.price >= minPrice && book.price <= maxPrice;
+  const [min, max] = maxPrice < minPrice ? [maxPrice, minPrice] : [minPrice, maxPrice];
+
+  return (book) => book.price >= min && book.price <= max;
 };
 
 const createNameFilter = (searchValue = "") => {

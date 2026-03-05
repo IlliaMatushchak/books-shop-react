@@ -1,4 +1,5 @@
 import "./SearchSection.css";
+import PriceRangeInput from "../PriceRangeInput/PriceRangeInput";
 
 function SearchSection({ filtersConfig, setFiltersConfig, sortType, setSortType }) {
   return (
@@ -14,22 +15,6 @@ function SearchSection({ filtersConfig, setFiltersConfig, sortType, setSortType 
           setFiltersConfig((config) => ({ ...config, searchValue: e.target.value }));
         }}
       />
-
-      <select
-        title="Select price range"
-        name="priceRange"
-        className="price-range"
-        value={filtersConfig.priceRange.join("-")}
-        onChange={(e) => {
-          const [min, max] = e.target.value.split("-").map(Number);
-          setFiltersConfig((config) => ({ ...config, priceRange: [min, max] }));
-        }}
-      >
-        <option value="0-9999">All prices</option>
-        <option value="0-15">{"0$ < price < 15$"}</option>
-        <option value="15-30">{"15$ < price < 30$"}</option>
-        <option value="30-9999">{"price 30$ +"}</option>
-      </select>
 
       <select
         title="Sort by"
@@ -48,6 +33,8 @@ function SearchSection({ filtersConfig, setFiltersConfig, sortType, setSortType 
         <option value="lowPrice">Lowest price</option>
         <option value="highPrice">Highest price</option>
       </select>
+
+      <PriceRangeInput filtersConfig={filtersConfig} setFiltersConfig={setFiltersConfig} />
     </section>
   );
 }

@@ -1,6 +1,7 @@
 .search-section {
     width: 75%;
     justify-content: flex-start;
+    align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
     padding: 1rem;
