@@ -25,9 +25,9 @@ const Header = memo(function Header() {
           <CartIcon />
           {isLoggedIn ? (
             <>
-              <Link to={ROUTES.HOME} className="btn-effect-3d" onClick={logout}>
+              <button onClick={logout} className="btn-text btn-effect-3d">
                 Logout
-              </Link>
+              </button>
 
               <NavLink
                 to={ROUTES.PROFILE}
