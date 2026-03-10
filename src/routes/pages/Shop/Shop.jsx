@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useControlledFetch from "../../../hooks/useControlledFetch";
 import useProcessedBooks from "../../../hooks/useProcessedBooks";
 import { BookService } from "../../../services/bookService";
+import { calculateMinAndMaxPrice } from "../../../utils/bookUtils";
 
 import BookList from "../../../containers/BooksList/BooksList";
 import SearchSection from "../../../components/SearchSection/SearchSection";
@@ -12,7 +13,7 @@ import Message from "../../../components/Message/Message";
 function Shop() {
   const [filtersConfig, setFiltersConfig] = useState({
     searchValue: "",
-    priceRange: [0, 9999],
+    priceRange: [0, Infinity],
   });
   const [sortType, setSortType] = useState("");
   const {
@@ -22,6 +23,13 @@ function Shop() {
     refetch,
   } = useControlledFetch({ requestFn: BookService.getAll, initialData: [], auto: true });
   const processedBooks = useProcessedBooks(books, filtersConfig, sortType);
+
+  useEffect(() => {
+    if (books.length !== 0) {
+      let priceRange = calculateMinAndMaxPrice(books);
+      setFiltersConfig((prev) => ({ ...prev, priceRange }));
+    }
+  }, [books]);
 
   if (loading) {
     return <Loader type="named" />;
