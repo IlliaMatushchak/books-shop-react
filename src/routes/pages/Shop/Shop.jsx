@@ -15,7 +15,7 @@ function Shop() {
     searchValue: "",
     priceRange: [0, Infinity],
   });
-  const [selectedTags, setSelectedTags] = useState();
+  const [selectedTags, setSelectedTags] = useState(new Set());
   const [sortType, setSortType] = useState("");
   const {
     data: books,
