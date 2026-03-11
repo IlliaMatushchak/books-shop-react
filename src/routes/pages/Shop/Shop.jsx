@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import useControlledFetch from "../../../hooks/useControlledFetch";
 import useProcessedBooks from "../../../hooks/useProcessedBooks";
 import { BookService } from "../../../services/bookService";
-import { calculateMinAndMaxPrice } from "../../../utils/bookUtils";
+import { calculateMinAndMaxPrice, getAllUniqueTags } from "../../../utils/bookUtils";
 
 import BookList from "../../../containers/BooksList/BooksList";
 import SearchSection from "../../../components/SearchSection/SearchSection";
@@ -15,6 +15,7 @@ function Shop() {
     searchValue: "",
     priceRange: [0, Infinity],
   });
+  const [selectedTags, setSelectedTags] = useState();
   const [sortType, setSortType] = useState("");
   const {
     data: books,
@@ -23,6 +24,7 @@ function Shop() {
     refetch,
   } = useControlledFetch({ requestFn: BookService.getAll, initialData: [], auto: true });
   const processedBooks = useProcessedBooks(books, filtersConfig, sortType);
+  const tagOptions = useMemo(() => getAllUniqueTags(books), [books]);
 
   useEffect(() => {
     if (books.length !== 0) {
@@ -45,6 +47,9 @@ function Shop() {
         setFiltersConfig={setFiltersConfig}
         sortType={sortType}
         setSortType={setSortType}
+        tagOptions={tagOptions}
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
       />
       {books.length === 0 ? (
         <Message message="No books found!" type="global" />

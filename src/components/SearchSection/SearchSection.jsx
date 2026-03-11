@@ -1,7 +1,8 @@
 import "./SearchSection.css";
 import PriceRangeInput from "../PriceRangeInput/PriceRangeInput";
+import MultiSelectDropdown from "../MultiSelectDropdown/MultiSelectDropdown";
 
-function SearchSection({ filtersConfig, setFiltersConfig, sortType, setSortType }) {
+function SearchSection({ filtersConfig, setFiltersConfig, sortType, setSortType, tagOptions, selectedTags, setSelectedTags }) {
   return (
     <section className="search-section flex fancy-background">
       <input
@@ -35,6 +36,12 @@ function SearchSection({ filtersConfig, setFiltersConfig, sortType, setSortType 
       </select>
 
       <PriceRangeInput filtersConfig={filtersConfig} setFiltersConfig={setFiltersConfig} />
+      
+      <MultiSelectDropdown
+        options={tagOptions}
+        selected={selectedTags}
+        setSelected={setSelectedTags}
+      />
     </section>
   );
 }
