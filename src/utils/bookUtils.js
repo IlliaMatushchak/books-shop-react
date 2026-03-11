@@ -7,4 +7,14 @@ function calculateMinAndMaxPrice(products = []) {
   );
 }
 
-export { calculateMinAndMaxPrice };
+function getAllUniqueTags(products = []) {
+  let uniqueTags = new Set();
+  for (const product of products) {
+    for (const tag of product.tags ?? []) {
+      uniqueTags.add(tag);
+    }
+  }
+  return [...uniqueTags];
+}
+
+export { calculateMinAndMaxPrice, getAllUniqueTags };
