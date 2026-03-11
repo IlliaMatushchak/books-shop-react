@@ -1,16 +1,22 @@
 import { useState, useRef, useEffect } from "react";
 import "./MultiSelectDropdown.css";
 
-function MultiSelectDropdown({ options = [], selected = [], setSelected }) {
+function MultiSelectDropdown({ options = [], selected, setSelected }) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
   const toggleOption = (value) => {
-    if (selected.includes(value)) {
-      setSelected(selected.filter((v) => v !== value));
-    } else {
-      setSelected([...selected, value]);
-    }
+    setSelected((prev) => {
+      const next = new Set(prev);
+
+      if (next.has(value)) {
+        next.delete(value);
+      } else {
+        next.add(value);
+      }
+
+      return next;
+    });
   };
 
   useEffect(() => {
@@ -31,7 +37,7 @@ function MultiSelectDropdown({ options = [], selected = [], setSelected }) {
       {open && (
         <ul className="dropdown-menu">
           {options.map((value) => {
-            const isChecked = selected.includes(value);
+            const isChecked = selected.has(value);
             return (
               <li key={value}>
                 <label className="dropdown-option">
