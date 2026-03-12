@@ -14,8 +14,8 @@ function Shop() {
   const [filtersConfig, setFiltersConfig] = useState({
     searchValue: "",
     priceRange: [0, Infinity],
+    tags: new Set(),
   });
-  const [selectedTags, setSelectedTags] = useState(new Set());
   const [sortType, setSortType] = useState("");
   const {
     data: books,
@@ -48,8 +48,6 @@ function Shop() {
         sortType={sortType}
         setSortType={setSortType}
         tagOptions={tagOptions}
-        selectedTags={selectedTags}
-        setSelectedTags={setSelectedTags}
       />
       {books.length === 0 ? (
         <Message message="No books found!" type="global" />
