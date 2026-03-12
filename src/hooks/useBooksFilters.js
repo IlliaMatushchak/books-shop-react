@@ -14,9 +14,16 @@ const createNameFilter = (searchValue = "") => {
   return (book) => book.title.toLowerCase().includes(normalizedName);
 };
 
-const buildFilters = ({ searchValue, priceRange }) => [
+const createTagsFilter = (tags) => {
+  if (tags.size === 0) return () => true;
+
+  return (book) => book.tags?.some((tag) => tags.has(tag));
+};
+
+const buildFilters = ({ searchValue, priceRange, tags }) => [
   createNameFilter(searchValue),
   createPriceFilter(priceRange),
+  createTagsFilter(tags),
 ];
 
 const applyFilters = (books = [], filters = []) => {
