@@ -2,11 +2,21 @@ import { useState, useRef, useEffect } from "react";
 import "./MultiSelectDropdown.css";
 
 function MultiSelectDropdown({ options = [], selected, setSelected }) {
+  const [tempSelected, setTempSelected] = useState(selected);
+  const tempSelectedRef = useRef(tempSelected); // fix problem with closure in handleClickOutside
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  useEffect(() => {
+    tempSelectedRef.current = tempSelected;
+  }, [tempSelected]);
+
+  useEffect(() => {
+    setTempSelected(selected);
+  }, [selected]);
+
   const toggleOption = (value) => {
-    setSelected((prev) => {
+    setTempSelected((prev) => {
       const next = new Set(prev);
 
       if (next.has(value)) {
@@ -19,25 +29,36 @@ function MultiSelectDropdown({ options = [], selected, setSelected }) {
     });
   };
 
+  const handleToggle = () => {
+    if (open) setSelected(tempSelected);
+    setOpen((prev) => !prev);
+  };
+
   useEffect(() => {
+    if (!open) return;
+
     const handleClickOutside = (e) => {
-      if (!dropdownRef.current?.contains(e.target)) setOpen(false);
+      if (!dropdownRef.current?.contains(e.target)) {
+        setSelected(tempSelectedRef.current);
+        setOpen(false);
+      }
     };
 
     document.addEventListener("click", handleClickOutside);
+
     return () => document.removeEventListener("click", handleClickOutside);
-  }, []);
+  }, [open, setSelected]);
 
   return (
     <div className="dropdown" ref={dropdownRef}>
-      <button className="dropdown-trigger" onClick={() => setOpen((prev) => !prev)}>
-        {selected.length > 0 ? `${selected.length} tags selected` : "Select tags"}
+      <button className="dropdown-trigger" onClick={handleToggle}>
+        {tempSelected.size > 0 ? `${tempSelected.size} tags selected` : "Select tags"}
       </button>
 
       {open && (
         <ul className="dropdown-menu">
           {options.map((value) => {
-            const isChecked = selected.has(value);
+            const isChecked = tempSelected.has(value);
             return (
               <li key={value}>
                 <label className="dropdown-option">
