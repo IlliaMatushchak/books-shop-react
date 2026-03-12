@@ -1,7 +1,7 @@
 import "./PriceRangeInput.css";
 
-function PriceRangeInput({ filtersConfig, setFiltersConfig }) {
-  const [minValue, maxValue] = filtersConfig.priceRange;
+function PriceRangeInput({ priceRange, setPriceRange }) {
+  const [minValue, maxValue] = priceRange;
 
   return (
     <fieldset className="price-range-fieldset">
@@ -15,8 +15,9 @@ function PriceRangeInput({ filtersConfig, setFiltersConfig }) {
         value={minValue === 0 ? "" : minValue}
         onChange={(e) => {
           let newValue = Number(e.target.value);
-          if (newValue >= 0 && !Number.isNaN(newValue))
-            setFiltersConfig((config) => ({ ...config, priceRange: [newValue, maxValue] }));
+          if (newValue >= 0 && !Number.isNaN(newValue)) {
+            setPriceRange([newValue, maxValue]);
+          }
         }}
       />
 
@@ -32,8 +33,9 @@ function PriceRangeInput({ filtersConfig, setFiltersConfig }) {
         value={maxValue === 0 ? "" : maxValue}
         onChange={(e) => {
           let newValue = Number(e.target.value);
-          if (newValue >= 0 && !Number.isNaN(newValue))
-            setFiltersConfig((config) => ({ ...config, priceRange: [minValue, newValue] }));
+          if (newValue >= 0 && !Number.isNaN(newValue)) {
+            setPriceRange([minValue, newValue]);
+          }
         }}
       />
     </fieldset>

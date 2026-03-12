@@ -10,6 +10,13 @@ function SearchSection({ filtersConfig, setFiltersConfig, sortType, setSortType,
     }));
   };
 
+  const handlePriceRangeChange = (newPriceRange) => {
+    setFiltersConfig((prev) => ({
+      ...prev,
+      priceRange: newPriceRange,
+    }));
+  };
+
   return (
     <section className="search-section flex fancy-background">
       <input
@@ -42,8 +49,11 @@ function SearchSection({ filtersConfig, setFiltersConfig, sortType, setSortType,
         <option value="highPrice">Highest price</option>
       </select>
 
-      <PriceRangeInput filtersConfig={filtersConfig} setFiltersConfig={setFiltersConfig} />
-      
+      <PriceRangeInput
+        priceRange={filtersConfig.priceRange}
+        setPriceRange={handlePriceRangeChange}
+      />
+
       <MultiSelectDropdown
         options={tagOptions}
         selected={filtersConfig.tags}
