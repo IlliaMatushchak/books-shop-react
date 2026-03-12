@@ -16,6 +16,12 @@ function Shop() {
     priceRange: [0, Infinity],
     tags: new Set(),
   });
+  const updateFilter = (key, value) => {
+    setFiltersConfig((prev) => ({
+      ...prev,
+      [key]: value,
+    }));
+  };
   const [sortType, setSortType] = useState("");
   const {
     data: books,
@@ -28,8 +34,7 @@ function Shop() {
 
   useEffect(() => {
     if (books.length !== 0) {
-      let priceRange = calculateMinAndMaxPrice(books);
-      setFiltersConfig((prev) => ({ ...prev, priceRange }));
+      updateFilter("priceRange", calculateMinAndMaxPrice(books));
     }
   }, [books]);
 
@@ -44,7 +49,7 @@ function Shop() {
     <>
       <SearchSection
         filtersConfig={filtersConfig}
-        setFiltersConfig={setFiltersConfig}
+        updateFilter={updateFilter}
         sortType={sortType}
         setSortType={setSortType}
         tagOptions={tagOptions}

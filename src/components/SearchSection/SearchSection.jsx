@@ -2,21 +2,7 @@ import "./SearchSection.css";
 import PriceRangeInput from "../PriceRangeInput/PriceRangeInput";
 import MultiSelectDropdown from "../MultiSelectDropdown/MultiSelectDropdown";
 
-function SearchSection({ filtersConfig, setFiltersConfig, sortType, setSortType, tagOptions }) {
-  const handleTagsChange = (newTags) => {
-    setFiltersConfig((prev) => ({
-      ...prev,
-      tags: newTags,
-    }));
-  };
-
-  const handlePriceRangeChange = (newPriceRange) => {
-    setFiltersConfig((prev) => ({
-      ...prev,
-      priceRange: newPriceRange,
-    }));
-  };
-
+function SearchSection({ filtersConfig, updateFilter, sortType, setSortType, tagOptions }) {
   return (
     <section className="search-section flex fancy-background">
       <input
@@ -27,7 +13,7 @@ function SearchSection({ filtersConfig, setFiltersConfig, sortType, setSortType,
         aria-label="Search by book name"
         value={filtersConfig.searchValue}
         onChange={(e) => {
-          setFiltersConfig((config) => ({ ...config, searchValue: e.target.value }));
+          updateFilter("searchValue", e.target.value);
         }}
       />
 
@@ -51,13 +37,13 @@ function SearchSection({ filtersConfig, setFiltersConfig, sortType, setSortType,
 
       <PriceRangeInput
         priceRange={filtersConfig.priceRange}
-        setPriceRange={handlePriceRangeChange}
+        setPriceRange={(priceRange) => updateFilter("priceRange", priceRange)}
       />
 
       <MultiSelectDropdown
         options={tagOptions}
         selected={filtersConfig.tags}
-        setSelected={handleTagsChange}
+        setSelected={(tags) => updateFilter("tags", tags)}
       />
     </section>
   );
