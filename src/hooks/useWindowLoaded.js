@@ -8,6 +8,11 @@ export default function useWindowLoaded() {
       setLoaded(true);
     }
 
+    if (document.readyState === "complete") {
+      handleLoad();
+      return;
+    }
+
     window.addEventListener("load", handleLoad);
 
     return () => {
