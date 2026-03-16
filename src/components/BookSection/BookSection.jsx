@@ -54,7 +54,7 @@ function BookSection({
         <span>{showFullDescription ? description : shortDescription} </span>
         <button
           type="button"
-          className="btn-text"
+          className="btn btn-text"
           onClick={(e) => {
             handleDescriptionClick(e);
           }}

@@ -1,5 +1,3 @@
-/* Header */
-
 .header {
     justify-content: space-between;
     align-items: center;
@@ -25,25 +23,19 @@
     padding: 0.1rem;
 }
 
-.header nav button {
-    color: black;
-}
-
 .header nav .active:not(.profile-link) {
-    background-color: rgb(255, 255, 0);
-    box-shadow: 0 0 0.5rem 0.2rem rgb(255, 255, 0);
-    border: 0.1rem solid black;
-    border-radius: 0.5rem;
+    box-shadow: 0 0 0.5rem 0.2rem yellow;
+    border: var(--border-md);
+    border-radius: var( --radius-sm);
 }
 
 .header nav .active.profile-link img {
-    background-color: rgb(255, 255, 0);
-    box-shadow: 0 0 0.5rem 0.2rem rgb(255, 255, 0);
+    box-shadow: 0 0 0.5rem 0.2rem yellow;
     border-radius: 50%
 }
 
 .header nav .active.profile-link span {
-    border-bottom: 0.1rem solid black;
+    border-bottom: var(--border-md);
 }
 
 .header .profile-link {

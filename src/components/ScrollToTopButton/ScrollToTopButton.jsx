@@ -30,7 +30,7 @@ export default function ScrollToTopButton() {
         type="button"
         onClick={scrollToTop}
         id="btn-scroll-up"
-        className="btn-fixed btn-circle btn-effect-shadow"
+        className="btn btn-fixed btn-circle btn-effect-shadow"
         aria-label="Scroll up"
       >
         Up

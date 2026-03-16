@@ -100,7 +100,7 @@ function AvatarUploader({ className = "", size = "16rem" }) {
               {avatar && (
                 <button
                   type="button"
-                  className="btn-text btn-effect-3d"
+                  className="btn btn-text btn-effect-rotate"
                   aria-label="Remove avatar"
                   onClick={(e) => {
                     e.stopPropagation();

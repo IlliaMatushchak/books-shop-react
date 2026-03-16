@@ -1,0 +1,42 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: clamp(16px, 1vw + 2px, 54px);
+}
+
+body {
+  font-family: Merienda, "Courier New", Courier, monospace;
+  letter-spacing: 0.07rem;
+  background: var(--color-bg);
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+::selection {
+  background: rgba(255, 255, 0, 0.5);
+}
+
+main {
+  flex-grow: 1;
+  margin: 3rem 0;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+  user-select: none;
+}
+
+a:focus-visible {
+  outline: var(--border-md);
+  outline-offset: 0.1rem;
+}

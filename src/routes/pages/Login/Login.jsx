@@ -47,6 +47,7 @@ function Login() {
           <label htmlFor="user-name">User name</label>
           <input
             id="user-name"
+            className="field focus-hop-up"
             type="text"
             name="username"
             placeholder="Type your name"
@@ -63,6 +64,7 @@ function Login() {
           <label htmlFor="password">Password</label>
           <input
             id="password"
+            className="field focus-hop-up"
             type="password"
             name="password"
             placeholder="Password"
@@ -78,7 +80,7 @@ function Login() {
 
           <button
             type="submit"
-            className="btn-effect-3d"
+            className="btn btn-effect-3d"
             disabled={loading}
           >
             Login

@@ -1,8 +1,8 @@
 .price-range-fieldset {
   min-width: 12.5rem;
   text-align: center;
-  border: 0.1rem solid black;
-  border-radius: 1rem;
+  border: var(--border-md);
+  border-radius: var(--radius-md);
   margin: 0;
 }
 
@@ -12,10 +12,6 @@
   appearance: textfield;
   width: 4rem;
   height: 2rem;
-}
-
-.price-range-fieldset input:focus {
-  transform: none;
 }
 
 .price-range-fieldset input::-webkit-outer-spin-button,

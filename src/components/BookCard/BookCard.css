@@ -1,26 +1,28 @@
 .book-card {
     width: 19rem;
     padding: 1rem;
-    transition: box-shadow 0.5s, transform 0.5s;
+    transition:
+      transform var(--transition-normal),
+      box-shadow var(--transition-normal);
 }
 
 .book-card:hover, .book-card:focus-within {
     transform: translateY(-0.2rem);
-    box-shadow: 0 0 0.5rem 0.3rem rgba(0,0,0,0.5);
+    box-shadow: var(--shadow);
 }
 
 .book-card .img-container {
     width: 100%;
     height: 22rem;
     overflow: hidden;
-    border: 0.07rem solid black;
+    border: var(--border-sm);
 }
 
 .book-card .book-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.5s;
+    transition: transform var(--transition-normal);
 }
 
 .book-card .book-img:hover {

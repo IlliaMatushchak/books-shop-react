@@ -84,14 +84,14 @@ const CartItem = memo(function CartItem({
             <button
               type="button"
               aria-label="Decrease count of books"
-              className="btn-minus btn-effect-3d btn-circle"
+              className="btn-minus btn btn-effect-3d btn-circle"
               onClick={decrement}
               disabled={loading}
             >
               -
             </button>
             <input
-              className={isValid ? "input-quantity" : "input-quantity invalid-field"}
+              className={`input-quantity field focus-shadow ${isValid || "error"}`}
               type="number"
               required
               step="1"
@@ -103,7 +103,7 @@ const CartItem = memo(function CartItem({
             <button
               type="button"
               aria-label="Increase count of books"
-              className="btn-plus btn-effect-3d btn-circle"
+              className="btn-plus btn btn-effect-3d btn-circle"
               onClick={increment}
               disabled={loading}
             >
@@ -114,7 +114,7 @@ const CartItem = memo(function CartItem({
       </div>
       <button
         type="button"
-        className="btn-remove btn-text btn-effect-3d"
+        className="btn-remove btn btn-text btn-effect-rotate"
         title="Remove item"
         aria-label="Remove from cart"
         disabled={loading}

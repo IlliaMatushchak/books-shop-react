@@ -70,6 +70,7 @@ function Registration() {
           <label htmlFor="user-name">User name</label>
           <input
             id="user-name"
+            className="field focus-hop-up"
             type="text"
             name="username"
             placeholder="Type your name"
@@ -86,6 +87,7 @@ function Registration() {
           <label htmlFor="email">Email</label>
           <input
             id="email"
+            className="field focus-hop-up"
             type="email"
             name="email"
             placeholder="Email"
@@ -100,6 +102,7 @@ function Registration() {
           <label htmlFor="password">Password</label>
           <input
             id="password"
+            className="field focus-hop-up"
             type="password"
             name="password"
             placeholder="Password"
@@ -116,6 +119,7 @@ function Registration() {
           <label htmlFor="phone-number">Phone Number</label>
           <input
             id="phone-number"
+            className="field focus-hop-up"
             type="tel"
             name="phoneNumber"
             placeholder="Phone Number"
@@ -131,6 +135,7 @@ function Registration() {
           <label htmlFor="gender">Gender</label>
           <select
             id="gender"
+            className="field focus-hop-up"
             name="gender"
             value={form.gender}
             onChange={handleChange}
@@ -144,7 +149,7 @@ function Registration() {
 
           <button
             type="submit"
-            className="btn-effect-3d"
+            className="btn btn-effect-3d"
             disabled={loading}
           >
             Register

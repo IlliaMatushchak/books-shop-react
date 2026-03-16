@@ -7,7 +7,7 @@ function NotFound() {
     <div className="error-info-container fancy-background">
       <h1>This page does not exist!</h1>
       <p>Try to choose another page or return back</p>
-      <Link to="/" className="a-like-btn btn-effect-press">
+      <Link to="/" className="btn a-like-btn btn-effect-press">
         Main page
       </Link> 
     </div>

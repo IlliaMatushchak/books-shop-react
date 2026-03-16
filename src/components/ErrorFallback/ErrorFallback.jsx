@@ -10,7 +10,7 @@ export default function ErrorFallback({ error, resetErrorBoundary, refetch }) {
       {resetErrorBoundary && (
         <button
           type="button"
-          className="btn-effect-press"
+          className="btn btn-effect-press"
           onClick={resetErrorBoundary}
         >
           Reset error
@@ -19,7 +19,7 @@ export default function ErrorFallback({ error, resetErrorBoundary, refetch }) {
       {!refetch && (
         <button
           type="button"
-          className="btn-effect-press"
+          className="btn btn-effect-press"
           onClick={() => {
             window.location.reload();
           }}
@@ -28,7 +28,7 @@ export default function ErrorFallback({ error, resetErrorBoundary, refetch }) {
         </button>
       )}
       {refetch && (
-        <button type="button" className="btn-effect-press" onClick={refetch}>
+        <button type="button" className="btn btn-effect-press" onClick={refetch}>
           Try again
         </button>
       )}

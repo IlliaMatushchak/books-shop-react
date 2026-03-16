@@ -14,7 +14,7 @@ const Cart = memo(function Cart() {
     <div className="cart-container fancy-background">
       <button
         type="button"
-        className="btn-clear-cart btn-effect-press"
+        className="btn btn-clear-cart btn-effect-press"
         onClick={clearCart}
         disabled={loading}
       >

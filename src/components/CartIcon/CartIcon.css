@@ -7,9 +7,9 @@
   position: absolute;
   bottom: 0;
   right: -0.5rem;
-  background-color: rgb(240, 240, 10, 1);
-  border: 0.1rem solid black;
-  border-radius: 1rem;
+  background-color: yellow;
+  border: var(--border-sm);
+  border-radius: var(--radius-sm);
   padding: 0.1rem;
 }
 

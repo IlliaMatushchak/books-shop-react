@@ -65,6 +65,7 @@ function PasswordForm() {
       <input
         type="password"
         name="oldPassword"
+        className="field focus-hop-up"
         placeholder="Old password"
         value={passwordData.oldPassword}
         onChange={handleChangePassword}
@@ -74,6 +75,7 @@ function PasswordForm() {
       <input
         type="password"
         name="newPassword"
+        className="field focus-hop-up"
         placeholder="New password"
         value={passwordData.newPassword}
         onChange={handleChangePassword}
@@ -86,6 +88,7 @@ function PasswordForm() {
       <input
         type="password"
         name="confirm"
+        className="field focus-hop-up"
         placeholder="Confirm password"
         value={passwordData.confirm}
         onChange={handleChangePassword}
@@ -94,7 +97,7 @@ function PasswordForm() {
       />
       {messages?.confirm && <Message message={messages.confirm} type={type} />}
       <hr />
-      <button type="submit" disabled={loading}>
+      <button type="submit" className="btn btn-effect-press" disabled={loading}>
         Change
       </button>
       {loading && <Loader type="local" />}

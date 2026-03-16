@@ -1,0 +1,26 @@
+.fancy-background {
+  background: linear-gradient(to right, rgba(245, 222, 170, 0.7) 0%, rgba(245, 222, 200, 0.7) 100%);
+  box-shadow: 0 0 1.25rem 0.6rem rgba(245, 222, 170, 0.9);
+  border-radius: var(--radius-sm);
+}
+
+.flex {
+  display: flex;
+}
+
+.error-text {
+  color: var(--color-error);
+}
+
+.field.error {
+  border: var(--border-error);
+  color: var(--color-error);
+}
+
+form.success {
+  border: var(--border-success);
+}
+
+form.error {
+  border: var(--border-error);
+}

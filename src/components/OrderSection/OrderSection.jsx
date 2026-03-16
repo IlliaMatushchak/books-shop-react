@@ -69,14 +69,14 @@ function OrderSection({ book }) {
             <button
               type="button"
               aria-label="Decrease count of books"
-              className="btn-minus btn-effect-3d btn-circle"
+              className="btn-minus btn btn-effect-3d btn-circle"
               onClick={decrement}
             >
               -
             </button>
             <input
               name="count"
-              className={isValid ? "count" : "count invalid-field"}
+              className={`count field focus-shadow ${isValid || "error"}`}
               id="count"
               type="number"
               required
@@ -89,7 +89,7 @@ function OrderSection({ book }) {
             <button
               type="button"
               aria-label="Increase count of books"
-              className="btn-plus btn-effect-3d btn-circle"
+              className="btn-plus btn btn-effect-3d btn-circle"
               onClick={increment}
             >
               +
@@ -107,7 +107,7 @@ function OrderSection({ book }) {
       {message?.text && <Message message={message.text} type={message.type} />}
       <button
         type="button"
-        className="add-button btn-effect-press"
+        className="add-button btn btn-effect-press"
         disabled={!isValid || loading}
         onClick={handleAddToCart}
       >

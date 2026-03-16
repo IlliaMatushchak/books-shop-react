@@ -1,0 +1,33 @@
+:root {
+  /* colors */
+  --color-bg: rgb(250, 240, 230);
+  --color-border: black;
+  --color-success: rgb(10, 100, 70);
+  --color-error: rgb(180, 50, 40);
+
+  /* radius */
+  --radius-sm: 0.5rem;
+  --radius-md: 1rem;
+
+  /* borders */
+  --border-sm: 0.07rem solid var(--color-border);
+  --border-md: 0.12rem solid var(--color-border);
+  --border-success: 0.14rem solid var(--color-success);
+  --border-error: 0.14rem solid var(--color-error);
+
+  /* shadows */
+  --shadow: 0 0 0.5rem 0.3rem rgba(0, 0, 0, 0.5);
+  --shadow-inset: inset 0 0 0.3rem 0.07rem black;
+
+  /* transitions */
+  --transition-fast: 0.2s;
+  --transition-normal: 0.5s;
+  --transition-long: 1s;
+
+  /* brakepoints */
+  /* --bp-mobile: 420px;
+  --bp-tablet: 768px;
+  --bp-desktop: 1200px; */
+
+  /* layout */
+}

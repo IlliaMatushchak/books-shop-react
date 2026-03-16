@@ -86,6 +86,7 @@ function UserInfoForm() {
       <label htmlFor="user-name">User name</label>
       <input
         id="user-name"
+        className="field focus-hop-up"
         type="text"
         name="username"
         value={form?.username || ""}
@@ -95,6 +96,7 @@ function UserInfoForm() {
       <label htmlFor="email">Email</label>
       <input
         id="email"
+        className="field focus-hop-up"
         type="email"
         name="email"
         placeholder="Email"
@@ -108,6 +110,7 @@ function UserInfoForm() {
       <label htmlFor="phone-number">Phone Number</label>
       <input
         id="phone-number"
+        className="field focus-hop-up"
         type="tel"
         name="phoneNumber"
         placeholder="Phone Number"
@@ -116,13 +119,12 @@ function UserInfoForm() {
         required
         disabled={!editing || loading}
       />
-      {messages?.phoneNumber && (
-        <Message message={messages.phoneNumber} type={type} />
-      )}
+      {messages?.phoneNumber && <Message message={messages.phoneNumber} type={type} />}
 
       <label htmlFor="gender">Gender</label>
       <select
         id="gender"
+        className="field focus-hop-up"
         name="gender"
         value={form?.gender || ""}
         onChange={handleChange}
@@ -135,6 +137,7 @@ function UserInfoForm() {
       <label htmlFor="role">Role</label>
       <input
         id="role"
+        className="field focus-hop-up"
         type="text"
         name="role"
         value={form?.role || ""}
@@ -146,6 +149,7 @@ function UserInfoForm() {
       {!editing ? (
         <button
           type="button"
+          className="btn btn-effect-press"
           onClick={(e) => {
             e.preventDefault();
             setEditing(true);
@@ -155,11 +159,12 @@ function UserInfoForm() {
         </button>
       ) : (
         <>
-          <button type="submit" disabled={loading}>
+          <button type="submit" className="btn btn-effect-press" disabled={loading}>
             Save
           </button>
           <button
             type="button"
+            className="btn btn-effect-press"
             onClick={(e) => {
               e.preventDefault();
               setEditing(false);

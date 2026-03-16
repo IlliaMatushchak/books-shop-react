@@ -3,7 +3,6 @@
   padding: 1rem;
   max-width: 18rem;
   text-align: center;
-  position: relative;
 }
 
 .register-container form :first-child {
@@ -14,7 +13,6 @@
 .register-container select,
 .register-container button[type="submit"] {
   width: 100%;
-  height: 2rem;
   margin-bottom: 1rem;
 }
 

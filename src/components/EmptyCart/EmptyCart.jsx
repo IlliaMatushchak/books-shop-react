@@ -9,7 +9,7 @@ const EmptyCart = memo(function EmptyCart() {
     <div className="empty-cart-container fancy-background">
       <h2>Cart is empty!</h2>
       <img src={cartImg} alt="Empty cart" loading="lazy" />
-      <Link to={ROUTES.SHOP} className="a-like-btn btn-effect-press">
+      <Link to={ROUTES.SHOP} className="btn a-like-btn btn-effect-press">
         Go to Shop
       </Link>
     </div>

@@ -7,6 +7,7 @@ function PriceRangeInput({ priceRange, setPriceRange }) {
     <fieldset className="price-range-fieldset">
       <legend>Price range</legend>
       <input
+        className="field focus-shadow"
         title="from price"
         type="number"
         placeholder="0"
@@ -25,6 +26,7 @@ function PriceRangeInput({ priceRange, setPriceRange }) {
       {minValue > maxValue && <span>{"<="}</span>}
 
       <input
+        className="field focus-shadow"
         title="to price"
         type="number"
         placeholder="0"

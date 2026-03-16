@@ -14,7 +14,7 @@ export default function GoBackButton() {
       type="button"
       onClick={navigateBack}
       id="btn-go-back"
-      className="btn-fixed btn-circle btn-effect-shadow"
+      className="btn btn-fixed btn-circle btn-effect-shadow"
       aria-label="Go to previous page"
       title="Go back"
     >

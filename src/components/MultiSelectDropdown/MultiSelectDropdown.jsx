@@ -51,7 +51,7 @@ function MultiSelectDropdown({ options = [], selected, setSelected }) {
 
   return (
     <div className="dropdown" ref={dropdownRef}>
-      <button className="dropdown-trigger" onClick={handleToggle}>
+      <button className="btn focus-shadow dropdown-trigger" onClick={handleToggle}>
         {tempSelected.size > 0 ? `${tempSelected.size} tags selected` : "Select tags"}
       </button>
 

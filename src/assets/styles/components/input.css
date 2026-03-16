@@ -1,0 +1,32 @@
+.field {
+  font-family: inherit;
+  font-size: inherit;
+  text-align: center;
+  line-height: 1;
+  border: var(--border-md);
+  border-radius: var(--radius-md);
+  outline: none;
+  height: 2rem;
+}
+
+select.field {
+  cursor: pointer;
+}
+
+/* effects */
+
+.focus-hop-up {
+  transition: transform var(--transition-normal);
+}
+
+.focus-hop-up:focus {
+  transform: perspective(10rem) translate3d(0, 0.3rem, 1rem);
+}
+
+.focus-shadow {
+  transition: box-shadow var(--transition-normal);
+}
+
+.focus-shadow:focus {
+  box-shadow: var(--shadow);
+}

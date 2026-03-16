@@ -1,8 +1,11 @@
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import { Suspense, lazy } from "react";
 
-import "./assets/styles/global.css";
-import "./assets/styles/button.css";
+import "./assets/styles/variables.css";
+import "./assets/styles/base.css";
+import "./assets/styles/components/button.css";
+import "./assets/styles/components/input.css";
+import "./assets/styles/utilities.css";
 
 import { ROLES } from "./constants/roles";
 import { ROUTE_NAMES, ROUTES } from "./constants/routes";

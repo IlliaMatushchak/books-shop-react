@@ -32,10 +32,6 @@
     margin: 0 0.5rem;
 }
 
-.order-section .count:focus {
-    transform: none;
-}
-
 .order-section .count::-webkit-outer-spin-button,
 .order-section .count::-webkit-inner-spin-button {
     -webkit-appearance: none;

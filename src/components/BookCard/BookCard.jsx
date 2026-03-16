@@ -17,7 +17,7 @@ const BookCard = memo(function BookCard({ image, title, author, price, id }) {
         <p>{author}</p>
         <div className="flex card-footer">
           <p>Price: {price}</p>
-          <Link to={`${ROUTES.PRODUCT}/${id}`} className="a-like-btn btn-effect-press">
+          <Link to={`${ROUTES.PRODUCT}/${id}`} className="btn a-like-btn btn-effect-press">
             View
           </Link>
         </div>

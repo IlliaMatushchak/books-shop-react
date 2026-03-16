@@ -1,6 +1,6 @@
 .search-section {
     width: 75%;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
@@ -18,20 +18,10 @@
     background-position: 95% 50%;
 }
 
-.search-section .search-by-name:focus {
-    transform: none;
-}
-
 .search-section .search-by-name::-webkit-search-cancel-button {
     /* -webkit-appearance:none; */
     position: relative;
     right: 2rem;
-}
-
-@media screen and (max-width: 1024px) {
-    .search-section {
-        justify-content: center;
-    }
 }
 
 @media screen and (max-width: 420px) {

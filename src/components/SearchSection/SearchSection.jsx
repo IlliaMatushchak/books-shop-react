@@ -6,7 +6,7 @@ function SearchSection({ filtersConfig, updateFilter, sortType, setSortType, tag
   return (
     <section className="search-section flex fancy-background">
       <input
-        className="search-by-name"
+        className="field focus-shadow search-by-name"
         type="search"
         name="searchByName"
         placeholder="Search by book name"
@@ -20,7 +20,7 @@ function SearchSection({ filtersConfig, updateFilter, sortType, setSortType, tag
       <select
         title="Sort by"
         name="sortType"
-        className="sort-selector"
+        className="field focus-shadow sort-selector"
         value={sortType}
         onChange={(e) => {
           setSortType(e.target.value);
@@ -35,15 +35,15 @@ function SearchSection({ filtersConfig, updateFilter, sortType, setSortType, tag
         <option value="highPrice">Highest price</option>
       </select>
 
-      <PriceRangeInput
-        priceRange={filtersConfig.priceRange}
-        setPriceRange={(priceRange) => updateFilter("priceRange", priceRange)}
-      />
-
       <MultiSelectDropdown
         options={tagOptions}
         selected={filtersConfig.tags}
         setSelected={(tags) => updateFilter("tags", tags)}
+      />
+
+      <PriceRangeInput
+        priceRange={filtersConfig.priceRange}
+        setPriceRange={(priceRange) => updateFilter("priceRange", priceRange)}
       />
     </section>
   );
