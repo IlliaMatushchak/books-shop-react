@@ -1,6 +1,7 @@
 :root {
   /* colors */
   --color-bg: rgb(250, 240, 230);
+  --color-main: rgba(245, 222, 170);
   --color-border: black;
   --color-success: rgb(10, 100, 70);
   --color-error: rgb(180, 50, 40);
@@ -16,6 +17,7 @@
   --border-error: 0.14rem solid var(--color-error);
 
   /* shadows */
+  --shadow-main: 0 0 1.25rem 0.6rem rgba(245, 222, 170, 0.9);
   --shadow: 0 0 0.5rem 0.3rem rgba(0, 0, 0, 0.5);
   --shadow-inset: inset 0 0 0.3rem 0.07rem black;
 
@@ -23,6 +25,13 @@
   --transition-fast: 0.2s;
   --transition-normal: 0.5s;
   --transition-long: 1s;
+
+  /* background */
+  --background-main-transparent: linear-gradient(
+    to right,
+    rgba(245, 222, 170, 0.7) 0%,
+    rgba(245, 222, 200, 0.7) 100%
+  );
 
   /* brakepoints */
   /* --bp-mobile: 420px;

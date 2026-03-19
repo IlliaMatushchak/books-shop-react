@@ -1,6 +1,6 @@
 .fancy-background {
-  background: linear-gradient(to right, rgba(245, 222, 170, 0.7) 0%, rgba(245, 222, 200, 0.7) 100%);
-  box-shadow: 0 0 1.25rem 0.6rem rgba(245, 222, 170, 0.9);
+  background: var(--background-main-transparent);
+  box-shadow: var(--shadow-main);
   border-radius: var(--radius-sm);
 }
 
