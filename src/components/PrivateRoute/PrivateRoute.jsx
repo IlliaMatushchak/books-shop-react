@@ -12,7 +12,7 @@ export default function PrivateRoute({ children, allowedRoles }) {
   }
 
   if (allowedRoles && !allowedRoles.includes(role)) {
-    if (role === ROLES.ADMIN) return <Navigate to={ROUTES.ADMIN_PANEL} replace />;
+    if (role === ROLES.ADMIN) return <Navigate to={ROUTES.ADMIN} replace />;
     if (role === ROLES.USER) return <Navigate to={ROUTES.SHOP} replace />;
   }
 

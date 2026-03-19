@@ -8,7 +8,7 @@ export default function PublicRoute({ children }) {
   const role = user?.role?.toUpperCase();
 
   if (isLoggedIn) {
-    if (role === ROLES.ADMIN) return <Navigate to={ROUTES.ADMIN_PANEL} replace />;
+    if (role === ROLES.ADMIN) return <Navigate to={ROUTES.ADMIN} replace />;
     if (role === ROLES.USER) return <Navigate to={ROUTES.SHOP} replace />;
   }
 
