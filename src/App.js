@@ -8,9 +8,11 @@ import "./assets/styles/components/input.css";
 import "./assets/styles/utilities.css";
 
 import { ROLES } from "./constants/roles";
-import { ROUTE_NAMES, ROUTES } from "./constants/routes";
+import { ROUTE_NAMES } from "./constants/routes";
 
-import Layout from "./routes/layouts/MainLayout";
+import MainLayout from "./routes/layouts/MainLayout";
+import PublicLayout from "./routes/layouts/PublicLayout";
+import AdminLayout from "./routes/layouts/AdminLayout";
 import BackgroundImg from "./components/BackgroundImg/BackgroundImg";
 import { CartProvider } from "./contexts/CartContext";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -40,59 +42,81 @@ function App() {
               <Router>
                 <Suspense fallback={<Loader type="global" />}>
                   <Routes>
-                    <Route path={ROUTES.HOME} element={<Layout />}>
-                      <Route
-                        index
-                        element={
-                          <PublicRoute>
-                            <Login />
-                          </PublicRoute>
-                        }
-                      />
-                      <Route
-                        path={ROUTE_NAMES.REGISTER}
-                        element={
-                          <ErrorBoundary fallback={<ErrorFallback />}>
+                    <Route element={<MainLayout />}>
+                      <Route element={<PublicLayout />}>
+                        <Route
+                          index
+                          element={
                             <PublicRoute>
-                              <Registration />
+                              <Login />
                             </PublicRoute>
-                          </ErrorBoundary>
-                        }
-                      />
+                          }
+                        />
+                        <Route
+                          path={ROUTE_NAMES.REGISTER}
+                          element={
+                            <ErrorBoundary fallback={<ErrorFallback />}>
+                              <PublicRoute>
+                                <Registration />
+                              </PublicRoute>
+                            </ErrorBoundary>
+                          }
+                        />
+                        <Route
+                          path={ROUTE_NAMES.SHOP}
+                          element={
+                            <ErrorBoundary fallback={<ErrorFallback />}>
+                              <Shop />
+                            </ErrorBoundary>
+                          }
+                        />
+                        <Route
+                          path={ROUTE_NAMES.PRODUCT + "/:bookID"}
+                          element={
+                            <ErrorBoundary fallback={<ErrorFallback />}>
+                              <SpecificBook />
+                            </ErrorBoundary>
+                          }
+                        />
+                        <Route
+                          path={ROUTE_NAMES.CART}
+                          element={
+                            <ErrorBoundary fallback={<ErrorFallback />}>
+                              <Cart />
+                            </ErrorBoundary>
+                          }
+                        />
+                        <Route
+                          path={ROUTE_NAMES.PROFILE}
+                          element={
+                            <ErrorBoundary fallback={<ErrorFallback />}>
+                              <PrivateRoute allowedRoles={[ROLES.USER, ROLES.ADMIN]}>
+                                <Profile />
+                              </PrivateRoute>
+                            </ErrorBoundary>
+                          }
+                        />
+                      </Route>
+
                       <Route
-                        path={ROUTE_NAMES.SHOP}
+                        path={ROUTE_NAMES.ADMIN}
                         element={
-                          <ErrorBoundary fallback={<ErrorFallback />}>
-                            <Shop />
-                          </ErrorBoundary>
+                          <PrivateRoute allowedRoles={[ROLES.ADMIN]}>
+                            <AdminLayout />
+                          </PrivateRoute>
                         }
-                      />
-                      <Route
-                        path={ROUTE_NAMES.PRODUCT + "/:bookID"}
-                        element={
-                          <ErrorBoundary fallback={<ErrorFallback />}>
-                            <SpecificBook />
-                          </ErrorBoundary>
-                        }
-                      />
-                      <Route
-                        path={ROUTE_NAMES.CART}
-                        element={
-                          <ErrorBoundary fallback={<ErrorFallback />}>
-                            <Cart />
-                          </ErrorBoundary>
-                        }
-                      />
-                      <Route
-                        path={ROUTE_NAMES.PROFILE}
-                        element={
-                          <ErrorBoundary fallback={<ErrorFallback />}>
-                            <PrivateRoute allowedRoles={[ROLES.USER, ROLES.ADMIN]}>
-                              <Profile />
-                            </PrivateRoute>
-                          </ErrorBoundary>
-                        }
-                      />
+                      >
+                        <Route index element={<h2>Main admin page</h2>} />
+                        <Route path={ROUTE_NAMES.ADMIN_BOOKS}>
+                          <Route index element={<h2>books</h2>} />
+                          <Route
+                            path={ROUTE_NAMES.ADMIN_BOOK_CREATE}
+                            element={<h2>books/create</h2>}
+                          />
+                        </Route>
+                        <Route path={ROUTE_NAMES.ADMIN_USERS} element={<h2>users</h2>} />
+                        <Route path={ROUTE_NAMES.ADMIN_ORDERS} element={<h2>orders</h2>} />
+                      </Route>
                       <Route path="*" element={<NotFound />} />
                     </Route>
                   </Routes>

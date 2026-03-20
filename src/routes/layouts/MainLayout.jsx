@@ -1,8 +1,6 @@
 import { useEffect } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
 import ScrollToTopButton from "../../components/ScrollToTopButton/ScrollToTopButton";
 import GoBackButton from "../../components/GoBackButton/GoBackButton";
 
@@ -15,11 +13,7 @@ function Layout() {
 
   return (
     <>
-      <Header />
-      <main>
-        <Outlet />
-      </main>
-      <Footer />
+      <Outlet />
       <ScrollToTopButton />
       {pathname !== "/" && <GoBackButton />}
     </>
