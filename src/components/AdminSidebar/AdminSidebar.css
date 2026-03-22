@@ -1,0 +1,50 @@
+.admin-sidebar {
+  min-width: 15rem;
+  max-width: 18rem;
+  position: fixed;
+  top: 0.1rem;
+  left: 0.1rem;
+  padding: 1rem;
+  z-index: 1001;
+  border-radius: var(--radius-md);
+  border: var(--border-md);
+  background-color: var(--color-bg);
+  transition:
+    transform var(--transition-long) ease,
+    visibility var(--transition-long);
+}
+
+.admin-sidebar .active {
+  border: var(--border-md);
+  border-radius: var(--radius-sm);
+  background-color: yellow;
+  padding: 0.1rem;
+}
+
+.admin-sidebar.show {
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.admin-sidebar.hide {
+  transform: translateX(-110%);
+  visibility: hidden; /*no reaction to keyboard*/
+  pointer-events: none; /*no reaction to click*/
+}
+
+.admin-sidebar .btn-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  color: var(--color-error);
+}
+
+.admin-sidebar + .btn-open {
+  position: fixed;
+  top: 30%;
+  left: 0;
+  padding: 1rem 0.2rem;
+  height: auto;
+  border-radius: 0;
+  background-color: yellow;
+}

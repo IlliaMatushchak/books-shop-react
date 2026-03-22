@@ -19,6 +19,9 @@ const Header = memo(function Header() {
       <header className="header flex fancy-background">
         <h1>Books shop</h1>
         <nav className="flex">
+          <NavLink to={ROUTES.ADMIN} className={getNavLinkFunc("btn-effect-3d")}>
+            Admin-panel
+          </NavLink>
           <NavLink to={ROUTES.SHOP} className={getNavLinkFunc("btn-effect-3d")}>
             Shop
           </NavLink>
