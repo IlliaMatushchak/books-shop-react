@@ -6,7 +6,7 @@ import "./AdminSidebar.css";
 const linkClass = ({ isActive }) => `link ${isActive ? "active" : ""}`;
 
 export default function AdminSidebar() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);

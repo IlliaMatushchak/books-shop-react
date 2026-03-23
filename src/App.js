@@ -22,6 +22,7 @@ import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
 import PublicRoute from "./components/PublicRoute/PublicRoute";
 import ErrorBoundary from "./containers/ErrorBoundary/ErrorBoundary";
 import ErrorFallback from "./components/ErrorFallback/ErrorFallback";
+import HomePage from "./routes/adminPages/HomePage/HomePage";
 
 const Registration = lazy(() => import("./routes/pages/Registration/Registration"));
 const Login = lazy(() => import("./routes/pages/Login/Login"));
@@ -106,7 +107,7 @@ function App() {
                           </PrivateRoute>
                         }
                       >
-                        <Route index element={<h2>Main admin page</h2>} />
+                        <Route index element={<HomePage />} />
                         <Route path={ROUTE_NAMES.ADMIN_BOOKS}>
                           <Route index element={<h2>books</h2>} />
                           <Route
