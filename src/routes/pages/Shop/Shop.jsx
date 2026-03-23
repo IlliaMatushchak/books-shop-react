@@ -1,42 +1,18 @@
-import { useEffect, useMemo, useState } from "react";
 import useControlledFetch from "../../../hooks/useControlledFetch";
-import useProcessedBooks from "../../../hooks/useProcessedBooks";
 import { BookService } from "../../../services/bookService";
-import { calculateMinAndMaxPrice, getAllUniqueTags } from "../../../utils/bookUtils";
 
+import BooksCatalogContainer from "../../../containers/BooksCatalogContainer/BooksCatalogContainer";
 import BookList from "../../../containers/BooksList/BooksList";
-import SearchSection from "../../../components/SearchSection/SearchSection";
 import Loader from "../../../components/Loader/Loader";
 import ErrorFallback from "../../../components/ErrorFallback/ErrorFallback";
-import Message from "../../../components/Message/Message";
 
 function Shop() {
-  const [filtersConfig, setFiltersConfig] = useState({
-    searchValue: "",
-    priceRange: [0, Infinity],
-    tags: new Set(),
-  });
-  const updateFilter = (key, value) => {
-    setFiltersConfig((prev) => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
-  const [sortType, setSortType] = useState("");
   const {
     data: books,
     loading,
     error,
     refetch,
   } = useControlledFetch({ requestFn: BookService.getAll, initialData: [], auto: true });
-  const processedBooks = useProcessedBooks(books, filtersConfig, sortType);
-  const tagOptions = useMemo(() => getAllUniqueTags(books), [books]);
-
-  useEffect(() => {
-    if (books.length !== 0) {
-      updateFilter("priceRange", calculateMinAndMaxPrice(books));
-    }
-  }, [books]);
 
   if (loading) {
     return <Loader type="named" />;
@@ -46,22 +22,9 @@ function Shop() {
   }
 
   return (
-    <>
-      <SearchSection
-        filtersConfig={filtersConfig}
-        updateFilter={updateFilter}
-        sortType={sortType}
-        setSortType={setSortType}
-        tagOptions={tagOptions}
-      />
-      {books.length === 0 ? (
-        <Message message="No books found!" type="global" />
-      ) : processedBooks.length === 0 ? (
-        <Message message="There are no books matching your filters!" type="global" />
-      ) : (
-        <BookList books={processedBooks} />
-      )}
-    </>
+    <BooksCatalogContainer books={books}>
+      {(processedBooks) => <BookList books={processedBooks} />}
+    </BooksCatalogContainer>
   );
 }
 
