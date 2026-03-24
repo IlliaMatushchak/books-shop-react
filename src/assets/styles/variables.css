@@ -5,6 +5,7 @@
   --color-border: black;
   --color-success: rgb(10, 100, 70);
   --color-error: rgb(180, 50, 40);
+  --color-warning: rgb(245, 160, 10);
 
   /* radius */
   --radius-sm: 0.5rem;

@@ -1,0 +1,73 @@
+.book-row-image {
+  display: block;
+  width: 6rem;
+  height: 8rem;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.book-row .on-error-fallback {
+  width: 6rem;
+  height: 8rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.book-row-title {
+  min-width: 10rem;
+}
+
+.book-row-description {
+  min-width: 14rem;
+  line-height: 1.5;
+}
+
+.book-row-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.book-row-tag {
+  padding: 0.2rem 0.5rem;
+  font-size: 0.8rem;
+  border-radius: var(--radius-md);
+  background-color: yellow;
+}
+
+.book-row-level {
+  display: inline-block;
+  padding: 0.2rem 0.5rem;
+  border-radius: var(--radius-md);
+  font-size: 0.8rem;
+  color: white;
+}
+
+.book-row-level-beginner {
+  background-color: rgb(20, 100, 50);
+}
+
+.book-row-level-middle {
+  background-color: rgb(30, 80, 230);
+}
+
+.book-row-level-pro {
+  background-color: rgb(185, 30, 30);
+}
+
+.book-row-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  min-width: 6rem;
+}
+
+.book-row-btn-edit {
+  background-color: var(--color-warning);
+  line-height: normal;
+}
+
+.book-row-btn-delete {
+  background-color: var(--color-error);
+}

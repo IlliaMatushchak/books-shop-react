@@ -1,0 +1,35 @@
+.books-table-wrapper {
+  overflow-x: auto;
+  border: var(--border-sm);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg);
+}
+
+.books-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.books-table thead {
+  background-color: gray;
+}
+
+.books-table th,
+.books-table td {
+  padding: 0.3rem;
+  text-align: left;
+  vertical-align: top;
+  font-size: 0.9rem;
+}
+
+.books-table th {
+  white-space: nowrap;
+}
+
+.books-table tr {
+  border-bottom: var(--border-sm);
+}
+
+.books-table tr:last-of-type {
+  border-bottom: none;
+}

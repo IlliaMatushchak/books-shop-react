@@ -23,6 +23,7 @@ import PublicRoute from "./components/PublicRoute/PublicRoute";
 import ErrorBoundary from "./containers/ErrorBoundary/ErrorBoundary";
 import ErrorFallback from "./components/ErrorFallback/ErrorFallback";
 import HomePage from "./routes/adminPages/HomePage/HomePage";
+import ManageBooks from "./routes/adminPages/ManageBooks/ManageBooks";
 
 const Registration = lazy(() => import("./routes/pages/Registration/Registration"));
 const Login = lazy(() => import("./routes/pages/Login/Login"));
@@ -109,10 +110,14 @@ function App() {
                       >
                         <Route index element={<HomePage />} />
                         <Route path={ROUTE_NAMES.ADMIN_BOOKS}>
-                          <Route index element={<h2>books</h2>} />
+                          <Route index element={<ManageBooks />} />
                           <Route
                             path={ROUTE_NAMES.ADMIN_BOOK_CREATE}
                             element={<h2>books/create</h2>}
+                          />
+                          <Route
+                            path={ROUTE_NAMES.ADMIN_BOOK_EDIT + "/:bookID"}
+                            element={<h2>books/edit</h2>}
                           />
                         </Route>
                         <Route path={ROUTE_NAMES.ADMIN_USERS} element={<h2>users</h2>} />
