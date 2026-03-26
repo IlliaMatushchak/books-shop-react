@@ -1,11 +1,12 @@
 import { memo } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { ROUTES } from "../../constants/routes";
 import { useAuth } from "../../contexts/AuthContext";
 import Loader from "../Loader/Loader";
 import CartIcon from "../CartIcon/CartIcon";
 import "./Header.css";
 import avatarImg from "../../assets/images/avatar.png";
+import { ROLES } from "../../constants/roles";
 
 const getNavLinkFunc = (className) => {
   return ({ isActive }) => (isActive ? `active ${className}` : className);
@@ -19,9 +20,11 @@ const Header = memo(function Header() {
       <header className="header flex fancy-background">
         <h1>Books shop</h1>
         <nav className="flex">
-          <NavLink to={ROUTES.ADMIN} className={getNavLinkFunc("btn-effect-3d")}>
-            Admin-panel
-          </NavLink>
+          {user?.role?.toUpperCase() === ROLES.ADMIN && (
+            <NavLink to={ROUTES.ADMIN} className={getNavLinkFunc("btn-effect-3d")}>
+              Admin-panel
+            </NavLink>
+          )}
           <NavLink to={ROUTES.SHOP} className={getNavLinkFunc("btn-effect-3d")}>
             Shop
           </NavLink>
