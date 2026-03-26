@@ -6,6 +6,7 @@
   --color-success: rgb(10, 100, 70);
   --color-error: rgb(180, 50, 40);
   --color-warning: rgb(245, 160, 10);
+  --color-text-secondary: rgb(102, 102, 102);
 
   /* radius */
   --radius-sm: 0.5rem;

@@ -19,16 +19,17 @@
     left: 0;
     background: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(0.2rem);
-    z-index: 9999;
 }
 
 .global {
     position: fixed;
+    z-index: 9999;
 }
 
 .local {
     position: absolute;
     border-radius: inherit;
+    z-index: 99;
 }
 
 .global h2 {

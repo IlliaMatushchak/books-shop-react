@@ -62,18 +62,9 @@
 }
 
 .cart-item .quantity-block .input-quantity {
-  -webkit-appearance: textfield;
-  -moz-appearance: textfield;
-  appearance: textfield;
   width: 3rem;
   height: 2rem;
   margin: 0 0.6rem;
-}
-
-.cart-item .quantity-block .input-quantity::-webkit-outer-spin-button,
-.cart-item .quantity-block .input-quantity::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
 }
 
 .cart-item .btn-remove {

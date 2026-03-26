@@ -41,6 +41,7 @@
 
 .admin-sidebar + .btn-open {
   position: fixed;
+  z-index: 110;
   top: 30%;
   left: 0;
   padding: 1rem 0.2rem;

@@ -32,7 +32,7 @@ function ManageBooks() {
           <section className="manage-books fancy-background">
             <div className="manage-books-header">
               <div>
-                <h1 className="manage-books-title">Manage Books</h1>
+                <h2 className="manage-books-title">Manage Books</h2>
                 <p className="manage-books-subtitle">
                   Here you can view, edit, and remove books from the store catalog.
                 </p>

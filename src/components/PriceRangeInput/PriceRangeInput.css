@@ -7,17 +7,8 @@
 }
 
 .price-range-fieldset input {
-  -webkit-appearance: textfield;
-  -moz-appearance: textfield;
-  appearance: textfield;
   width: 4rem;
   height: 2rem;
-}
-
-.price-range-fieldset input::-webkit-outer-spin-button,
-.price-range-fieldset input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
 }
 
 .price-range-fieldset span {
