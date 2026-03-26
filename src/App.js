@@ -24,6 +24,8 @@ import ErrorBoundary from "./containers/ErrorBoundary/ErrorBoundary";
 import ErrorFallback from "./components/ErrorFallback/ErrorFallback";
 import HomePage from "./routes/adminPages/HomePage/HomePage";
 import ManageBooks from "./routes/adminPages/ManageBooks/ManageBooks";
+import CreateBook from "./routes/adminPages/CreateBook/CreateBook";
+import EditBook from "./routes/adminPages/EditBook/EditBook";
 
 const Registration = lazy(() => import("./routes/pages/Registration/Registration"));
 const Login = lazy(() => import("./routes/pages/Login/Login"));
@@ -111,13 +113,10 @@ function App() {
                         <Route index element={<HomePage />} />
                         <Route path={ROUTE_NAMES.ADMIN_BOOKS}>
                           <Route index element={<ManageBooks />} />
-                          <Route
-                            path={ROUTE_NAMES.ADMIN_BOOK_CREATE}
-                            element={<h2>books/create</h2>}
-                          />
+                          <Route path={ROUTE_NAMES.ADMIN_BOOK_CREATE} element={<CreateBook />} />
                           <Route
                             path={ROUTE_NAMES.ADMIN_BOOK_EDIT + "/:bookID"}
-                            element={<h2>books/edit</h2>}
+                            element={<EditBook />}
                           />
                         </Route>
                         <Route path={ROUTE_NAMES.ADMIN_USERS} element={<h2>users</h2>} />
