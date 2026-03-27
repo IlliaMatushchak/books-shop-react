@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useMemo,
-  useCallback,
-  useEffect,
-} from "react";
+import { createContext, useContext, useMemo, useCallback, useEffect } from "react";
 import { useAuth } from "./AuthContext";
 import useControlledFetch from "../hooks/useControlledFetch";
 import { CartService } from "../services/cartService";
@@ -29,7 +23,7 @@ function CartProvider({ children }) {
         totalCount: acc.totalCount + item.quantity,
         totalPrice: acc.totalPrice + item.quantity * item.book.price,
       }),
-      { totalCount: 0, totalPrice: 0 }
+      { totalCount: 0, totalPrice: 0 },
     );
   }, [cart]);
 
@@ -42,12 +36,13 @@ function CartProvider({ children }) {
       fetchCart({
         requestFn: CartService.merge,
         args: [localCart],
-        onSuccess: () => {
+        onSuccess: (fullCart) => {
+          setCart(fullCart);
           LocalStorageService.remove(LS_KEYS.CART);
         },
       });
     },
-    [fetchCart]
+    [fetchCart, setCart],
   );
 
   useEffect(() => {
@@ -75,9 +70,7 @@ function CartProvider({ children }) {
       } else {
         setCart((prevCart) => {
           const updated = [...prevCart];
-          const index = updated.findIndex(
-            (item) => item.productId === productId
-          );
+          const index = updated.findIndex((item) => item.productId === productId);
           if (index === -1) {
             updated.push({ productId, quantity, book });
           } else {
@@ -91,7 +84,7 @@ function CartProvider({ children }) {
         });
       }
     },
-    [isLoggedIn, fetchCart, setCart]
+    [isLoggedIn, fetchCart, setCart],
   );
 
   const changeQuantity = useCallback(
@@ -110,7 +103,7 @@ function CartProvider({ children }) {
         });
       }
     },
-    [isLoggedIn, fetchCart, setCart]
+    [isLoggedIn, fetchCart, setCart],
   );
 
   const removeFromCart = useCallback(
@@ -118,12 +111,10 @@ function CartProvider({ children }) {
       if (isLoggedIn) {
         fetchCart({ requestFn: CartService.remove, args: [productId] });
       } else {
-        setCart((prevCart) =>
-          prevCart.filter((item) => item.productId !== productId)
-        );
+        setCart((prevCart) => prevCart.filter((item) => item.productId !== productId));
       }
     },
-    [isLoggedIn, fetchCart, setCart]
+    [isLoggedIn, fetchCart, setCart],
   );
 
   const clearCart = useCallback(() => {
@@ -158,7 +149,7 @@ function CartProvider({ children }) {
       changeQuantity,
       removeFromCart,
       clearCart,
-    ]
+    ],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

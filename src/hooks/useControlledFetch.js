@@ -48,8 +48,7 @@ function useControlledFetch({
       const finalOnError = overrideOnError ?? onErrorRef.current;
 
       if (typeof finalRequestFn !== "function") return;
-      if (!Array.isArray(finalArgs))
-        throw new Error("overrideArgs must be an array!");
+      if (!Array.isArray(finalArgs)) throw new Error("overrideArgs must be an array!");
 
       if (abortControllerRef.current) abortControllerRef.current.abort();
       const controller = new AbortController();
@@ -64,8 +63,7 @@ function useControlledFetch({
       finalRequestFn(...finalArgs, controller.signal)
         .then((result) => {
           if (lastFetchId.current !== fetchId) return;
-          setData(result);
-          typeof finalOnSuccess === "function" && finalOnSuccess(result);
+          typeof finalOnSuccess === "function" ? finalOnSuccess(result) : setData(result);
           hasSuccess.current = true;
         })
         .catch((error) => {
@@ -83,7 +81,7 @@ function useControlledFetch({
           if (lastFetchId.current === fetchId) setLoading(false);
         });
     },
-    [requestFn]
+    [requestFn],
   );
 
   // auto mode

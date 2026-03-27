@@ -22,12 +22,14 @@ function UserInfoForm() {
   const { messages, type, showMessages, clearMessages } = useTimedMessages(8000);
   const {
     data: profile,
+    setData: setProfile,
     loading,
     error,
     fetch: fetchProfile,
   } = useControlledFetch({
     requestFn: ProfileService.getProfile,
     onSuccess: (profile) => {
+      setProfile(profile);
       setForm(profile);
     },
     auto: true,
@@ -63,6 +65,7 @@ function UserInfoForm() {
         },
       ],
       onSuccess: (newProfile) => {
+        setProfile(newProfile);
         updateUser(newProfile);
         setEditing(false);
         showMessages({ success: "Profile updated!" }, "success");
