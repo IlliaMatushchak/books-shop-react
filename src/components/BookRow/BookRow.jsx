@@ -5,7 +5,7 @@ import imgNotFound from "../../assets/images/imgNotFound.png";
 import LazyImage from "../LazyImage/LazyImage";
 import "./BookRow.css";
 
-const BookRow = memo(function BookRow({ book }) {
+const BookRow = memo(function BookRow({ book, onDelete }) {
   return (
     <tr className="book-row">
       <td>{book?.id}</td>
@@ -46,7 +46,13 @@ const BookRow = memo(function BookRow({ book }) {
             Edit
           </Link>
 
-          <button type="button" className="btn btn-effect-press book-row-btn-delete">
+          <button
+            type="button"
+            className="btn btn-effect-press book-row-btn-delete"
+            onClick={() => {
+              onDelete(book?.id);
+            }}
+          >
             Delete
           </button>
         </div>

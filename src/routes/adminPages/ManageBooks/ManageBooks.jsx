@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { Link } from "react-router-dom";
 import { ROUTES } from "../../../constants/routes";
 import useControlledFetch from "../../../hooks/useControlledFetch";
@@ -13,16 +14,32 @@ import "./ManageBooks.css";
 function ManageBooks() {
   const {
     data: books,
+    setData: setBooks,
     loading,
     error,
+    fetch: fetchBook,
     refetch,
   } = useControlledFetch({ requestFn: BookService.getAll, initialData: [], auto: true });
 
-  if (loading) {
-    return <Loader type="named" />;
-  }
+  const handleDelete = useCallback(
+    (bookID) => {
+      fetchBook({
+        requestFn: BookService.delete,
+        args: [bookID],
+        onSuccess: () => {
+          setBooks((books) => books.filter(({ id }) => id !== bookID));
+        },
+      });
+    },
+    [fetchBook, setBooks],
+  );
+
   if (error) {
     return <ErrorFallback error={error} refetch={refetch} />;
+  }
+
+  if (!Array.isArray(books)) {
+    return null;
   }
 
   return (
@@ -30,6 +47,7 @@ function ManageBooks() {
       {(processedBooks) => {
         return (
           <section className="manage-books fancy-background">
+            {loading && <Loader type="local" />}
             <div className="manage-books-header">
               <div>
                 <h2 className="manage-books-title">Manage Books</h2>
@@ -44,7 +62,7 @@ function ManageBooks() {
                 Add New Book
               </Link>
             </div>
-            <BooksTable books={processedBooks} />
+            <BooksTable books={processedBooks} onDelete={handleDelete} />
           </section>
         );
       }}

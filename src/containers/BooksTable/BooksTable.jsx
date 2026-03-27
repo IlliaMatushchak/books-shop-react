@@ -2,7 +2,7 @@ import { memo } from "react";
 import BookRow from "../../components/BookRow/BookRow";
 import "./BooksTable.css";
 
-const BooksTable = memo(function BooksTable({ books }) {
+const BooksTable = memo(function BooksTable({ books, onDelete }) {
   return (
     <div className="books-table-wrapper">
       <table className="books-table">
@@ -23,7 +23,7 @@ const BooksTable = memo(function BooksTable({ books }) {
 
         <tbody>
           {books.map((book) => {
-            return <BookRow key={book.id} book={book} />;
+            return <BookRow key={book.id} book={book} onDelete={onDelete} />;
           })}
         </tbody>
       </table>
