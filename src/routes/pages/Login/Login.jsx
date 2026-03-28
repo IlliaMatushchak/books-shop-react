@@ -3,6 +3,7 @@ import { useTimedMessages } from "../../../hooks/useTimedMessages";
 import { useAuth } from "../../../contexts/AuthContext";
 import Message from "../../../components/Message/Message";
 import Loader from "../../../components/Loader/Loader";
+import DemoCredentials from "../../../components/DemoCredentials/DemoCredentials";
 import { validateLoginForm } from "../../../utils/validation/formValidation";
 import "./Login.css";
 
@@ -88,6 +89,7 @@ function Login() {
         </form>
         {loading && <Loader type="global" />}
       </div>
+      <DemoCredentials onSelect={setForm} />
     </>
   );
 }
